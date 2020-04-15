@@ -10,11 +10,6 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 @	IN	NS	dns.cc.pt.
-1	IN	PTR	dns.cc.pt.
-1	IN	PTR	serv1.cc.pt.
-2	IN	PTR	pop.cc.pt.
-2	IN	PTR	imap.cc.pt.
-2	IN	PTR	serv2.cc.pt.
-3	IN	PTR	www.cc.pt.
-3	IN	PTR	mail.cc.pt.
-3	IN	PTR	serv3.cc.pt.
+1	IN	PTR	alfa.cc.pt.
+2	IN	PTR	delta.cc.pt.
+3	IN	PTR	omega.cc.pt.

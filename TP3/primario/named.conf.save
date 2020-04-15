@@ -27,9 +27,5 @@ zone "255.in-addr.arpa" {
 	file "/etc/bind/db.255";
 };
 
-zone "3.3.10.in-addr-arpa" {
-	type master;
-	file "/home/primario/";
-};
 
 
