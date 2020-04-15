@@ -1,0 +1,16 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	604800
+@	IN	SOA	dns.cc.pt. grupo06.cc.pt. (
+			      1		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	dns.cc.pt.
+1	IN	PTR	portatil1.cc.pt.
+1	IN	PTR	grupo06.cc.pt.
+2	IN	PTR	portatil2.cc.pt.
+3	IN	PTR	portatil3.cc.pt.
