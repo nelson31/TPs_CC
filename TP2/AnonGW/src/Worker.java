@@ -11,9 +11,9 @@ public class Worker implements Runnable{
      */
     public static final int MAX_SIZE_TRANSFER = 1024;
 
-    private static final boolean FROM_CLIENT = true;
+    public static final boolean FROM_CLIENT = true;
 
-    private static final boolean FROM_SERVER = false;
+    public static final Boolean FROM_SERVER = false;
     /**
      * Socket a partir do qual cada
      * worker receberá dados
@@ -36,7 +36,7 @@ public class Worker implements Runnable{
      * Variável que guarda o sentido
      * atual dos dados
      */
-    private boolean sentido;
+    private Boolean sentido;
 
     /**
      * Construtor para objetos da
@@ -76,8 +76,6 @@ public class Worker implements Runnable{
         como cliente para o buffer intermediário */
         while((lidos = read.read(transfer,0,MAX_SIZE_TRANSFER)) != -1)
             write.write(transfer,0,lidos);
-        /* Copiamos o conteúdo do buffer intermediário
-        para o socket destino */
     }
 
     /**
@@ -87,19 +85,14 @@ public class Worker implements Runnable{
     public void run(){
 
         try {
-            int turn = 0;
-            int lidos;
-            /* Lemos os dados de um socket para outro*/
-            while(!cliente.isClosed() && !server.isClosed()){
-                Thread t1 = new Thread(new ReaderFromTo(cliente,server,transfer));
-                Thread t2 = new Thread(new ReaderFromTo(server,cliente,transfer));
-                t1.start();
-                t2.start();
-                /* Esperamos que ambas
-                as threads terminem */
-                t1.join();
-                t2.join();
-            }
+            Thread t1 = new Thread(new ReaderFromTo(cliente,server,transfer));
+            Thread t2 = new Thread(new ReaderFromTo(server,cliente,transfer));
+            t1.start();
+            t2.start();
+            /* Esperamos que ambas
+            as threads terminem */
+            t1.join();
+            t2.join();
         }
         catch(IOException | InterruptedException exc){
             System.out.println(exc.getMessage());
