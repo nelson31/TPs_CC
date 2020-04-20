@@ -9,12 +9,12 @@ public class Worker implements Runnable{
      * Quantidade fixa de bytes para
      * escrever para o socket de output
      */
-    private static final int MAX_SIZE_TRANSFER = 64;
+    private static final int MAX_SIZE_TRANSFER = 1024*1024;
     /**
      * Socket a partir do qual cada
      * worker receberá dados
      */
-    private Socket receive;
+    private Socket cliente;
 
     /**
      * Buffer que permite transferir os
@@ -26,25 +26,49 @@ public class Worker implements Runnable{
      * Socket a partir do qual cada
      * worker enviará dados
      */
-    private Socket send;
+    private Socket server;
 
     /**
      * Construtor para objetos da
      * classe Worker
-     * @param receive
+     * @param cliente
      * @param IPAdd
      * @param port
      */
-    public Worker(Socket receive, String IPAdd, String port) {
+    public Worker(Socket cliente, String IPAdd, String port) {
 
         try {
-            this.receive = receive;
-            this.send = new Socket(IPAdd, Integer.parseInt(port));
+            this.cliente = cliente;
+            this.server = new Socket(IPAdd, Integer.parseInt(port));
             this.transfer = new byte[MAX_SIZE_TRANSFER];
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
         }
+    }
+
+    /**
+     * Método que permite ler uma certa quantidade
+     * de bytes de um socket para outro
+     * @param input
+     * @param output
+     * @throws IOException
+     */
+    public void readFromTo(Socket input, Socket output)
+        throws IOException{
+
+        InputStream read = input.getInputStream();
+        OutputStream write = output.getOutputStream();
+        int bytesReaded = 0;
+        /* Vamos buscar o número de bytes a serem lidos */
+        int lidos;
+        /* Lemos os dados do socket que se comporta
+        como cliente para o buffer intermediário */
+        while((lidos = read.read(transfer,bytesReaded,MAX_SIZE_TRANSFER)) != -1)
+            bytesReaded += lidos;
+        /* Copiamos o conteúdo do buffer intermediário
+        para o socket destino */
+        write.write(transfer,0,bytesReaded);
     }
 
     /**
@@ -54,14 +78,20 @@ public class Worker implements Runnable{
     public void run(){
 
         try {
-            InputStream read = this.receive.getInputStream();
-            OutputStream write = this.send.getOutputStream();
+            int turn = 0;
             int lidos;
             /* Lemos os dados de um socket para outro*/
-            while((lidos = read.read(transfer,0,MAX_SIZE_TRANSFER)) != 0){
-                write.write(transfer,0,lidos);
+            while(!cliente.isClosed() && !server.isClosed()){
+                /* Alternamos a leitura e escrita
+                entre o servidor e o cliente */
+                if(turn%2 == 0){
+                    readFromTo(cliente,server);
+                }
+                else{
+                    readFromTo(server,cliente);
+                }
+                turn++;
             }
-
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());

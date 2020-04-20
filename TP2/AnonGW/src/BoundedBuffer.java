@@ -4,27 +4,48 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class BoundedBuffer implements IBoundedBuffer{
 
-    private Request[] list;
-    private int size;
-    private int nResquests;
+    private int nMaxRequests;
+    private int nRequests;
+    private Request[] requests;
 
-    private Lock l;
-    private Condition writers;
-    private Condition readers;
+    private Lock l = new ReentrantLock();
+    private Condition writers = l.newCondition();
+    private Condition readers = l.newCondition();
 
     /**
-     * Construtor para um objeto da
-     * classe BoundedBufferQueue
-     * @param size
+     * Construtor para objetos da
+     * classe Download.BoundedBuffer
+     *
+     * @param nMaxRequests
      */
-    public BoundedBuffer(int size) {
+    public BoundedBuffer(int nMaxRequests) {
 
-        this.size = size;
-        this.list = new Request[size];
-        this.l = new ReentrantLock();
-        this.nResquests = 0;
-        writers = l.newCondition();
-        readers = l.newCondition();
+        this.nMaxRequests = nMaxRequests;
+        this.requests = new Request[nMaxRequests];
+        this.nRequests = 0;
+    }
+
+    /**
+     * Método que permite obter o lock de um
+     * objeto da classe Download.BoundedBuffer
+     */
+    private void lock() {
+
+        this.l.lock();
+    }
+
+    /**
+     * Método que permite ceder um lock de
+     * um objeto da classe pooldownload
+     */
+    private void unlock() {
+
+        this.l.unlock();
+    }
+
+    public int getnMaxRequests() {
+
+        return this.nMaxRequests;
     }
 
     /**
@@ -32,23 +53,30 @@ public class BoundedBuffer implements IBoundedBuffer{
      * de Download para ser realizado por
      * um downloader
      *
-     * @param r
+     * @param newRequest
      */
-    public void putRequest(Request r) {
+    public void putRequest(Request newRequest){
 
         try {
-            this.l.lock();
-
-            while (nResquests == size)
+            /* Obtemos o lock da pool */
+            this.lock();
+            /* Enquanto estiver cheio, esperamos */
+            while (this.nRequests >= this.nMaxRequests)
                 this.writers.await();
-
-            this.list[this.nResquests++] = r;
-
+            /* Quando obtivermos o lock aumentamos o
+            numero de pedidos em simultâneo
+            e adicionamos o novo pedido à lista */
+            this.requests[this.nRequests++] = newRequest;
+            /* Notificamos leitores de que há um novo pedido */
             this.readers.signal();
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            this.l.unlock();
+
+        }
+        catch(InterruptedException exp){
+            System.out.println(exp.getMessage());
+        }
+        finally {
+            /* Cedemos o lock do objeto */
+            this.unlock();
         }
     }
 
@@ -60,26 +88,23 @@ public class BoundedBuffer implements IBoundedBuffer{
 
         Request r = null;
         try {
-            this.l.lock();
-
-            while(this.nResquests == 0)
-                readers.await();
-
-            r = this.list[0];
-
-            for(int i=0; i<nResquests-1; i++)
-                list[i] = list[i+1];
-
-            this.nResquests--;
-
+            /* Obtemos o lock da pool */
+            this.lock();
+            /* Enquanto não houver pedidos esperamos */
+            while (this.nRequests == 0)
+                this.readers.await();
+            /* Quando obtivermos o lock diminuimos o numero
+            de downloads em simultaneo e obtemos o proximo pedido */
+            r = this.requests[--this.nRequests];
+            /* Notificamos escritores de um
+            novo espaço para colocar novo pedido */
             this.writers.signal();
 
-        }
-        catch(InterruptedException e){
-            System.out.println(e.getMessage());
-        }
-        finally {
-            this.l.unlock();
+        } catch (InterruptedException exp) {
+            System.out.println(exp.getMessage());
+        } finally {
+            /* Cedemos o lock do objeto */
+            this.unlock();
         }
         return r;
     }

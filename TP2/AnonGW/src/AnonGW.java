@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -9,13 +10,13 @@ public class AnonGW {
      * clientes que se pretendem anonimizar
      * para comunicar com um dado servidor
      */
-    private ServerSocket listen;
+    private static ServerSocket listen;
 
     /**
      * Socket que permite receber dados
      * de um cliente
      */
-    private Socket input;
+    private static Socket input;
 
     /**
      * Socket que será usado para comunicar
@@ -23,12 +24,29 @@ public class AnonGW {
      */
     private Socket output;
 
+    /**
+     * Método a partir do qual arranca
+     * o programa principal
+     * @param args
+     */
     public static void main(String[] args){
 
-        /* Colocamos o server socket
-        permanentemente à escuta*/
-
-        System.exit(0);
-
+        try {
+            /* Colocamos o servidor à escuta
+            na porta 80 */
+            listen = new ServerSocket(80);
+            /* Colocamos o server socket
+            permanentemente à escuta*/
+            while (true) {
+                System.out.println("I'm listening for new requests");
+                Worker w = new Worker(listen.accept(), args[2], args[4]);
+                Thread t = new Thread(w);
+                t.start();
+                System.out.println("New request");
+            }
+        }
+        catch(IOException exc){
+            System.out.println("IOError");
+        }
     }
 }
