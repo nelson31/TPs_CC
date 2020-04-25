@@ -36,6 +36,7 @@ public class AnonGW {
             na porta 80 */
             listen = new ServerSocket(80);
             String ipadd = args[2], port = args[4];
+            System.out.println("I'm protecting you to access to " + ipadd + ", port " + port);
             /* Colocamos o server socket
             permanentemente à escuta*/
             while (true) {
