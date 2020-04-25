@@ -35,6 +35,7 @@ public class AnonGW {
             /* Colocamos o servidor à escuta
             na porta 80 */
             listen = new ServerSocket(80);
+            String ipadd = args[2], port = args[4];
             /* Colocamos o server socket
             permanentemente à escuta*/
             while (true) {
