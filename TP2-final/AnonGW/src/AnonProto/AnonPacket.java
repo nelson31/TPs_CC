@@ -27,6 +27,13 @@ public class AnonPacket implements Comparable{
     private int sequence;
 
     /**
+     * Variável que guarda a sequencia do pacote
+     * no reader para o identificar para tratar
+     * da gestão de acks
+     */
+    private int ackseq;
+
+    /**
      * Variável que guarda o endereço ip do
      * anonGW que é o criador do AnonPacket
      */
@@ -101,7 +108,7 @@ public class AnonPacket implements Comparable{
      * @param sequence
      * @param destinationIP
      */
-    public AnonPacket(byte[] data, int session, int sequence, String ownerIP, String destinationIP, int port)
+    public AnonPacket(byte[] data, int session, int sequence, String ownerIP, String destinationIP, int port, int ackseq)
         throws UnknownHostException {
 
         this.sequence = sequence;
@@ -110,6 +117,7 @@ public class AnonPacket implements Comparable{
         this.destinationIP = InetAddress.getByName(destinationIP);
         this.port = port;
         this.data = new byte[data.length];
+        this.ackseq = ackseq;
         /* Copiamos o conteudo para o pacote */
         for(int i=0; i<data.length; i++)
             this.data[i] = data[i];
@@ -124,7 +132,7 @@ public class AnonPacket implements Comparable{
         throws UnknownHostException{
 
         /* O endereço do owner não é importante neste caso */
-        return new AnonPacket(new byte[0],-ackSeq,-1,"localhost",destinationIP,0);
+        return new AnonPacket(new byte[0],-ackSeq,-1,"localhost",destinationIP,0,ackSeq);
     }
 
     /**
@@ -137,7 +145,7 @@ public class AnonPacket implements Comparable{
     public static AnonPacket getSizePacket(int size, int session, int sequence, String destinationIP)
         throws UnknownHostException{
 
-        return new AnonPacket(new byte[0],session,sequence,"ENDEREÇO DO OWNER", destinationIP, size);
+        return new AnonPacket(new byte[0],session,sequence,"ENDEREÇO DO OWNER", destinationIP, size, -1);
     }
 
     /**
@@ -166,6 +174,11 @@ public class AnonPacket implements Comparable{
         return this.ownerIP;
     }
 
+    public int getAckseq() {
+
+        return ackseq;
+    }
+
     /**
      * Método que retorna o campo
      * de dados do pacote
@@ -174,6 +187,22 @@ public class AnonPacket implements Comparable{
     public byte[] getData() {
 
         return data;
+    }
+
+    /**
+     * Método que permite alterar a variável
+     * ackseq do objeto da classe AnonPacket
+     * ao qual é enviado o método
+     * @param ackseq
+     */
+    public void setAckseq(int ackseq) {
+
+        this.ackseq = ackseq;
+    }
+
+    public void setSession(int session) {
+
+        this.session = session;
     }
 
     /**
@@ -196,16 +225,18 @@ public class AnonPacket implements Comparable{
 
         byte[] sessArray = this.intToBytes(this.session);
         byte[] seqArray = this.intToBytes(sequence);
+        byte[] ackArray = this.intToBytes(this.ackseq);
         byte[] ownArray = this.ownerIP.getAddress();
         byte[] addArray = this.destinationIP.getAddress();
         byte[] portArray = this.intToBytes(this.port);
 
         /* Array que irá conter o conteudo do pacote Anon */
-        byte[] ret = new byte[sessArray.length + seqArray.length + ownArray.length + addArray.length + portArray.length + this.data.length];
+        byte[] ret = new byte[sessArray.length + seqArray.length + ackArray.length + ownArray.length + addArray.length + portArray.length + this.data.length];
         System.out.println("Tamaho total: " + ret.length);
         int i = 0;
         i += arraycpy(ret,sessArray,i,0,sessArray.length);
         i += arraycpy(ret,seqArray,i,0,seqArray.length);
+        i += arraycpy(ret,ackArray,i,0,ackArray.length);
         i += arraycpy(ret,ownArray,i,0,ownArray.length);
         i += arraycpy(ret,addArray,i,0,addArray.length);
         i += arraycpy(ret,portArray,i,0,portArray.length);
@@ -227,9 +258,10 @@ public class AnonPacket implements Comparable{
         int offset = 0;
         byte[] seqArray = new byte[4], addArray = new byte[4],
                 portArray = new byte[4], data, sessArray = new byte[4],
-                ownArray = new byte[4];
+                ownArray = new byte[4], ackArray = new byte[4];
         offset += arraycpy(sessArray,array,0,offset,4);
         offset += arraycpy(seqArray,array,0,offset,4);
+        offset += arraycpy(ackArray,array,0,offset,4);
         offset += arraycpy(ownArray,array,0,offset,4);
         offset += arraycpy(addArray,array,0,offset,4);
         offset += arraycpy(portArray,array,0,offset,4);
@@ -238,7 +270,8 @@ public class AnonPacket implements Comparable{
         InetAddress owner = InetAddress.getByAddress(ownArray);
         InetAddress dest = InetAddress.getByAddress(addArray);
         int port = byteArrayToInt(portArray);
-        return new AnonPacket(data,byteArrayToInt(sessArray),byteArrayToInt(seqArray),owner.getHostName(),dest.getHostName(),port);
+        return new AnonPacket(data,byteArrayToInt(sessArray),byteArrayToInt(seqArray),
+                owner.getHostName(),dest.getHostName(),port,byteArrayToInt(ackArray));
     }
 
     /**
@@ -254,6 +287,8 @@ public class AnonPacket implements Comparable{
         sb.append(this.session);
         sb.append("; Nºo de sequência: ");
         sb.append(this.sequence);
+        sb.append("; Ack sequence: ");
+        sb.append(this.ackseq);
         sb.append("; Owner IP address: ");
         sb.append(this.ownerIP);
         sb.append("; Destination IP address: ");

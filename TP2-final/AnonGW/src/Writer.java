@@ -54,10 +54,25 @@ public class Writer implements Runnable {
     private Boolean waiting;
 
     /**
+     * Variável que guarda os valores atribuidos
+     * aos campos ackseq de cada um dos pacotes
+     * que passam pelo writer
+     */
+    private int nextAckSeq;
+
+    /**
+     * Variável que guarda o valor do ack do
+     * pacote que está a tentar ser enviado
+     * num dado momento
+     */
+    private Integer actualAckSeq;
+
+    /**
      * Construtor para objetos da classe Writer
      * @param socket
      */
-    public Writer(DatagramSocket socket, PacketQueue queue, Lock l, Condition c, Boolean sucessFlag, Boolean waiting){
+    public Writer(DatagramSocket socket, PacketQueue queue, Lock l, Condition c,
+                  Boolean sucessFlag, Boolean waiting, Integer actualAckSeq){
 
         this.socket = socket;
         this.queue = queue;
@@ -68,6 +83,8 @@ public class Writer implements Runnable {
         /* Aqui não estamos a espera
         de nenhum ack - inicialmente será FALSE */
         this.waiting = waiting;
+        this.nextAckSeq = 0;
+        this.actualAckSeq = actualAckSeq;
     }
 
     /**
@@ -83,22 +100,30 @@ public class Writer implements Runnable {
                 DatagramPacket dp = new DatagramPacket(ap.toByteArray(),
                         4096, InetAddress.getByName("0.0.0.0"), ap.getPort());
 
+                /* Atribuimos um valor ao campo
+                que guarda a seq para o ack */
+                ap.setAckseq(this.nextAckSeq++);
                 /* Se for um ack simplesmente enviamos
                 e não esperamos novo ack */
-                if(ap.isAcknowledgment())
+                if(ap.isAcknowledgment()) {
+                    dp = new DatagramPacket(ap.toByteArray(),ap.toByteArray().length, ap.getOwner(),6666);
                     this.socket.send(dp);
+                }
                 /* Caso contrário teremos de gerir o protocolo
                 relacionado com a receção e envio de acks */
                 else {
-                /* Enquanto o writer não receber confirmação
-                que o pacote foi recebido no destino espera */
-                    while (this.timeoutReached) {
+                    /* Enquanto o writer não receber confirmação
+                    que o pacote foi recebido no destino espera */
+                    while (!this.successFlag) {
                         /* Inicializamos o timeoutReached a false */
                         this.timeoutReached = false;
                         /* Enviamos o respetivo pacote */
                         this.socket.send(dp);
                         /* Esperamos no máximo um RTT */
                         this.l.lock();
+                        /* Atualizamos o valor atual do pacote
+                        que pretendemos receber o ack */
+                        this.actualAckSeq = this.nextAckSeq;
                         /* Se estamos num novo ciclo não houve
                         sucesso no ciclo anterior */
                         this.successFlag = false;

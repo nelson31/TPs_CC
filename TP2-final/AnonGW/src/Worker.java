@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 public class Worker implements Runnable{
@@ -14,7 +12,7 @@ public class Worker implements Runnable{
      * Socket a partir do qual cada
      * worker receberá dados
      */
-    private Socket cliente;
+    private Socket socket;
 
     /**
      * Buffer que permite transferir os
@@ -26,7 +24,7 @@ public class Worker implements Runnable{
      * Socket a partir do qual cada
      * worker enviará dados
      */
-    private Socket server;
+    private AnonSocket anon;
 
     /**
      * Construtor para objetos da
@@ -55,8 +53,8 @@ public class Worker implements Runnable{
 
         try {
             /* Arrancamos um thread que lê do socket do cliente para o socket do servidor */
-            Thread t1 = new Thread(new ReaderFromTo(cliente,server,transfer));
-            Thread t2 = new Thread(new ReaderFromTo(server,cliente,transfer));
+            Thread t1 = new Thread(new ReaderFromClientToAnon(cliente,server,transfer));
+            Thread t2 = new Thread(new ReaderFromClientToAnon(server,cliente,transfer));
             t1.start();
             t2.start();
             /* Esperamos que ambas

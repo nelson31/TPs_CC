@@ -8,7 +8,7 @@ public class testePacket {
 
         try {
             byte[] data = {14,37,00,45,12,45};
-            AnonPacket ap = new AnonPacket(data,12, 14, "localhost", "localhost", 80);
+            AnonPacket ap = new AnonPacket(data,12, 14, "localhost", "localhost", 80,45);
 
             byte[] packet = ap.toByteArray();
 

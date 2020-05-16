@@ -41,18 +41,29 @@ public class AnonSocket {
     private PacketQueue sending;
 
     /**
+     * Variável que guarda o IP do anonGW local
+     */
+    private String localIP;
+
+    private ForeignSessions foreignTable;
+
+    private SessionGetter idSessionGetter;
+
+    /**
      * Construtor para objetos da classe
      * AnonSocket
      * @param port
      * @throws SocketException
      */
-    public AnonSocket(int port, String addIP)
+    public AnonSocket(int port, String addIP, ForeignSessions foreignTable, SessionGetter idSessionGetter)
         throws SocketException, UnknownHostException {
 
         /* Lock a ser usado pelo reader e writer
         para a gestão do envio e receção de ACK's */
         Lock l = new ReentrantLock();
         Condition c = l.newCondition();
+        this.foreignTable = foreignTable;
+        this.idSessionGetter = idSessionGetter;
         Boolean successFlag = Boolean.FALSE;
         Boolean waiting = Boolean.FALSE;
 
@@ -62,8 +73,9 @@ public class AnonSocket {
         this.receiving = new MappingTable();
         /* Criamos as instâncias para ler
         e escrever no socket UDP */
-        this.reader = new Reader(this.s,receiving,sending,l,c,successFlag,waiting);
-        this.writer = new Writer(this.s,sending,l,c,successFlag,waiting);
+        Integer actualAckSeq = 0;
+        this.reader = new Reader(this.s,receiving,sending,l,c,successFlag,waiting,addIP,foreignTable,this.idSessionGetter,actualAckSeq);
+        this.writer = new Writer(this.s,sending,l,c,successFlag,waiting,actualAckSeq);
         /* Colocamos o reader e o writer a correr */
         new Thread(this.reader).start();
         new Thread(this.writer).start();
@@ -88,7 +100,7 @@ public class AnonSocket {
                 body[k] = data[j];
             i += k;
             /* Adicionamos o pacote à lista para ser enviado */
-            list.add(new AnonPacket(body,session,sequence,"ENDEREÇO DO OWNER", ipDest,port));
+            list.add(new AnonPacket(body,session,sequence,"ENDEREÇO DO OWNER", ipDest,port,-1));
         }
         /* Enviamos o número de pacotes
         a serem recebidos */

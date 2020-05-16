@@ -52,10 +52,38 @@ public class Reader implements Runnable {
     private Boolean isWriterWaitingForAcks;
 
     /**
+     * Variável que guarda o endereço
+     * IP do anonGW local
+     */
+    private String localIP;
+
+    /**
+     * Variável que guarda os Id's que são
+     * atribuidos a sessões cujo owner é
+     * outro AnonGW que não o local
+     */
+    private ForeignSessions foreignTable;
+
+    /**
+     * Variável que permite obter a ids de
+     * sessão para o anonGW local
+     */
+    private SessionGetter idSessionGetter;
+
+    /**
+     * Variável que guarda o valor do ack do
+     * pacote que está a tentar ser enviado
+     * num dado momento
+     */
+    private Integer actualAckSeq;
+
+    /**
      * Construtor para objetos da classe reader
      */
     public Reader(DatagramSocket socket, MappingTable table, PacketQueue sendAcks,
-                  Lock l, Condition c, Boolean successFlag, Boolean isWriterWaitingForAcks){
+                  Lock l, Condition c, Boolean successFlag, Boolean isWriterWaitingForAcks,
+                  String localIP, ForeignSessions foreignTable, SessionGetter idSessionGetter,
+                  Integer actualAckSeq){
 
         this.socket = socket;
         this.table = table;
@@ -64,6 +92,10 @@ public class Reader implements Runnable {
         this.c = c;
         this.successFlag = successFlag;
         this.isWriterWaitingForAcks = isWriterWaitingForAcks;
+        this.localIP = localIP;
+        this.foreignTable = foreignTable;
+        this.idSessionGetter = idSessionGetter;
+        this.actualAckSeq = actualAckSeq;
     }
 
     /**
@@ -87,7 +119,7 @@ public class Reader implements Runnable {
                     try{
                         /* Colocamos o valor do success a true
                         caso o writer esteja à espera */
-                        if(this.isWriterWaitingForAcks) {
+                        if(this.isWriterWaitingForAcks && this.actualAckSeq.equals(-ap.getSession())) {
                             this.successFlag = true;
                             /* Sinalizamos o writer */
                             this.c.signal();
@@ -99,12 +131,21 @@ public class Reader implements Runnable {
                     }
                 }
                 else {
+                    int sessionHere = this.idSessionGetter.getID();
+                    /* Caso o pacote não pertence ao anonGW local,
+                    atribuimos-lhe um id de sessão local */
+                    if(!this.localIP.equals(ap.getOwner().getHostAddress()))
+                        ap.setSession(sessionHere);
                     /* Colocamos o pacote na table */
                     this.table.addPacket(ap.getSession(), ap);
                     /* Enviamos o ack para o destino com
                     o respetivo ack */
-                    AnonPacket ack = AnonPacket.getAcknowledgment(-ap.getSequence(),ap.getOwner().getHostAddress());
+                    AnonPacket ack = AnonPacket.getAcknowledgment(ap.getAckseq(),ap.getOwner().getHostAddress());
                     this.sendAcks.send(ack);
+                    /* Se o owner do pacote não for o anonGW local
+                    adicionamos uma entrada à foreignTable */
+                    if(!this.localIP.equals(ap.getOwner().getHostAddress()))
+                        this.foreignTable.add(sessionHere,ap.getOwner().getHostAddress(),ap.getSession());
                 }
             }
         }
