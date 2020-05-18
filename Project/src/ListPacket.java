@@ -65,6 +65,8 @@ public class ListPacket {
 
         this.list.add(sp);
 
+        System.out.println("Tamanho da lista: " + this.list.size());
+
         /* Sinalizamos quem estava à
         espera de ler do socket */
         this.c.signal();
