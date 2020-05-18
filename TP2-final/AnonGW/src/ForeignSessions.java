@@ -117,7 +117,7 @@ public class ForeignSessions {
     }
 
     /**
-     * Método que permite obter um id de sessão
+     * Método que permite adicionar um id de sessão
      * @param session
      */
     public void add(int session, String peerIP, int foreignsession, String targetServerIP, int targetServerPort){
@@ -126,7 +126,7 @@ public class ForeignSessions {
         à estrutura de dados */
         this.l.lock();
 
-        this.foreignIds.add(session);
+        this.ownerSessionIds.add(session);
         this.available.add(session);
         this.peersIP.add(peerIP);
         this.foreignIds.add(foreignsession);
@@ -153,6 +153,10 @@ public class ForeignSessions {
         this.ownerSessionIds.remove(foreignID);
         this.peersIP.remove(index);
         this.foreignIds.remove(index);
+        this.targetServersIPs.remove(index);
+        this.targetServersPorts.remove(index);
+        /* Pelo sim pelo não removemos tambem da lista available */
+        this.available.remove(foreignID);
 
         /* Cedemos o lock */
         this.l.unlock();

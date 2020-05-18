@@ -188,4 +188,21 @@ public class AnonSocket {
         }
         return data;
     }
+
+    /**
+     * Método que dado o id de sessão liberta o
+     * espaço na foreign table caso seja uma
+     * sessão externa e cede o id
+     * @param idSession
+     */
+    public void endSession(int idSession){
+
+        /* Caso estejamos perante uma sessão externa
+        eliminamos essa linha da tabela foreign */
+        if(this.foreignTable.isForeign(idSession))
+            this.foreignTable.remove(idSession);
+        /* Cedemos o id da sessão mesmo que não se
+        trate de uma sessão externa */
+        this.idSessionGetter.cedeID(idSession);
+    }
 }

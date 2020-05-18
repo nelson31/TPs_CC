@@ -51,13 +51,25 @@ public class SessionHandler implements Runnable{
 
             /* Colocamos as 2 threads a correr: Uma que
             le do cliente e escreve para o anon e vice versa */
-            new Thread(new ReaderFromSocketToAnon(cliente, asocket, destinationIP,
-                    destinationPort, sessionID, peerIP)).start();
+            Thread t1 = new Thread(new ReaderFromSocketToAnon(cliente, asocket, destinationIP,
+                    destinationPort, sessionID, peerIP));
 
-            new Thread(new ReaderFromAnonToSocket(cliente, asocket, destinationIP,
-                    destinationPort, sessionID)).start();
+            Thread t2 = new Thread(new ReaderFromAnonToSocket(cliente, asocket, destinationIP,
+                    destinationPort, sessionID));
+
+            t1.start();
+            t2.start();
+
+            /* Esperamos por ambas as threads */
+            t1.join();
+            t2.join();
+
+            /* Aqui teremos que ceder o id de sessão e ainda, se
+             tiver sido atribuida um sessão externa, teremos
+            que remover essa informação da tabela foreign */
+            this.asocket.endSession(this.sessionID);
         }
-        catch(IOException exc){
+        catch(IOException | InterruptedException exc){
             System.out.println("Erro ao iniciar as threads de leitura dos sockets - " + exc.getMessage());
         }
     }
