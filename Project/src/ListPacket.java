@@ -148,7 +148,7 @@ public class ListPacket {
 
         this.l.lock();
 
-        boolean ret = this.list.contains(new SecurePacket(id,null,null,0,null));
+        boolean ret = this.list.contains(new SecurePacket(id,null,null,0,new byte[0]));
         /* Caso exista removemos o
         respetivo pacote de ack */
         if(ret)

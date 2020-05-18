@@ -48,8 +48,7 @@ public class AnonSocket {
             que não seja ack */
             data = this.ssocket.receiveNotAck();
             /* Enviamos um ack para o destino */
-            SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),
-                    data.getDestino(),data.getPort());
+            SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
 
             this.ssocket.send(pack);
         }

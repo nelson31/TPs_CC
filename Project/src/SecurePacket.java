@@ -161,6 +161,11 @@ public class SecurePacket {
         }
     }
 
+    public InetAddress getOrigem() {
+
+        return origem;
+    }
+
     public InetAddress getDestino() {
 
         return destino;

@@ -16,7 +16,7 @@ public class Sender {
             while((message = bf.readLine()) != null){
 
                 byte[] data = {12,42,23,43,23};
-                SecurePacket sp = new SecurePacket(0,InetAddress.getByName(args[0]),destination,6666,data);
+                SecurePacket sp = new SecurePacket(1,InetAddress.getByName(args[0]),destination,6666,data);
                 asocket.send(sp);
                 System.out.println("Escreva uma mensagem: ");
             }
