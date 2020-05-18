@@ -6,23 +6,10 @@ import java.net.UnknownHostException;
 
 public class Receiver {
 
-    private static AnonSocket asocket;
-
-    private static String ipDest;
-
-    public Receiver(int port, String IP){
-
-        try {
-            asocket = new AnonSocket(port, IP, new ForeignSessions(), new SessionGetter());
-        }
-        catch(UnknownHostException | SocketException exc){
-            System.out.println("Erro ao criar o socket");
-        }
-    }
-
     public static void main(String[] args){
 
         try {
+            AnonSocket asocket = new AnonSocket(6666, args[1], new ForeignSessions(), new SessionGetter());
             System.out.println("Estou à espera de mensagens:");
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
@@ -31,7 +18,7 @@ public class Receiver {
                 System.out.println("Mensagem lida: " + message);
             }
         }
-        catch(InterruptedException exc){
+        catch(InterruptedException | SocketException | UnknownHostException exc){
             System.out.println("Erro ao ler pedido");
         }
     }
