@@ -14,7 +14,7 @@ public class Sender {
                 String message = null;
                 while ((message = bf.readLine()) != null) {
                     byte[] data = message.getBytes();
-                    asocket.send(0, data, args[1], args[1], 0);
+                    asocket.send(0, data, args[2], args[1], 0);
                     System.out.println("Mensagem para enviar:");
                 }
             }
