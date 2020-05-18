@@ -20,9 +20,9 @@ public class Writer implements Runnable {
      * Construtor para objetos
      * da classe Writer
      */
-    public Writer(DatagramSocket socket) {
+    public Writer(DatagramSocket socket, ListPacket sending) {
 
-        this.sending = new ListPacket();
+        this.sending = sending;
         this.socket = socket;
     }
 

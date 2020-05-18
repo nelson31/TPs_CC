@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -37,8 +36,8 @@ public class SecureSocket {
         this.socket = new DatagramSocket(port,localIP);
         this.sending = new ListPacket();
         this.receiving = new ListPacket();
-        this.reader = new Reader(socket);
-        this.writer = new Writer(socket);
+        this.reader = new Reader(socket,this.receiving);
+        this.writer = new Writer(socket,this.sending);
         new Thread(this.reader).start();
         new Thread(this.writer).start();
     }
@@ -48,10 +47,7 @@ public class SecureSocket {
      * Método que permite enviar uma datagrama
      * @param packet
      */
-    public void send(SecurePacket packet)
-            throws IOException {
-
-        byte[] content = packet.toByteArray();
+    public void send(SecurePacket packet){
 
         /* Adicionamos o pacote à estrutura
         de dados para ser enviado */

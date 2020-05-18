@@ -17,9 +17,9 @@ public class Reader implements Runnable {
      */
     private DatagramSocket socket;
 
-    public Reader(DatagramSocket socket) {
+    public Reader(DatagramSocket socket, ListPacket receiving) {
 
-        this.receiving = new ListPacket();
+        this.receiving = receiving;
         this.socket = socket;
     }
 
