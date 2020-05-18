@@ -138,7 +138,7 @@ public class AnonPacket implements Comparable{
         throws UnknownHostException{
 
         /* O endereço do owner não é importante neste caso */
-        return new AnonPacket(new byte[0],-ackSeq,-1,"localhost",destinationIP,0,ackSeq);
+        return new AnonPacket(new byte[0],ackSeq,-1,"localhost",destinationIP,0,ackSeq);
     }
 
     /**

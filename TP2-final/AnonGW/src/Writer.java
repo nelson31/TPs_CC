@@ -100,12 +100,13 @@ public class Writer implements Runnable {
                 DatagramPacket dp = new DatagramPacket(ap.toByteArray(),
                         ap.toByteArray().length, InetAddress.getByName(ap.getNextPeerIP()), 6666);
 
-                System.out.println("Pacote para enviar: ");
-                System.out.println(ap.toString());
-
                 /* Atribuimos um valor ao campo
                 que guarda a seq para o ack */
                 ap.setAckseq(this.nextAckSeq++);
+
+                System.out.println("[Writer] Pacote para enviar: ");
+                System.out.println(ap.toString());
+
                 /* Se for um ack simplesmente enviamos
                 e não esperamos novo ack */
                 if(ap.isAcknowledgment()) {
