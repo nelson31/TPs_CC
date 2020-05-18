@@ -69,6 +69,7 @@ public class ForeignSessions {
         this.targetServersPorts = new ArrayList<>();
         this.ownerSessionIds = new ArrayList<>();
         this.l = new ReentrantLock();
+        this.c = this.l.newCondition();
     }
 
     /**
