@@ -9,7 +9,7 @@ public class Receiver {
     public static void main(String[] args){
 
         try {
-            AnonSocket asocket = new AnonSocket(6666, args[1], new ForeignSessions(), new SessionGetter());
+            AnonSocket asocket = new AnonSocket(6666, args[0], new ForeignSessions(), new SessionGetter());
             System.out.println("Estou à espera de mensagens:");
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             while (true) {
