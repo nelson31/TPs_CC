@@ -100,10 +100,6 @@ public class Writer implements Runnable {
                 DatagramPacket dp = new DatagramPacket(ap.toByteArray(),
                         ap.toByteArray().length, InetAddress.getByName(ap.getNextPeerIP()), 6666);
 
-                /* Atribuimos um valor ao campo
-                que guarda a seq para o ack */
-                ap.setAckseq(this.nextAckSeq++);
-
                 System.out.println("[Writer] Pacote para enviar: ");
                 System.out.println(ap.toString());
 
@@ -121,12 +117,15 @@ public class Writer implements Runnable {
                     /* Enquanto o writer não receber confirmação
                     que o pacote foi recebido no destino espera */
                     while (!this.successFlag.getB()) {
-                        /* Inicializamos o timeoutReached a false */
-                        this.timeoutReached.setB(false);
+                        /* Atribuimos um valor ao campo
+                        que guarda a seq para o ack */
+                        ap.setAckseq(this.nextAckSeq++);
                         /* Enviamos o respetivo pacote */
                         this.socket.send(dp);
                         /* Esperamos no máximo um RTT */
                         this.l.lock();
+                        /* Inicializamos o timeoutReached a false */
+                        this.timeoutReached.setB(false);
                         /* Atualizamos o valor atual do pacote
                         que pretendemos receber o ack */
                         this.actualAckSeq.setI(nextAckSeq);
@@ -157,6 +156,8 @@ public class Writer implements Runnable {
                             this.l.unlock();
                         }
                     }
+                    /* Atualizamos o valor do ack que esperamos */
+                    this.actualAckSeq.setI(this.actualAckSeq.getI()+1);
                 }
             }
         }

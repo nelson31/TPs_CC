@@ -111,7 +111,12 @@ public class AnonSocket {
         /* Aqui partimos os dados por AnonPackets */
         List<AnonPacket> list = new ArrayList<>();
         for(int i=0; i<data.length; sequence = this.activeSessions.getAndIncrement(session)){
-            byte[] body = new byte[4080];
+            byte[] body;
+            if(data.length-i < 4080)
+                body = new byte[data.length-i];
+            else
+                body = new byte[4080];
+            
             k = 0;
             for(int j=i; k<4080 && j<data.length; j++,k++)
                 body[k] = data[j];
