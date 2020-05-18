@@ -115,6 +115,7 @@ public class Reader implements Runnable {
                 AnonPacket ap = AnonPacket.getFromByteArray(dp.getData());
                 /* Se for ACK sinalizamos o writer */
                 if(ap.isAcknowledgment()){
+		    System.out.println("Recebi ack");
                     this.l.lock();
                     try{
                         /* Colocamos o valor do success a true
