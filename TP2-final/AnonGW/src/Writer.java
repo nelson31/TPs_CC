@@ -99,6 +99,9 @@ public class Writer implements Runnable {
                 // Corrigir InetAdress para o do anonGW que for escolhido para a sessão em questão
                 DatagramPacket dp = new DatagramPacket(ap.toByteArray(),
                         ap.toByteArray().length, InetAddress.getByName(ap.getNextPeerIP()), 6666);
+                
+                System.out.println("Pacote para enviar: ");
+                System.out.println(ap.toString());
 
                 /* Atribuimos um valor ao campo
                 que guarda a seq para o ack */
