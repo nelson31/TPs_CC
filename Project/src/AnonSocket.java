@@ -50,6 +50,8 @@ public class AnonSocket {
             /* Enviamos um ack para o destino */
             SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
 
+            System.out.println("Ack enviado: ");
+            System.out.println(pack.toString());
             this.ssocket.send(pack);
         }
         catch(IOException exc){
