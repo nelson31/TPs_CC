@@ -106,6 +106,7 @@ public class Writer implements Runnable {
                 /* Se for um ack simplesmente enviamos
                 e não esperamos novo ack */
                 if(ap.isAcknowledgment()) {
+                    System.out.println("Vou enviar ack");
                     dp = new DatagramPacket(ap.toByteArray(),ap.toByteArray().length,
                             InetAddress.getByName(ap.getNextPeerIP()),6666);
                     this.socket.send(dp);

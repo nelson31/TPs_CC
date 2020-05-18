@@ -115,7 +115,6 @@ public class Reader implements Runnable {
                 AnonPacket ap = AnonPacket.getFromByteArray(dp.getData());
                 /* Se for ACK sinalizamos o writer */
                 if(ap.isAcknowledgment()){
-		            System.out.println("Recebi ack");
                     this.l.lock();
                     try{
                         /* Colocamos o valor do success a true
@@ -144,6 +143,7 @@ public class Reader implements Runnable {
                     o respetivo ack */
                     AnonPacket ack = AnonPacket.getAcknowledgment(ap.getAckseq(),ap.getOwner().getHostAddress());
                     this.sendAcks.send(ack.getDestinationIP().getHostAddress(), ack);
+                    System.out.println("Enviei ack");
                     /* Se o owner do pacote não for o anonGW local
                     adicionamos uma entrada à foreignTable */
                     if(!this.localIP.equals(ap.getOwner().getHostAddress())){
