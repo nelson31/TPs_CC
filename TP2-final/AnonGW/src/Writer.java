@@ -65,14 +65,14 @@ public class Writer implements Runnable {
      * pacote que está a tentar ser enviado
      * num dado momento
      */
-    private Integer actualAckSeq;
+    private IntegerEncapsuler actualAckSeq;
 
     /**
      * Construtor para objetos da classe Writer
      * @param socket
      */
     public Writer(DatagramSocket socket, PacketQueue queue, Lock l, Condition c,
-                  BooleanEncapsuler sucessFlag, BooleanEncapsuler waiting, Integer actualAckSeq){
+                  BooleanEncapsuler sucessFlag, BooleanEncapsuler waiting, IntegerEncapsuler actualAckSeq){
 
         this.socket = socket;
         this.queue = queue;
@@ -83,7 +83,7 @@ public class Writer implements Runnable {
         /* Aqui não estamos a espera
         de nenhum ack - inicialmente será FALSE */
         this.waiting = waiting;
-        this.nextAckSeq = 0;
+        this.nextAckSeq = 1;
         this.actualAckSeq = actualAckSeq;
     }
 
@@ -129,7 +129,7 @@ public class Writer implements Runnable {
                         this.l.lock();
                         /* Atualizamos o valor atual do pacote
                         que pretendemos receber o ack */
-                        this.actualAckSeq = this.nextAckSeq;
+                        this.actualAckSeq.setI(nextAckSeq);
                         /* Se estamos num novo ciclo não houve
                         sucesso no ciclo anterior */
                         this.successFlag.setB(false);

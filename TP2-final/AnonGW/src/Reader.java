@@ -75,7 +75,7 @@ public class Reader implements Runnable {
      * pacote que está a tentar ser enviado
      * num dado momento
      */
-    private Integer actualAckSeq;
+    private IntegerEncapsuler actualAckSeq;
 
     /**
      * Construtor para objetos da classe reader
@@ -83,7 +83,7 @@ public class Reader implements Runnable {
     public Reader(DatagramSocket socket, MappingTable table, PacketQueue sendAcks,
                   Lock l, Condition c, BooleanEncapsuler successFlag, BooleanEncapsuler isWriterWaitingForAcks,
                   String localIP, ForeignSessions foreignTable, SessionGetter idSessionGetter,
-                  Integer actualAckSeq){
+                  IntegerEncapsuler actualAckSeq){
 
         this.socket = socket;
         this.table = table;

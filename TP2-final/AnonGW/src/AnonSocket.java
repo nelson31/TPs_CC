@@ -76,7 +76,7 @@ public class AnonSocket {
         this.activeSessions = new CurrentSequence();
         /* Criamos as instâncias para ler
         e escrever no socket UDP */
-        Integer actualAckSeq = 0;
+        IntegerEncapsuler actualAckSeq = new IntegerEncapsuler(1);
         this.reader = new Reader(this.s,receiving,sending,l,c,successFlag,waiting,addIP,foreignTable,this.idSessionGetter,actualAckSeq);
         this.writer = new Writer(this.s,sending,l,c,successFlag,waiting,actualAckSeq);
         /* Colocamos o reader e o writer a correr */

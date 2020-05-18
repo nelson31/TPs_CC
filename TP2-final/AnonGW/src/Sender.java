@@ -12,7 +12,7 @@ public class Sender {
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             String message = null;
             while ((message = bf.readLine()) != null) {
-                byte[] data = message.getBytes();
+                byte[] data = {24,34,45,56};
                 asocket.send(0, data, args[1], args[0], 0);
                 System.out.println("Mensagem para enviar:");
             }
