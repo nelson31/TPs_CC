@@ -7,13 +7,13 @@ public class Sender {
     public static void main(String[] args){
 
         try {
-            AnonSocket asocket = new AnonSocket(6666, args[1], new ForeignSessions(), new SessionGetter());
+            AnonSocket asocket = new AnonSocket(6666, args[2], new ForeignSessions(), new SessionGetter());
             System.out.println("Mensagem para enviar:");
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             String message = null;
             while ((message = bf.readLine()) != null) {
                 byte[] data = message.getBytes();
-                asocket.send(0, data, args[2], args[1], 0);
+                asocket.send(0, data, args[3], args[2], 0);
                 System.out.println("Mensagem para enviar:");
             }
         }
