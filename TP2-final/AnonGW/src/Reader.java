@@ -113,7 +113,7 @@ public class Reader implements Runnable {
                 this.socket.receive(dp);
                 // Aqui teremos que desencriptar a informação quando tratarmos da segurança
                 AnonPacket ap = AnonPacket.getFromByteArray(dp.getData());
-                System.out.println(ap.toString());
+                System.out.println("[Reader] Pacote recebido: " + ap.toString());
                 /* Se for ACK sinalizamos o writer */
                 if(ap.isAcknowledgment()){
                     this.l.lock();
