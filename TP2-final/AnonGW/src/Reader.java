@@ -145,9 +145,11 @@ public class Reader implements Runnable {
                     this.sendAcks.send(ack.getDestinationIP().getHostAddress(), ack);
                     /* Se o owner do pacote não for o anonGW local
                     adicionamos uma entrada à foreignTable */
-                    if(!this.localIP.equals(ap.getOwner().getHostAddress()))
+                    if(!this.localIP.equals(ap.getOwner().getHostAddress())){
+		        System.out.println(this.localIP + " " + ap.getOwner().getHostAddress());
                         this.foreignTable.add(sessionHere,ap.getOwner().getHostAddress(),
                                 ap.getSession(),ap.getDestinationIP().getHostAddress(),ap.getPort());
+	 	    }
                 }
             }
         }
