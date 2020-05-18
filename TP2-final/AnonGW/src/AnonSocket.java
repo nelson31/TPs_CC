@@ -96,7 +96,7 @@ public class AnonSocket {
         /* Se a sessão ainda não estiver ativa
         ativamos uma nova */
         if(!this.activeSessions.contains(session))
-            this.activeSessions.put(session,1);
+            this.activeSessions.put(session,0);
 
         String ownerIP = this.s.getLocalAddress().getHostAddress();
         /* Se o id de sessão for local então o
@@ -150,6 +150,9 @@ public class AnonSocket {
         /* Teremos que receber o número de pacotes
         a serem recebidos para remontar a string de
         dados enviada */
+        /* Se a sessão não estiver ativa ativamos */
+        if(this.activeSessions.contains(session))
+            this.activeSessions.put(session, 0);
 
         /* Lemos o pacote */
         AnonPacket ap = this.receiving.getPacket(session,this.activeSessions.getAndIncrement(session));
