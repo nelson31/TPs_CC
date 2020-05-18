@@ -113,11 +113,11 @@ public class Reader implements Runnable {
                 this.socket.receive(dp);
                 // Aqui teremos que desencriptar a informação quando tratarmos da segurança
                 AnonPacket ap = AnonPacket.getFromByteArray(dp.getData());
-                System.out.println("[Reader] Pacote recebido: " + ap.toString());
                 /* Se for ACK sinalizamos o writer */
                 if(ap.isAcknowledgment()){
                     this.l.lock();
                     try{
+                        System.out.println("Recebi ack de " + -ap.getSession());
                         /* Colocamos o valor do success a true
                         caso o writer esteja à espera */
                         if(this.isWriterWaitingForAcks.getB() && this.actualAckSeq.equals(-ap.getSession())) {
@@ -132,6 +132,7 @@ public class Reader implements Runnable {
                     }
                 }
                 else {
+                    System.out.println("[Reader] Pacote de dados recebido: " + ap.toString());
                     int sessionHere = this.idSessionGetter.getID();
                     /* Caso o pacote não pertence ao anonGW local,
                     atribuimos-lhe um id de sessão local */
@@ -147,7 +148,6 @@ public class Reader implements Runnable {
                     /* Se o owner do pacote não for o anonGW local
                     adicionamos uma entrada à foreignTable */
                     if(!this.localIP.equals(ap.getOwner().getHostAddress())){
-		            System.out.println(this.localIP + " " + ap.getOwner().getHostAddress());
                         this.foreignTable.add(sessionHere,ap.getOwner().getHostAddress(),
                                 ap.getSession(),ap.getDestinationIP().getHostAddress(),ap.getPort());
 	 	            }
