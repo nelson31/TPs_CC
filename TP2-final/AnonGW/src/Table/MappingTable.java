@@ -5,6 +5,7 @@ import AnonProto.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Classe que representa um mapeamento de
@@ -34,6 +35,7 @@ public class MappingTable {
     public MappingTable(){
 
         this.table = new HashMap<>();
+        this.l = new ReentrantLock();
         /* Inicializamos a estrutura com o número
         de linhas igual ao número máximo de sessões
         em simultâneo */
