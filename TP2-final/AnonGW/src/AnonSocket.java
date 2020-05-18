@@ -151,7 +151,7 @@ public class AnonSocket {
         a serem recebidos para remontar a string de
         dados enviada */
         /* Se a sessão não estiver ativa ativamos */
-        if(this.activeSessions.contains(session))
+        if(!this.activeSessions.contains(session))
             this.activeSessions.put(session, 0);
 
         /* Lemos o pacote */
