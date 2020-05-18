@@ -30,7 +30,7 @@ public class AnonSocket {
                     received = true;
             }
         }
-        catch(InterruptedException | IOException exc){
+        catch(InterruptedException exc){
             System.out.println(exc.getMessage());
         }
     }
@@ -43,20 +43,15 @@ public class AnonSocket {
     public SecurePacket receive(){
 
         SecurePacket data = null;
-        try{
-            /* Recebemos o primeiro pacote
-            que não seja ack */
-            data = this.ssocket.receiveNotAck();
-            /* Enviamos um ack para o destino */
-            SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
+        /* Recebemos o primeiro pacote
+        que não seja ack */
+        data = this.ssocket.receiveNotAck();
+        /* Enviamos um ack para o destino */
+        SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
 
-            System.out.println("Ack enviado: ");
-            System.out.println(pack.toString());
-            this.ssocket.send(pack);
-        }
-        catch(IOException exc){
-            System.out.println(exc.getMessage());
-        }
+        System.out.println("Ack enviado: ");
+        System.out.println(pack.toString());
+        this.ssocket.send(pack);
         return data;
     }
 }
