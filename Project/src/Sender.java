@@ -12,11 +12,13 @@ public class Sender {
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             InetAddress destination = InetAddress.getByName(args[1]);
             String message;
+            System.out.println("Escreva uma mensagem: ");
             while((message = bf.readLine()) != null){
 
                 byte[] data = {12,42,23,43,23};
                 SecurePacket sp = new SecurePacket(0,InetAddress.getByName(args[0]),destination,6666,data);
                 asocket.send(sp);
+                System.out.println("Escreva uma mensagem: ");
             }
         }
         catch(IOException exc){
