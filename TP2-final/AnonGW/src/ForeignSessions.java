@@ -82,6 +82,8 @@ public class ForeignSessions {
         this.l.lock();
 
         try{
+            /* Enquanto não existir nenhuma sessão
+            externa à espera aguardamos */
             while(this.available.size() == 0)
                 this.c.await();
 
@@ -113,6 +115,8 @@ public class ForeignSessions {
         int index = this.foreignIds.indexOf(foreignId);
 
         si = new SessionInfo(this.ownerSessionIds.get(index),this.peersIP.get(index));
+
+        this.l.unlock();
         return si;
     }
 

@@ -52,7 +52,12 @@ public class ClientAccepter implements Runnable{
         while(true){
 
             try {
+                /* Selecionamos um dos peers para encaminhar
+                a informação para o destino */
                 this.nextPeer = (this.nextPeer + 1) % this.peersIP.size();
+
+                /* Colocamos um SessionHandler a tratar dessa sessão de comunicação.
+                Atibuimos um id à cessão e, o prórpio anonGW é o owner da sessão */
                 new Thread(new SessionHandler(accepter.accept(), asocket, destinationIP,
                         destinationPort, idSessionGetter.getID(), this.peersIP.get(this.nextPeer))).start();
             }

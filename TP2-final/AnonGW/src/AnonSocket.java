@@ -129,7 +129,7 @@ public class AnonSocket {
 
         /* Enviamos cada um dos pacotes pelo socket */
         for(AnonPacket packet : list){
-            /* Adicionamos os pacotes à estrutura PacketQueue
+            /* Adicionamos os pacotes à estrutura Queue.PacketQueue
             para estes serem reencaminhados pelo writer */
             this.sending.send(nextPeerIP, packet);
         }
@@ -204,5 +204,7 @@ public class AnonSocket {
         /* Cedemos o id da sessão mesmo que não se
         trate de uma sessão externa */
         this.idSessionGetter.cedeID(idSession);
+        /* Removemos a respetiva linha da sessão */
+        this.activeSessions.remove(idSession);
     }
 }
