@@ -43,6 +43,9 @@ public class Writer implements Runnable {
 
                 /* Enviamos o pacote */
                 this.socket.send(packet);
+
+                System.out.println("[Writer] Acabei de enviar o pacote: ");
+                System.out.println(sp.toString());
             }
         }
         catch(IOException exc){
