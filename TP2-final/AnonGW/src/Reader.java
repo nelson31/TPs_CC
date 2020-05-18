@@ -43,13 +43,13 @@ public class Reader implements Runnable {
      * Boolean usada para sinalizar o writer
      * sempre que seja recebido um acknowledgment
      */
-    private Boolean successFlag;
+    private BooleanEncapsuler successFlag;
 
     /**
      * Variável que nos diz se o writer está
      * a espera de acks
      */
-    private Boolean isWriterWaitingForAcks;
+    private BooleanEncapsuler isWriterWaitingForAcks;
 
     /**
      * Variável que guarda o endereço
@@ -81,7 +81,7 @@ public class Reader implements Runnable {
      * Construtor para objetos da classe reader
      */
     public Reader(DatagramSocket socket, MappingTable table, PacketQueue sendAcks,
-                  Lock l, Condition c, Boolean successFlag, Boolean isWriterWaitingForAcks,
+                  Lock l, Condition c, BooleanEncapsuler successFlag, BooleanEncapsuler isWriterWaitingForAcks,
                   String localIP, ForeignSessions foreignTable, SessionGetter idSessionGetter,
                   Integer actualAckSeq){
 
@@ -119,8 +119,8 @@ public class Reader implements Runnable {
                     try{
                         /* Colocamos o valor do success a true
                         caso o writer esteja à espera */
-                        if(this.isWriterWaitingForAcks && this.actualAckSeq.equals(-ap.getSession())) {
-                            this.successFlag = true;
+                        if(this.isWriterWaitingForAcks.getB() && this.actualAckSeq.equals(-ap.getSession())) {
+                            this.successFlag.setB(true);
                             /* Sinalizamos o writer */
                             this.c.signal();
                         }
@@ -136,16 +136,18 @@ public class Reader implements Runnable {
                     atribuimos-lhe um id de sessão local */
                     if(!this.localIP.equals(ap.getOwner().getHostAddress()))
                         ap.setSession(sessionHere);
+
                     /* Colocamos o pacote na table */
                     this.table.addPacket(ap.getSession(), ap);
                     /* Enviamos o ack para o destino com
                     o respetivo ack */
                     AnonPacket ack = AnonPacket.getAcknowledgment(ap.getAckseq(),ap.getOwner().getHostAddress());
-                    this.sendAcks.send(ack);
+                    this.sendAcks.send(ack.getDestinationIP().getHostAddress(), ack);
                     /* Se o owner do pacote não for o anonGW local
                     adicionamos uma entrada à foreignTable */
                     if(!this.localIP.equals(ap.getOwner().getHostAddress()))
-                        this.foreignTable.add(sessionHere,ap.getOwner().getHostAddress(),ap.getSession());
+                        this.foreignTable.add(sessionHere,ap.getOwner().getHostAddress(),
+                                ap.getSession(),ap.getDestinationIP().getHostAddress(),ap.getPort());
                 }
             }
         }

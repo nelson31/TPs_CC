@@ -4,7 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class SessionGetter {
 
-    private static final int MAX_SIZE = 50;
+    public static final int MAX_SESSIONS_SIMULT = 50;
 
     /**
      * Variável que permite garantir exclusão
@@ -37,8 +37,8 @@ public class SessionGetter {
 
         this.l = new ReentrantLock();
         this.c = l.newCondition();
-        this.isIndexAtributed = new boolean[MAX_SIZE];
-        for(int i=0; i<MAX_SIZE; i++)
+        this.isIndexAtributed = new boolean[MAX_SESSIONS_SIMULT];
+        for(int i=0; i<MAX_SESSIONS_SIMULT; i++)
             this.isIndexAtributed[i] = false;
         this.num = 0;
     }
@@ -57,10 +57,10 @@ public class SessionGetter {
         try {
             /* Esperamos enquanto não houver
             id de sessão disponível */
-            while (this.num == MAX_SIZE)
+            while (this.num == MAX_SESSIONS_SIMULT)
                 this.c.await();
 
-            for(int i=0; i<MAX_SIZE && ret==-1; i++)
+            for(int i=0; i<MAX_SESSIONS_SIMULT && ret==-1; i++)
                 if(!isIndexAtributed[i]) ret = i;
 
         }

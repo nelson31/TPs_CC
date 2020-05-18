@@ -39,19 +39,19 @@ public class Writer implements Runnable {
      * Boolean que nos diz se o último packet
      * enviado foi recebido com sucesso no destino
      */
-    private Boolean successFlag;
+    private BooleanEncapsuler successFlag;
 
     /**
      * Boolean que nos diz quando o timeout
      * foi excedido
      */
-    private Boolean timeoutReached;
+    private BooleanEncapsuler timeoutReached;
 
     /**
      * Variável que nos diz se o writer
      * está de momento à espera de um ack
      */
-    private Boolean waiting;
+    private BooleanEncapsuler waiting;
 
     /**
      * Variável que guarda os valores atribuidos
@@ -72,14 +72,14 @@ public class Writer implements Runnable {
      * @param socket
      */
     public Writer(DatagramSocket socket, PacketQueue queue, Lock l, Condition c,
-                  Boolean sucessFlag, Boolean waiting, Integer actualAckSeq){
+                  BooleanEncapsuler sucessFlag, BooleanEncapsuler waiting, Integer actualAckSeq){
 
         this.socket = socket;
         this.queue = queue;
         this.l = l;
         this.c = c;
         this.successFlag = sucessFlag;
-        this.timeoutReached = true;
+        this.timeoutReached.setB(true);
         /* Aqui não estamos a espera
         de nenhum ack - inicialmente será FALSE */
         this.waiting = waiting;
@@ -98,7 +98,7 @@ public class Writer implements Runnable {
                 AnonPacket ap = this.queue.next();
                 // Corrigir InetAdress para o do anonGW que for escolhido para a sessão em questão
                 DatagramPacket dp = new DatagramPacket(ap.toByteArray(),
-                        4096, InetAddress.getByName("0.0.0.0"), ap.getPort());
+                        4096, InetAddress.getByName(ap.getNextPeerIP()), 6666);
 
                 /* Atribuimos um valor ao campo
                 que guarda a seq para o ack */
@@ -106,7 +106,8 @@ public class Writer implements Runnable {
                 /* Se for um ack simplesmente enviamos
                 e não esperamos novo ack */
                 if(ap.isAcknowledgment()) {
-                    dp = new DatagramPacket(ap.toByteArray(),ap.toByteArray().length, ap.getOwner(),6666);
+                    dp = new DatagramPacket(ap.toByteArray(),ap.toByteArray().length,
+                            InetAddress.getByName(ap.getNextPeerIP()),6666);
                     this.socket.send(dp);
                 }
                 /* Caso contrário teremos de gerir o protocolo
@@ -114,9 +115,9 @@ public class Writer implements Runnable {
                 else {
                     /* Enquanto o writer não receber confirmação
                     que o pacote foi recebido no destino espera */
-                    while (!this.successFlag) {
+                    while (!this.successFlag.getB()) {
                         /* Inicializamos o timeoutReached a false */
-                        this.timeoutReached = false;
+                        this.timeoutReached.setB(false);
                         /* Enviamos o respetivo pacote */
                         this.socket.send(dp);
                         /* Esperamos no máximo um RTT */
@@ -126,19 +127,19 @@ public class Writer implements Runnable {
                         this.actualAckSeq = this.nextAckSeq;
                         /* Se estamos num novo ciclo não houve
                         sucesso no ciclo anterior */
-                        this.successFlag = false;
+                        this.successFlag.setB(false);
 
                         /* Criamos já a thread que implementa o timeout e
                         pômo-la a correr SÓ DEPOIS DE TER OBTIDO O LOCK */
                         new Thread(new TimeoutSignal(this.l, this.c, this.timeoutReached)).start();
                         try {
                             /* Suspendo se ainda não tiver confirmação */
-                            while (!this.successFlag && !this.timeoutReached) {
+                            while (!this.successFlag.getB() && !this.timeoutReached.getB()) {
                                 /* Aqui estamos à espera de um pacote */
-                                this.waiting = true;
+                                this.waiting.setB(true);
                                 this.c.await();
                                 /* Aqui deixamos de estar à espera de um pacote */
-                                this.waiting = false;
+                                this.waiting.setB(false);
                             }
                         /* Quando acordar temos que verificar se foi
                         porque o pacote chegou ou porque deu timeout.

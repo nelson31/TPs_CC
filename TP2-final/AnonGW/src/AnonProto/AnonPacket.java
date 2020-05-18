@@ -58,6 +58,12 @@ public class AnonPacket implements Comparable{
     private byte[] data;
 
     /**
+     * Variável que guarda o endereço IP do
+     * peer para o qual vamos envaminhar o pacote
+     */
+    private String nextPeerIP;
+
+    /**
      * Variável que converte um inteiro no
      * array de bytes para ser enviado por
      * um datagram socket
@@ -142,10 +148,10 @@ public class AnonPacket implements Comparable{
      * @param sequence
      * @return
      */
-    public static AnonPacket getSizePacket(int size, int session, int sequence, String destinationIP)
+    public static AnonPacket getSizePacket(int size, int session, int sequence, String destinationIP, String ownerIP)
         throws UnknownHostException{
 
-        return new AnonPacket(new byte[0],session,sequence,"ENDEREÇO DO OWNER", destinationIP, size, -1);
+        return new AnonPacket(new byte[0],session,sequence,ownerIP, destinationIP, size, -1);
     }
 
     /**
@@ -179,6 +185,16 @@ public class AnonPacket implements Comparable{
         return ackseq;
     }
 
+    public String getNextPeerIP() {
+
+        return nextPeerIP;
+    }
+
+    public InetAddress getDestinationIP() {
+
+        return destinationIP;
+    }
+
     /**
      * Método que retorna o campo
      * de dados do pacote
@@ -203,6 +219,11 @@ public class AnonPacket implements Comparable{
     public void setSession(int session) {
 
         this.session = session;
+    }
+
+    public void setNextPeerIP(String nextPeerIP) {
+
+        this.nextPeerIP = nextPeerIP;
     }
 
     /**

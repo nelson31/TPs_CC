@@ -1,9 +1,13 @@
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ReaderFromAnonToClient implements Runnable {
+public class ReaderFromSocketToAnon implements Runnable {
 
+
+    private static final int MAX_SIZE_TRANSFER = 4096;
     /**
      * Socket que se comporta
      * como input
@@ -35,20 +39,28 @@ public class ReaderFromAnonToClient implements Runnable {
     private byte[] transfer;
 
     /**
-     * Construtor para objetos da classe ReaderFromClientToAnon
+     * Variável que guarda uma lista com os
+     * endereços IP dos pares de Anon
+     */
+    private String peerIP;
+
+    /**
+     * Construtor para objetos da classe ReaderFromSocketToAnon
      * @param cliente
      * @param anon
      * @throws IOException
      */
-    public ReaderFromAnonToClient(Socket cliente, AnonSocket anon, SessionGetter idSessionGetter,
-                                  String destinationIP, int sessionID)
+    public ReaderFromSocketToAnon(Socket cliente, AnonSocket anon,
+                                  String destinationIP, int destintationPort, int sessionID, String peerIP)
             throws IOException
     {
         this.cliente = cliente;
         this.anon = anon;
         this.transfer = new byte[4096];
         this.destinationIP = destinationIP;
+        this.destinationPort = destintationPort;
         this.sessionID = sessionID;
+        this.peerIP = peerIP;
     }
 
     public void run(){
@@ -56,14 +68,16 @@ public class ReaderFromAnonToClient implements Runnable {
         /* Vamos buscar o número de bytes a serem lidos */
         int lidos;
         try {
-            OutputStream output = this.cliente.getOutputStream();
-            /* Lemos os dados do AnonSocket que se comporta
+            List<Byte> list = new ArrayList<>();
+            InputStream input = this.cliente.getInputStream();
+            /* Lemos os dados do socket que se comporta
             como cliente para o buffer intermediário */
-            this.anon.read(this.sessionID,transfer);
-            /* Enviamos os dados de uma vez para o cliente */
-            output.write(transfer,0,transfer.length);
+            while ((lidos = input.read(transfer, 0, MAX_SIZE_TRANSFER)) != -1)
+                this.anon.send(sessionID,transfer,peerIP,this.destinationIP,destinationPort);
+        /* Copiamos o conteúdo do buffer intermediário
+        para o socket destino */
         }
-        catch(IOException | InterruptedException exp){
+        catch(IOException exp){
             System.out.println("[" + exp.getClass().getSimpleName() + "] - " + exp.getMessage());
         }
     }

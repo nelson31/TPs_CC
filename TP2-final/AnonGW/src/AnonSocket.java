@@ -49,6 +49,8 @@ public class AnonSocket {
 
     private SessionGetter idSessionGetter;
 
+    private CurrentSequence activeSessions;
+
     /**
      * Construtor para objetos da classe
      * AnonSocket
@@ -64,13 +66,14 @@ public class AnonSocket {
         Condition c = l.newCondition();
         this.foreignTable = foreignTable;
         this.idSessionGetter = idSessionGetter;
-        Boolean successFlag = Boolean.FALSE;
-        Boolean waiting = Boolean.FALSE;
+        BooleanEncapsuler successFlag = new BooleanEncapsuler(false);
+        BooleanEncapsuler waiting = new BooleanEncapsuler(false);
 
         this.s = new DatagramSocket(port, InetAddress.getByName(addIP));
         /* Criamos a estrutura para enviar pacotes */
         this.sending = new PacketQueue();
         this.receiving = new MappingTable();
+        this.activeSessions = new CurrentSequence();
         /* Criamos as instâncias para ler
         e escrever no socket UDP */
         Integer actualAckSeq = 0;
@@ -85,35 +88,50 @@ public class AnonSocket {
      * Implementação do método read
      * @return
      */
-    public void send(int session, byte[] data, String ipDest, int port)
+    public void send(int session, byte[] data, String nextPeerIP, String targetIP, int port)
             throws IOException {
 
         int k;
         // AQUI HAVERÁ ENCRIPTAÇÃO DOS DADOS
+        /* Se a sessão ainda não estiver ativa
+        ativamos uma nova */
+        if(!this.activeSessions.contains(session))
+            this.activeSessions.put(session,1);
 
+        String ownerIP = this.s.getLocalAddress().getHostAddress();
+        /* Se o id de sessão for local então o
+        owner da sessão é um outro anonGW */
+        if(this.foreignTable.isForeign(session)){
+            SessionInfo info = this.foreignTable.get(session);
+            ownerIP = info.getOwnerIP();
+            session = info.getOwnerSessionID();
+        }
+        int sizeSequence = this.activeSessions.getAndIncrement(session);
+        int sequence = this.activeSessions.getAndIncrement(session);
         /* Aqui partimos os dados por AnonPackets */
         List<AnonPacket> list = new ArrayList<>();
-        for(int i=0, sequence = 1; i<data.length; sequence++){
+        for(int i=0; i<data.length; sequence = this.activeSessions.getAndIncrement(session)){
             byte[] body = new byte[4080];
             k = 0;
             for(int j=i; k<4080 && j<data.length; j++,k++)
                 body[k] = data[j];
             i += k;
             /* Adicionamos o pacote à lista para ser enviado */
-            list.add(new AnonPacket(body,session,sequence,"ENDEREÇO DO OWNER", ipDest,port,-1));
+            list.add(new AnonPacket(body,session,sequence,ownerIP,targetIP,port,-1));
         }
         /* Enviamos o número de pacotes
         a serem recebidos */
         int size = list.size();
         /* O endereço IP não é relevante neste caso */
-        AnonPacket pack = AnonPacket.getSizePacket(size,session,0,"localhost");
+        AnonPacket pack = AnonPacket.getSizePacket(size,session,sizeSequence,"0.0.0.0",ownerIP);
         /* Enviamos o pacote com o tamanho */
-        this.sending.send(pack);
+        this.sending.send(nextPeerIP, pack);
 
         /* Enviamos cada um dos pacotes pelo socket */
         for(AnonPacket packet : list){
-            /* Enviamos o pacote para o seru destino */
-            this.sending.send(packet);
+            /* Adicionamos os pacotes à estrutura PacketQueue
+            para estes serem reencaminhados pelo writer */
+            this.sending.send(nextPeerIP, packet);
         }
     }
 
@@ -121,31 +139,30 @@ public class AnonSocket {
      * Método que permite ler uma mensagem
      * do socket dada uma sessão
      * @param session
-     * @param data
      * @throws InterruptedException
      */
-    public int read(int session, byte[] data)
+    public byte[] read(int session, TargetServerInfo target)
             throws InterruptedException{
 
+        byte[] data;
         int messageSize = 0;
         Set<AnonPacket> packets = new TreeSet<>();
         /* Teremos que receber o número de pacotes
         a serem recebidos para remontar a string de
         dados enviada */
 
-        /* Preparamos a table para receber o packet tamanho */
-        this.receiving.newPacket(session,0);
         /* Lemos o pacote */
-        AnonPacket ap = this.receiving.getPacket(session,0);
+        AnonPacket ap = this.receiving.getPacket(session,this.activeSessions.getAndIncrement(session));
         /* Num pacote size o tamanho está representado na port */
         int size = ap.getPort();
 
         for(int i=0; i<size; i++){
-            /* Preparamos a table para a receção de
-            cada um dos pacotes com os dados */
-            this.receiving.newPacket(session,i);
             /* Recebemos o respetivo pacote */
-            ap = this.receiving.getPacket(session,i);
+            ap = this.receiving.getPacket(session,this.activeSessions.getAndIncrement(session));
+            if(i==0) {
+                target.setTargetIP(ap.getDestinationIP());
+                target.setTargetPort(ap.getPort());
+            }
             /* Adicionamos o pacote ao Set */
             packets.add(ap);
             /* Aumentamos ao tamanho total
@@ -154,6 +171,7 @@ public class AnonSocket {
         }
 
         data = new byte[messageSize];
+
         /* Copiamos o conteudo de cada packet
         para a mensagem de destino */
         Iterator it = packets.iterator();
@@ -168,6 +186,6 @@ public class AnonSocket {
                 data[ind] = dados[i];
             }
         }
-        return messageSize;
+        return data;
     }
 }

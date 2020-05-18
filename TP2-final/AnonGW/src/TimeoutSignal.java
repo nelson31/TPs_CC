@@ -27,13 +27,13 @@ public class TimeoutSignal implements Runnable{
      * Variável para sinalizar writer
      * que o timeout foi atingido
      */
-    private Boolean timeoutReached;
+    private BooleanEncapsuler timeoutReached;
 
     /**
      * Construtor para objetos da classe TimeoutSignal
      * @param l
      */
-    public TimeoutSignal(Lock l, Condition c, Boolean timeoutReached){
+    public TimeoutSignal(Lock l, Condition c, BooleanEncapsuler timeoutReached){
 
         this.l = l;
         this.c = c;
@@ -53,7 +53,7 @@ public class TimeoutSignal implements Runnable{
             this.l.lock();
             /* Alteramos o valor do boolean para true,
             sinalizando que o timeout foi atingido */
-            this.timeoutReached = true;
+            this.timeoutReached.setB(true);
             /* Após esperar o time out acordamos
             que está suspenso - no máximo estará
             uma única thread que corresponderá

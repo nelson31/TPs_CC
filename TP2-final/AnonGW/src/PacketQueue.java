@@ -16,6 +16,12 @@ public class PacketQueue {
     private List<AnonPacket> queue;
 
     /**
+     * Variável que guarda o endereço IP do anonGW
+     * para o qual será reencaminhado o pacote
+     */
+    private List<String> nextPeer;
+
+    /**
      * Variável que garante exclusão mútua
      * no acesso à queue
      */
@@ -33,6 +39,7 @@ public class PacketQueue {
     public PacketQueue(){
 
         this.queue = new ArrayList<>();
+        this.nextPeer = new ArrayList<>();
         this.l = new ReentrantLock();
         this.c = l.newCondition();
     }
@@ -54,9 +61,11 @@ public class PacketQueue {
                 this.c.await();
 
             ap = this.queue.get(0);
+            ap.setNextPeerIP(this.nextPeer.get(0));
             /* Removemos o pacote que acabou
             de ser enviado */
             this.queue.remove(0);
+            this.nextPeer.remove(0);
         }
         catch(InterruptedException exc){
             System.out.println("Erro ao obter proximo pacote para enviar");
@@ -75,7 +84,7 @@ public class PacketQueue {
      * Método que permite adicionar um pacote
      * à queue para ser enviado pelo socket
      */
-    public void send(AnonPacket ap){
+    public void send(String nextPeer, AnonPacket ap){
 
         /* Obtemos o lock para
         escrever na queue */
@@ -84,6 +93,8 @@ public class PacketQueue {
             /* Adicionamos o respetivo
             pacote à queue */
             this.queue.add(ap);
+
+            this.nextPeer.add(nextPeer);
             /* Acordamos a thread responsável
             por escrever no socket */
             this.c.signal();

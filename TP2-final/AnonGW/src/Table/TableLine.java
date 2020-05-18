@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 
-public class TableLine {
+public class TableLine implements ITableLine{
 
     /**
      * Variável que identifica a sequencia
@@ -35,7 +35,6 @@ public class TableLine {
     /**
      * Método que permite adicionar um novo
      * objeto para receber um pacote
-     * @param session
      * @param pi
      */
     public void createLine(PacketIdentifier pi){
@@ -43,8 +42,10 @@ public class TableLine {
         /* Obtemos o lock para escrever */
         this.l.lock();
         try{
-            /* Colocamos o novo PacketIdentifier */
-            this.line.put(pi.getSequence(), pi);
+            /* Adicionamos a linha se ainda não existir */
+            if(!this.line.containsKey(pi.getSequence()))
+                /* Colocamos o novo PacketIdentifier */
+                this.line.put(pi.getSequence(), pi);
         }
         finally {
             /* Cedemos o lock */
@@ -85,5 +86,18 @@ public class TableLine {
             this.l.unlock();
         }
         return p;
+    }
+
+    /**
+     * Método que permite eliminar todos
+     * os pacotes de uma sessão
+     */
+    public void clear(){
+
+        this.l.lock();
+
+        this.line.clear();
+
+        this.l.unlock();
     }
 }

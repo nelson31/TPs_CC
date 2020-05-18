@@ -8,10 +8,12 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * Classe que representa um mapeamento de
- * endereço IP destino para pacotes a serem
- * enviados para esse mesmo destino
+ * id de sessão para a lista de pacotes
+ * pertencentes a uma determinada sessão
  */
 public class MappingTable {
+
+    public static final int MAX_SESSIONS_SIMULT = 50;
 
     /**
      * Variável para garantir exclusão
@@ -23,7 +25,7 @@ public class MappingTable {
      * Tabela que guarda o conjunto de pacotes a
      * serem enviados para cada um dos destinos
      */
-    private Map<Integer, TableLine> table;
+    private Map<Integer, SessionLine> table;
 
     /**
      * Construtor para objetos da
@@ -32,43 +34,11 @@ public class MappingTable {
     public MappingTable(){
 
         this.table = new HashMap<>();
-    }
-
-    /**
-     * Método que regista a existência
-     * de uma nova session
-     * @param session
-     */
-    public void newPacket(int session, int sequence){
-
-        if(!this.table.containsKey(session)) {
-            TableLine line = new TableLine(session);
-            line.createLine(new PacketIdentifier(session, sequence));
-            /* Obtemos o lock para escrever na tabela */
-            this.l.lock();
-            try{
-                this.table.put(session, line);
-            }
-            finally {
-                /* Cedemos o lock */
-                this.l.unlock();
-            }
-        }
-        else{
-            TableLine mp;
-            /* Obtemos o lock para ler da tabela */
-            this.l.lock();
-            try{
-                mp = this.table.get(session);
-            }
-            finally {
-                /* Cedemos o lock após ler a linhas
-                correspondente à sessão respetiva */
-                this.l.unlock();
-            }
-            /* Escrevemos o pacote */
-            if(mp != null)
-                mp.createLine(new PacketIdentifier(session,sequence));
+        /* Inicializamos a estrutura com o número
+        de linhas igual ao número máximo de sessões
+        em simultâneo */
+        for(int i=0; i<MAX_SESSIONS_SIMULT; i++){
+            this.table.put(i,new SessionLine(i));
         }
     }
 
@@ -80,19 +50,19 @@ public class MappingTable {
      */
     public void addPacket(int session, AnonPacket packet){
 
-        TableLine mp = null;
+        SessionLine mp = null;
         /* Obtemos o lock para escrever
         na tabela */
         this.l.lock();
-        try{
-            mp = this.table.get(session);
-        }
-        finally {
-            this.l.unlock();
-        }
+
+        /* Obtemos a linha respetiva à sessão */
+        mp = this.table.get(session);
+
+        /* Cedemos o lock */
+        this.l.unlock();
+
         /* Adicionamos o respetivo pacote */
-        if(mp != null)
-            mp.getIdentifier(packet.getSequence()).put(packet);
+        mp.addPacket(packet);
     }
 
     /**
@@ -105,17 +75,32 @@ public class MappingTable {
     public AnonPacket getPacket(int session, int sequence)
             throws InterruptedException{
 
-        TableLine tl = null;
+        SessionLine sl = null;
         /* Obtemos o lock para aceder
         à linha respetiva */
         this.l.lock();
-        try{
-            tl = this.table.get(session);
-        }
-        finally {
-            /* Cedemos o lock apos aceder à linha */
-            this.l.unlock();
-        }
-        return tl.getIdentifier(sequence).get();
+
+        /* Vamos buscar a linha referente
+        à sessão fornecida */
+        sl = this.table.get(session);
+
+        /* Cedemos o lock apos aceder à linha */
+        this.l.unlock();
+
+        return sl.getPacket(sequence);
+    }
+
+    /**
+     * Método que permite eliminar todos os pacotes
+     * de uma linha correspondente a uma sessão
+     * @param session
+     */
+    public void clearSession(int session){
+
+        this.l.lock();
+
+        this.table.get(session).clearLine();
+
+        this.l.unlock();
     }
 }
