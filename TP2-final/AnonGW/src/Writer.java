@@ -79,7 +79,7 @@ public class Writer implements Runnable {
         this.l = l;
         this.c = c;
         this.successFlag = sucessFlag;
-        this.timeoutReached.setB(true);
+        this.timeoutReached = new BooleanEncapsuler(true);
         /* Aqui não estamos a espera
         de nenhum ack - inicialmente será FALSE */
         this.waiting = waiting;
