@@ -22,6 +22,8 @@ public class AnonSocket {
         try {
             boolean received = false;
             while (!received) {
+                System.out.println("Enviei o seguinte pacote: ");
+                System.out.println(ss.toString());
                 this.ssocket.send(ss);
                 Thread.sleep(250);
                 if (this.ssocket.contains(-ss.getId()))
