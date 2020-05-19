@@ -52,8 +52,8 @@ public class AnonStream {
         List<AnonPacket> sending = new ArrayList<>();
         int ind = 0;
         for(int i=0; i<dadosSize; sequence++){
-            if(dadosSize-ind<maxsize_payload)
-                ind = dadosSize-ind;
+            if(dadosSize-i<maxsize_payload)
+                ind = dadosSize-i;
             else
                 ind = maxsize_payload;
             /* Alocamos espaço para o body
