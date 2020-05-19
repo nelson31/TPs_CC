@@ -79,7 +79,7 @@ public class SessionLine {
         this.c.signal();
 
         /* Cedemos o lock */
-        this.l.lock();
+        this.l.unlock();
     }
 
     /**
@@ -106,6 +106,9 @@ public class SessionLine {
         }
         catch(InterruptedException exc){
             System.out.println("Erro ao ler o AnonPacket");
+        }
+        finally {
+            this.l.unlock();
         }
 
         return ret;
