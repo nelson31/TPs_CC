@@ -50,7 +50,7 @@ public class StreamSender {
             System.out.println("Inserir destino: ");
             while((message = bf.readLine()) != null){
                 destino = InetAddress.getByName(message);
-                as.send(data,new IntegerEncapsuler(0),origem,destino,destino,origem,6666,80);
+                as.send(data,new IntegerEncapsuler(0),origem,destino,origem,6666,80);
                 System.out.println("Inserir destino: ");
             }
         }

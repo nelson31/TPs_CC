@@ -82,7 +82,7 @@ public class ReaderFromSocketToStream implements Runnable {
             while ((os.read(data,0,1024)) != -1) {
                 this.stream.send(data,sequence,
                         this.socket.getInetAddress(),this.destinoIp,
-                        this.destinoFinalIP, this.socket.getInetAddress(),this.destinoPort,
+                        this.socket.getLocalAddress(),this.destinoPort,
                         this.destinoFinalPort);
                 System.out.println("À espera de dados");
             }
