@@ -26,6 +26,7 @@ public class AnonSocket {
             throws SocketException {
 
         this.ssocket = new SecureSocket(port, localIP);
+        this.idGetter = new PacketIdGetter();
     }
 
     /**
