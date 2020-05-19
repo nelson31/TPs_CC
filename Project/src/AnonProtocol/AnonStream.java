@@ -107,6 +107,7 @@ public class AnonStream {
                 info.setSession(ap.getSession());
                 // Verificar se estamos perante uma sessão local ou externa
                 info.setOwner(ap.getOwnerIP());
+                System.out.println("[AnonStream] owner dos dados: " + ap.getOwnerIP());
                 info.setTargetServer(ap.getTargetServerIP());
                 info.setTargetPort(ap.getTargetPort());
             }
