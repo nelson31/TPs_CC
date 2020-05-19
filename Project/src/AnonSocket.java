@@ -45,6 +45,9 @@ public class AnonSocket {
         /* Recebemos o primeiro pacote
         que não seja ack */
         data = this.ssocket.receiveNotAck();
+
+        System.out.println("[AnonSocket] Pacote de dados recebido: ");
+        System.out.println(data.toString());
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
 

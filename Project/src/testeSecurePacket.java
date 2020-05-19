@@ -7,7 +7,7 @@ public class testeSecurePacket {
 
         byte[] data = {12,23,42,12};
         try {
-            SecurePacket packet = new SecurePacket(2, InetAddress.getByName("localhost"), InetAddress.getByName("localhost"), 6666, data);
+            SecurePacket packet = SecurePacket.getAck(5,InetAddress.getByName("localhost"),InetAddress.getByName("localhost"),6666);
 
             byte[] array = packet.toByteArray();
             for(int i=0; i<array.length; i++)
