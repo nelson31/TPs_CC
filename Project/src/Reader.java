@@ -30,7 +30,7 @@ public class Reader implements Runnable {
             a fazer o mesmo */
             while (true) {
 
-                DatagramPacket dp = new DatagramPacket(new byte[1024], 1024);
+                DatagramPacket dp = new DatagramPacket(new byte[21], 21);
                 socket.receive(dp);
                 /* Obtemos o pacote Secure */
                 SecurePacket sp = SecurePacket.getFromByteArray(dp.getData());

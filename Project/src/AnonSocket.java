@@ -21,8 +21,6 @@ public class AnonSocket {
         try {
             boolean received = false;
             while (!received) {
-                System.out.println("Enviei o seguinte pacote: ");
-                System.out.println(ss.toString());
                 this.ssocket.send(ss);
                 Thread.sleep(250);
                 if (this.ssocket.contains(-ss.getId()))
@@ -45,14 +43,8 @@ public class AnonSocket {
         /* Recebemos o primeiro pacote
         que não seja ack */
         data = this.ssocket.receiveNotAck();
-
-        System.out.println("[AnonSocket] Pacote de dados recebido: ");
-        System.out.println(data.toString());
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
-
-        System.out.println("Ack enviado: ");
-        System.out.println(pack.toString());
         this.ssocket.send(pack);
         return data;
     }
