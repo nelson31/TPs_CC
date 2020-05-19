@@ -7,9 +7,4 @@ public class AnonSmartStream {
      * com outros peers
      */
     private AnonStream astream;
-
-    /**
-     * Variável que permite
-     */
-    private
 }
