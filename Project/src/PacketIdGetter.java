@@ -35,11 +35,12 @@ public class PacketIdGetter {
 
         this.l.lock();
 
+        if(this.nextID == 0)
+            this.nextID++;
+
         int ret = this.nextID;
 
         this.nextID = (this.nextID+1)%max_id;
-
-        if(ret == 0) ret++;
 
         this.l.unlock();
 
