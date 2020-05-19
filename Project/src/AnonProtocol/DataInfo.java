@@ -67,7 +67,7 @@ public class DataInfo {
 
     public boolean isComplete(){
 
-        return this.session > 0;
+        return this.session >= 0;
     }
 
     public void setSession(int session) {
