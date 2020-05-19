@@ -43,7 +43,10 @@ public class StreamSender {
                 data[i++] = valor[1];
                 data[i++] = valor[2];
                 data[i++] = valor[3];
-                System.out.print(valor[0] + valor[1] + valor[2] + valor[3]);
+                System.out.print(valor[0]);
+                System.out.print(valor[1]);
+                System.out.print(valor[2]);
+                System.out.print(valor[3]);
             }
             System.out.println();
             System.out.println("Inserir destino: ");
