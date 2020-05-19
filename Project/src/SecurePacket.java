@@ -202,6 +202,11 @@ public class SecurePacket {
         return payloadSize;
     }
 
+    public void setId(int id) {
+
+        this.id = id;
+    }
+
     public void setData(byte[] data) {
 
         this.data = data;

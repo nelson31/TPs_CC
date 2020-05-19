@@ -3,8 +3,25 @@ import java.net.SocketException;
 
 public class AnonSocket {
 
+    /**
+     * Estrutura de dados que permite
+     * comunicação
+     */
     private SecureSocket ssocket;
 
+    /**
+     * Estrutura de dados que permite atribuir id's
+     * aos pacotes para tratar o envio de acks
+     */
+    private PacketIdGetter idGetter;
+
+    /**
+     * Construtor para objetos da
+     * classe AnonSocket
+     * @param port
+     * @param localIP
+     * @throws SocketException
+     */
     public AnonSocket(int port, InetAddress localIP)
             throws SocketException {
 
@@ -19,6 +36,8 @@ public class AnonSocket {
     public void send(SecurePacket ss) {
 
         try {
+            int id = this.idGetter.get();
+            ss.setId(id);
             boolean received = false;
             while (!received) {
                 this.ssocket.send(ss);
