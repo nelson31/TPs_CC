@@ -116,6 +116,7 @@ public class AnonStream {
             count++;
         }
         ret = new byte[finalSize];
+        System.out.println("Tamanho total: " + finalSize + " bytes");
         int ind = 0;
         byte[] body;
         for(AnonPacket pack : packs){
