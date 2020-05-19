@@ -23,7 +23,7 @@ public class AnonTesteSender {
                 destination = InetAddress.getByName(message);
                 byte[] data = {12,42,23,43,23};
                 AnonPacket sp = new AnonPacket(0,0,5,80,
-                        InetAddress.getByName("localhost"),InetAddress.getByName(args[0]),data);
+                        InetAddress.getByName("localhost"),InetAddress.getByName(args[0]),0,data);
                 asocket.send(sp,asocket.getLocalIp(),destination,6666);
                 System.out.println("Escreva uma mensagem: ");
             }

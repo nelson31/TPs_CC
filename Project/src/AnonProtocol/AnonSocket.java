@@ -27,12 +27,6 @@ public class AnonSocket {
     private MappingTable received;
 
     /**
-     * Variável que permite atribuir um id de
-     * sessão a uma nova sessão
-     */
-    private SessionGetter sessionGetter;
-
-    /**
      * Runnable que le os pacotes Anon e os separa
      * por sessões para a MappingTable
      */
@@ -48,7 +42,6 @@ public class AnonSocket {
         this.localIp = localIp;
         this.socket = new SecureSocket(port,localIp);
         this.received = new MappingTable();
-        this.sessionGetter = new SessionGetter();
         this.ssepare = new SessionSepare(this.socket,received);
         /* Colocamos o reader a correr */
         new Thread(this.ssepare).start();
