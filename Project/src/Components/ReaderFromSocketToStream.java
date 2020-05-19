@@ -2,11 +2,9 @@ package Components;
 
 import AnonProtocol.AnonStream;
 import AnonProtocol.IntegerEncapsuler;
-import AnonProtocol.SessionGetter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -87,7 +85,7 @@ public class ReaderFromSocketToStream implements Runnable {
                     dat[i] = data[i];
                 }
                 this.stream.send(dat,sequence,this.socket.getLocalAddress(),this.destinoIp,
-                        this.socket.getLocalAddress(),this.destinoPort,
+                        this.destinoFinalIP,this.socket.getLocalAddress(),this.destinoPort,
                         this.destinoFinalPort);
                 System.out.println("À espera de dados");
             }

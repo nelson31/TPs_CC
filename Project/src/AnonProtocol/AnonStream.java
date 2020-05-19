@@ -42,7 +42,7 @@ public class AnonStream {
      * @param destPort
      */
     public void send(byte[] dados, IntegerEncapsuler actualSequence, InetAddress origem,
-                     InetAddress destino, InetAddress owner,
+                     InetAddress destino, InetAddress finalDestIp, InetAddress owner,
                      int destPort, int finalDestPort){
 
         int count = 0;
@@ -66,14 +66,14 @@ public class AnonStream {
                 body[j] = dados[i];
 
             /* Construimos novo datagrama */
-            AnonPacket sp = new AnonPacket(this.session,sequence,ind,finalDestPort,destino,owner,-1,body);
+            AnonPacket sp = new AnonPacket(this.session,sequence,ind,finalDestPort,finalDestIp,owner,-1,body);
 
             count++;
 
             sending.add(sp);
         }
         /* Enviamos o pacote que refere o tamanho */
-        AnonPacket apack = AnonPacket.getSizePacket(session,sizeSequence,finalDestPort,destino,owner,count);
+        AnonPacket apack = AnonPacket.getSizePacket(session,sizeSequence,finalDestPort,finalDestIp,owner,count);
         this.asocket.send(apack,origem,destino,destPort);
 
         /* Agora enviamos os pacotes */
