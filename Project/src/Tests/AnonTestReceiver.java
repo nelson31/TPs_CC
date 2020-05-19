@@ -13,6 +13,7 @@ public class AnonTestReceiver {
 
         try {
             AnonSocket asocket = new AnonSocket(6666, InetAddress.getByName(args[0]));
+            int sessao = Integer.parseInt(args[1]);
             while(true) {
                 System.out.println("À espera do pacote: ");
                 AnonPacket sp = asocket.receive(0);
