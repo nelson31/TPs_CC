@@ -103,18 +103,18 @@ public class AnonStream {
         int count = 0;
 
         do{
+            if(!info.isComplete()){
+                info.setSession(ap.getSession());
+                // Verificar se estamos perante uma sessão local ou externa
+                info.setOwner(ap.getOwnerIP());
+                info.setTargetServer(ap.getTargetServerIP());
+                info.setTargetPort(ap.getTargetPort());
+            }
             ap = this.asocket.receive(session);
             if(!ap.isSizePacket()){
                 count++;
                 packs.add(ap);
                 finalSize += ap.getPayloadSize();
-                if(!info.isComplete()){
-                    info.setSession(ap.getSession());
-                    // Verificar se estamos perante uma sessão local ou externa
-                    info.setOwner(ap.getOwnerIP());
-                    info.setTargetServer(ap.getTargetServerIP());
-                    info.setTargetPort(ap.getTargetPort());
-                }
             }
         }
         while(!ap.isSizePacket());
