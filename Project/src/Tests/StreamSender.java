@@ -19,7 +19,10 @@ public class StreamSender {
             AnonStream as = new AnonStream(new AnonSocket(6666, origem),0);
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             String message;
-            byte[] data = {23,43,42,5,2,34,43};
+            byte[] data = new byte[4096];
+            for(int i = 0; i<4096; i++){
+                data[i] = (byte)i;
+            }
             System.out.println("Inserir destino: ");
             while((message = bf.readLine()) != null){
                 destino = InetAddress.getByName(message);
