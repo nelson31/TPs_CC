@@ -36,13 +36,16 @@ public class StreamSender {
             String message;
             byte[] data = new byte[4096];
             byte[] valor;
+            System.out.println("Dados enviados: ");
             for(int i = 0; i<1024; i++){
                 valor = intToBytes(i);
                 data[i++] = valor[0];
                 data[i++] = valor[1];
                 data[i++] = valor[2];
                 data[i++] = valor[3];
+                System.out.print(valor[0] + valor[1] + valor[2] + valor[3]);
             }
+            System.out.println();
             System.out.println("Inserir destino: ");
             while((message = bf.readLine()) != null){
                 destino = InetAddress.getByName(message);
