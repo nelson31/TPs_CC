@@ -1,0 +1,8 @@
+Comunicacoes_por_Computador
+15
+20
+
+
+
+** O stor de CC disse que o melhor é, em vez de se ler de um ficheiro(apesar de aceitar soluções destas),
+devemos coloca-las como argumento no arranque dos AnonGWs
