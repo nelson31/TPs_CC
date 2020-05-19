@@ -38,8 +38,8 @@ public class Writer implements Runnable {
 
                 /* Construimos o datagram packet
                 para enviar */
-                DatagramPacket packet = new DatagramPacket(sp.getData(),
-                        sp.getData().length, sp.getDestino(), sp.getPort());
+                DatagramPacket packet = new DatagramPacket(sp.toByteArray(),
+                        sp.toByteArray().length, sp.getDestino(), sp.getPort());
 
                 /* Enviamos o pacote */
                 this.socket.send(packet);
