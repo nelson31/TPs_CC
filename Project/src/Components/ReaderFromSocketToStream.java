@@ -79,10 +79,10 @@ public class ReaderFromSocketToStream implements Runnable {
             ler do socket TCP */
             byte[] data = new byte[1024];
             System.out.println("À espera de dados: ");
+            System.out.println("Origem: " + this.socket.getLocalAddress());
             while ((os.read(data,0,1024)) != -1) {
-                this.stream.send(data,sequence,
-                        this.socket.getInetAddress(),this.destinoIp,
-                        this.socket.getLocalAddress(),this.destinoPort,
+                this.stream.send(data,sequence,this.socket.getLocalAddress(),this.destinoIp,
+                        this.socket.getInetAddress(),this.destinoPort,
                         this.destinoFinalPort);
                 System.out.println("À espera de dados");
             }
