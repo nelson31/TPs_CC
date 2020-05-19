@@ -1,3 +1,5 @@
+import SecureProtocol.SecurePacket;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 

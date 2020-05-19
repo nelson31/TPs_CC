@@ -1,34 +1,36 @@
+package SecureProtocol;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class IntegerEncapsuler {
+public class BooleanEncapsuler {
 
-    private Integer i;
+    private Boolean b;
 
     private Lock l;
 
-    public IntegerEncapsuler(Integer i){
+    public BooleanEncapsuler(Boolean b){
 
-        this.i = i;
+        this.b = b;
         this.l = new ReentrantLock();
     }
 
-    public Integer getB() {
+    public Boolean getB() {
 
         this.l.lock();
 
-        Integer i = this.i;
+        boolean b = this.b;
 
         this.l.unlock();
 
-        return i;
+        return b;
     }
 
-    public void setB(Integer i) {
+    public void setB(Boolean b) {
 
         this.l.lock();
 
-        this.i = i;
+        this.b = b;
 
         this.l.unlock();
     }

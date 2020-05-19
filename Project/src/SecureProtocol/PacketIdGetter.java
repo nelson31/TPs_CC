@@ -1,3 +1,5 @@
+package SecureProtocol;
+
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,7 +20,7 @@ public class PacketIdGetter {
 
     /**
      * Construtor para objetos da
-     * classe PacketIdGetter
+     * classe SecureProtocol.PacketIdGetter
      */
     public PacketIdGetter(){
 

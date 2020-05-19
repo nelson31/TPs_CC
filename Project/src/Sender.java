@@ -1,3 +1,6 @@
+import SecureProtocol.SecurePacket;
+import SecureProtocol.SecureSocket;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,7 +11,7 @@ public class Sender {
     public static void main(String[] args){
 
         try {
-            AnonSocket asocket = new AnonSocket(6666, InetAddress.getByName(args[0]));
+            SecureSocket asocket = new SecureSocket(6666, InetAddress.getByName(args[0]));
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             InetAddress destination = InetAddress.getByName(args[1]);
             String message;

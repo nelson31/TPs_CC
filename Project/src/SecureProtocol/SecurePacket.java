@@ -1,3 +1,5 @@
+package SecureProtocol;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -157,7 +159,7 @@ public class SecurePacket {
     }
 
     /**
-     * Construtor para objetos da classe SecurePacket
+     * Construtor para objetos da classe SecureProtocol.SecurePacket
      */
     public SecurePacket(int id, InetAddress origem, InetAddress destino, int port, int payloadSize, byte[] data){
 
@@ -235,7 +237,7 @@ public class SecurePacket {
 
     /**
      * Método que nos diz se um determinado
-     * SecurePacket é um Ack
+     * SecureProtocol.SecurePacket é um Ack
      * @return
      */
     public boolean isAck(){
@@ -245,7 +247,7 @@ public class SecurePacket {
 
     /**
      * Implementação do método equals para
-     * objetos da classe SecurePacket
+     * objetos da classe SecureProtocol.SecurePacket
      */
     public boolean equals(Object o){
 

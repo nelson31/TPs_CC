@@ -1,3 +1,5 @@
+package SecureProtocol;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -37,7 +39,7 @@ public class ListPacket {
 
     /**
      * Construtores para objetos
-     * da classe ListPacket
+     * da classe SecureProtocol.ListPacket
      */
     public ListPacket(){
 

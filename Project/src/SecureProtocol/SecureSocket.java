@@ -1,13 +1,15 @@
+package SecureProtocol;
+
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class AnonSocket {
+public class SecureSocket {
 
     /**
      * Estrutura de dados que permite
      * comunicação
      */
-    private SecureSocket ssocket;
+    private ThreadSocket ssocket;
 
     /**
      * Estrutura de dados que permite atribuir id's
@@ -17,15 +19,15 @@ public class AnonSocket {
 
     /**
      * Construtor para objetos da
-     * classe AnonSocket
+     * classe SecureProtocol.SecureSocket
      * @param port
      * @param localIP
      * @throws SocketException
      */
-    public AnonSocket(int port, InetAddress localIP)
+    public SecureSocket(int port, InetAddress localIP)
             throws SocketException {
 
-        this.ssocket = new SecureSocket(port, localIP);
+        this.ssocket = new ThreadSocket(port, localIP);
         this.idGetter = new PacketIdGetter();
     }
 

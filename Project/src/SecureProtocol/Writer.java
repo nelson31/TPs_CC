@@ -1,3 +1,5 @@
+package SecureProtocol;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -18,7 +20,7 @@ public class Writer implements Runnable {
 
     /**
      * Construtor para objetos
-     * da classe Writer
+     * da classe SecureProtocol.Writer
      */
     public Writer(DatagramSocket socket, ListPacket sending) {
 

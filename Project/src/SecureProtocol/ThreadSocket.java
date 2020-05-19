@@ -1,8 +1,10 @@
+package SecureProtocol;
+
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class SecureSocket {
+public class ThreadSocket {
 
     /**
      * Variável que permite
@@ -26,11 +28,11 @@ public class SecureSocket {
 
     /**
      * Construtor para objetos da
-     * classe SecureSocket
+     * classe SecureProtocol.ThreadSocket
      * @param port
      * @param localIP
      */
-    public SecureSocket(int port, InetAddress localIP)
+    public ThreadSocket(int port, InetAddress localIP)
             throws SocketException {
 
         this.socket = new DatagramSocket(port,localIP);
