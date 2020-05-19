@@ -30,7 +30,7 @@ public class ListPacket {
 
         int count = 0;
         for(SecurePacket sp : this.list)
-            if(sp.isAck())
+            if(!sp.isAck())
                 count++;
         return count;
     }
@@ -64,8 +64,6 @@ public class ListPacket {
         this.notAck.lock();
 
         this.list.add(sp);
-
-        System.out.println("Tamanho da lista: " + this.list.size());
 
         /* Sinalizamos quem estava à
         espera de ler do socket */
