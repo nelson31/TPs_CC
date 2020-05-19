@@ -34,6 +34,14 @@ public class Reader implements Runnable {
                 socket.receive(dp);
                 /* Obtemos o pacote Secure */
                 SecurePacket sp = SecurePacket.getFromByteArray(dp.getData());
+                /* Criamos o novo campo data */
+                byte[] data = new byte[sp.getPayloadSize()];
+                byte[] antigo = sp.getData();
+                for(int i=0; i<data.length; i++){
+                    data[i] = antigo[i];
+                }
+                /* Atualizamos o campo data para o novo vetor */
+                sp.setData(data);
                 /* Colocamos o pacote na estrutura */
                 this.receiving.addPacket(sp);
             }

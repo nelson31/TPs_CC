@@ -35,6 +35,12 @@ public class SecurePacket {
     private int port;
 
     /**
+     * Variável que nos informa acerca
+     * do tamanho do payload
+     */
+    private int payloadSize;
+
+    /**
      * Variável que converte um inteiro no
      * array de bytes para ser enviado por
      * um datagram socket
@@ -59,7 +65,7 @@ public class SecurePacket {
      */
     public static SecurePacket getAck(int id, InetAddress origemDoAck, InetAddress destinoDoAck, int portDestino){
 
-        return new SecurePacket(-id,origemDoAck,destinoDoAck,portDestino,new byte[0]);
+        return new SecurePacket(-id,origemDoAck,destinoDoAck,portDestino,0,new byte[0]);
     }
 
     /**
@@ -106,14 +112,16 @@ public class SecurePacket {
         byte[] origemArray = this.origem.getAddress();
         byte[] destinoArray = this.destino.getAddress();
         byte[] portArray = intToBytes(this.port);
+        byte[] sizeArray = intToBytes(this.payloadSize);
         /* Array que irá conter o conteudo do pacote Anon */
-        byte[] ret = new byte[idArray.length + origemArray.length + destinoArray.length + portArray.length + this.data.length];
+        byte[] ret = new byte[idArray.length + origemArray.length + destinoArray.length + portArray.length + sizeArray.length + this.data.length];
 
         int i = 0;
         i += arraycpy(ret,idArray,i,0,idArray.length);
         i += arraycpy(ret,origemArray,i,0,origemArray.length);
         i += arraycpy(ret,destinoArray,i,0,destinoArray.length);
         i += arraycpy(ret,portArray,i,0,portArray.length);
+        i += arraycpy(ret,sizeArray,i,0,sizeArray.length);
         arraycpy(ret,this.data,i,0,this.data.length);
 
         return ret;
@@ -133,28 +141,31 @@ public class SecurePacket {
         byte[] origemArray = new byte[4];
         byte[] destinoArray = new byte[4];
         byte[] portArray = new byte[4];
+        byte[] sizeArray = new byte[4];
         offset += arraycpy(idArray,data,0,offset,4);
         offset += arraycpy(origemArray,data,0,offset,4);
         offset += arraycpy(destinoArray,data,0,offset,4);
         offset += arraycpy(portArray,data,0,offset,4);
+        offset += arraycpy(sizeArray,data,0,offset,4);
         byte[] body = new byte[data.length-offset];
         arraycpy(body,data,0,offset, data.length-offset);
 
         InetAddress destino = InetAddress.getByAddress(destinoArray);
         InetAddress origem = InetAddress.getByAddress(origemArray);
 
-        return new SecurePacket(byteArrayToInt(idArray),origem,destino,byteArrayToInt(portArray),body);
+        return new SecurePacket(byteArrayToInt(idArray),origem,destino,byteArrayToInt(portArray),byteArrayToInt(sizeArray),body);
     }
 
     /**
      * Construtor para objetos da classe SecurePacket
      */
-    public SecurePacket(int id, InetAddress origem, InetAddress destino, int port, byte[] data){
+    public SecurePacket(int id, InetAddress origem, InetAddress destino, int port, int payloadSize, byte[] data){
 
         this.id = id;
         this.origem = origem;
         this.destino = destino;
         this.port = port;
+        this.payloadSize = payloadSize;
         this.data = new byte[data.length];
         for(int i=0; i<data.length; i++){
             this.data[i] = data[i];
@@ -186,6 +197,16 @@ public class SecurePacket {
         return id;
     }
 
+    public int getPayloadSize() {
+
+        return payloadSize;
+    }
+
+    public void setData(byte[] data) {
+
+        this.data = data;
+    }
+
     public String toString(){
 
         StringBuilder sb = new StringBuilder();
@@ -197,6 +218,8 @@ public class SecurePacket {
         sb.append(this.destino);
         sb.append("; Port: ");
         sb.append(this.port);
+        sb.append("; PayloadSize: ");
+        sb.append(this.payloadSize);
         sb.append("; Data: ");
         for(int i=0; i<this.data.length; i++){
             sb.append(this.data[i]);
