@@ -9,7 +9,8 @@ public class testeAnonPacket {
 
         byte[] data = {12,23,42,12,13,23};
         try {
-            AnonPacket packet = new AnonPacket(5, 2, 6, 80, InetAddress.getByName("localhost"), data);
+            AnonPacket packet = new AnonPacket(5, 2, 6, 80,
+                    InetAddress.getByName("localhost"),InetAddress.getByName("localhost"), data);
 
             byte[] array = packet.toByteArray();
             for (int i = 0; i < array.length; i++)

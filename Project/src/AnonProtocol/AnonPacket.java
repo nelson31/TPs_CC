@@ -37,6 +37,12 @@ public class AnonPacket {
     private InetAddress targetServerIP;
 
     /**
+     * Variável que guarda o endereço
+     * IP do owner
+     */
+    private InetAddress ownerIP;
+
+    /**
      * Estrutura de dados que armazena
      * o conteúdo do pacote
      */
@@ -101,9 +107,10 @@ public class AnonPacket {
         byte[] sizeArray = intToBytes(this.payloadSize);
         byte[] portArray = intToBytes(this.targetPort);
         byte[] targArray = this.targetServerIP.getAddress();
+        byte[] ownArray = this.ownerIP.getAddress();
         /* Array que irá conter o conteudo do pacote Anon */
         byte[] ret = new byte[sessArray.length + seqArray.length + sizeArray.length +
-                portArray.length + targArray.length + data.length];
+                portArray.length + targArray.length + ownArray.length + data.length];
 
         int i = 0;
         i += arraycpy(ret,sessArray,i,0,sessArray.length);
@@ -111,6 +118,7 @@ public class AnonPacket {
         i += arraycpy(ret,sizeArray,i,0,sizeArray.length);
         i += arraycpy(ret,portArray,i,0,portArray.length);
         i += arraycpy(ret,targArray,i,0,targArray.length);
+        i += arraycpy(ret,ownArray,i,0,ownArray.length);
         arraycpy(ret,this.data,i,0,this.data.length);
 
         return ret;
@@ -131,18 +139,21 @@ public class AnonPacket {
         byte[] sizeArray = new byte[4];
         byte[] portArray = new byte[4];
         byte[] targArray = new byte[4];
+        byte[] ownArray = new byte[4];
         offset += arraycpy(sessArray,data,0,offset,4);
         offset += arraycpy(seqArray,data,0,offset,4);
         offset += arraycpy(sizeArray,data,0,offset,4);
         offset += arraycpy(portArray,data,0,offset,4);
         offset += arraycpy(targArray,data,0,offset,4);
+        offset += arraycpy(ownArray,data,0,offset,4);
         byte[] body = new byte[data.length-offset];
         arraycpy(body,data,0,offset, data.length-offset);
 
         InetAddress targetServerIP = InetAddress.getByAddress(targArray);
+        InetAddress ownerIP = InetAddress.getByAddress(ownArray);
 
         return new AnonPacket(byteArrayToInt(sessArray),byteArrayToInt(seqArray),byteArrayToInt(sizeArray),
-                byteArrayToInt(portArray),targetServerIP,body);
+                byteArrayToInt(portArray),targetServerIP,ownerIP,body);
     }
 
     /**
@@ -153,13 +164,15 @@ public class AnonPacket {
      * @param data
      */
     public AnonPacket(int session, int sequence,
-                      int payloadSize, int port, InetAddress targetServerIP, byte[] data){
+                      int payloadSize, int port, InetAddress targetServerIP,
+                      InetAddress ownerIP, byte[] data){
 
         this.session = session;
         this.sequence = sequence;
         this.payloadSize = payloadSize;
         this.targetPort = port;
         this.targetServerIP = targetServerIP;
+        this.ownerIP = ownerIP;
         this.data = new byte[data.length];
         for(int i=0; i<data.length; i++){
             this.data[i] = data[i];
@@ -174,6 +187,16 @@ public class AnonPacket {
     public int getSequence(){
 
         return this.sequence;
+    }
+
+    public InetAddress getOwnerIP() {
+
+        return ownerIP;
+    }
+
+    public void setSession(int session) {
+
+        this.session = session;
     }
 
     /**
@@ -194,6 +217,8 @@ public class AnonPacket {
         sb.append(this.targetPort);
         sb.append("; Target server IP: ");
         sb.append(this.targetServerIP);
+        sb.append("; Owner IP: ");
+        sb.append(this.ownerIP);
         sb.append("; Data: ");
         for(int i=0; i<this.data.length; i++){
             sb.append(this.data[i]);
