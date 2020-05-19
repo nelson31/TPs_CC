@@ -8,8 +8,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 
 public class StreamSender {
+
+    /**
+     * Variável que converte um inteiro no
+     * array de bytes para ser enviado por
+     * um datagram socket
+     * @param i
+     * @return
+     */
+    private static byte[] intToBytes(int i) {
+
+        ByteBuffer bb = ByteBuffer.allocate(4);
+        bb.putInt(i);
+        return bb.array();
+    }
 
     public static void main(String[] args) {
 
@@ -20,8 +35,13 @@ public class StreamSender {
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             String message;
             byte[] data = new byte[4096];
-            for(int i = 0; i<4096; i++){
-                data[i] = (byte)i;
+            byte[] valor;
+            for(int i = 0; i<1024; i++){
+                valor = intToBytes(i);
+                data[i++] = valor[0];
+                data[i++] = valor[1];
+                data[i++] = valor[2];
+                data[i++] = valor[3];
             }
             System.out.println("Inserir destino: ");
             while((message = bf.readLine()) != null){
