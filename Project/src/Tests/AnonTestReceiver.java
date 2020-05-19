@@ -16,7 +16,7 @@ public class AnonTestReceiver {
             int sessao = Integer.parseInt(args[1]);
             while(true) {
                 System.out.println("À espera do pacote: ");
-                AnonPacket sp = asocket.receive(0);
+                AnonPacket sp = asocket.receive(sessao);
                 System.out.println("Packet received: ");
                 System.out.println(sp.toString());
             }
