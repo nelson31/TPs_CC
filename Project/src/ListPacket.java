@@ -165,12 +165,12 @@ public class ListPacket {
      */
     private void remove(int id){
 
-        int ind = 0;
-
-        for(SecurePacket sp : this.list) {
-            if (sp.getId() == id)
-                this.list.remove(ind);
-            ind++;
+        boolean found = false;
+        for(int i=0; i<this.list.size() && !found; i++) {
+            if (this.list.get(i).getId() == id) {
+                this.list.remove(i);
+                found = true;
+            }
         }
     }
 }
