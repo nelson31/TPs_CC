@@ -83,7 +83,7 @@ public class ReaderFromSocketToStream implements Runnable {
             System.out.println("Origem: " + this.socket.getLocalAddress());
             while ((lidos = os.read(data,0,1024)) != -1) {
                 byte[] dat = new byte[lidos];
-                for(int i=0; i<data.length; i++){
+                for(int i=0; i<lidos; i++){
                     dat[i] = data[i];
                 }
                 this.stream.send(dat,sequence,this.socket.getLocalAddress(),this.destinoIp,
