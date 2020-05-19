@@ -18,8 +18,8 @@ public class StreamReceiver {
             while(true){
                 byte[] lido = as.read();
                 System.out.println("Conteudo lido da stream");
-                for(byte b : lido)
-                    System.out.print(b);
+                for(int i=0; i<lido.length; i++)
+                    System.out.print(lido[i]);
                 System.out.println();
             }
         }
