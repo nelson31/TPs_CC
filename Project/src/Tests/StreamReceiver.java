@@ -2,6 +2,7 @@ package Tests;
 
 import AnonProtocol.AnonSocket;
 import AnonProtocol.AnonStream;
+import AnonProtocol.DataInfo;
 
 import java.net.InetAddress;
 import java.net.SocketException;
@@ -16,7 +17,10 @@ public class StreamReceiver {
                     InetAddress.getByName(args[0])), Integer.parseInt(args[1]));
 
             while(true){
-                byte[] lido = as.read();
+                DataInfo info = new DataInfo();
+                byte[] lido = as.read(info);
+                System.out.println("Meta-Info: ");
+                System.out.println(info.toString());
                 System.out.println("Conteudo lido da stream");
                 for(int i=0; i<lido.length; i++)
                     System.out.print(lido[i]);

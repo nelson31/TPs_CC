@@ -243,6 +243,16 @@ public class AnonPacket implements Comparable{
         return data;
     }
 
+    public int getTargetPort() {
+
+        return targetPort;
+    }
+
+    public InetAddress getTargetServerIP() {
+
+        return targetServerIP;
+    }
+
     public void setSession(int session) {
 
         this.session = session;

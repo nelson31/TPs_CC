@@ -69,6 +69,9 @@ public class SessionGetter {
         catch(InterruptedException exc){
             System.out.println("Erro ao obter id de sessão");
         }
+        finally {
+            this.l.unlock();
+        }
         return ret;
     }
 

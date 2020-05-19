@@ -86,8 +86,13 @@ public class AnonStream {
         actualSequence.setI(sequence);
     }
 
-
-    public byte[] read(){
+    /**
+     * Método que permite ler da stream
+     * um certo conteudo de dados
+     * @param info
+     * @return
+     */
+    public byte[] read(DataInfo info){
 
         byte[] ret;
         int finalSize = 0;
@@ -103,12 +108,18 @@ public class AnonStream {
                 count++;
                 packs.add(ap);
                 finalSize += ap.getPayloadSize();
+                if(!info.isComplete()){
+                    info.setSession(ap.getSession());
+                    // Verificar se estamos perante uma sessão local ou externa
+                    info.setOwner(ap.getOwnerIP());
+                    info.setTargetServer(ap.getTargetServerIP());
+                    info.setTargetPort(ap.getTargetPort());
+                }
             }
         }
         while(!ap.isSizePacket());
         /* Aqui o ap é um pacote de size */
         int numReaded = ap.getIsSizeArray();
-        System.out.println("Recebi " + numReaded + " packets");
         while(count<numReaded){
             ap = this.asocket.receive(session);
             finalSize += ap.getPayloadSize();
@@ -116,7 +127,6 @@ public class AnonStream {
             count++;
         }
         ret = new byte[finalSize];
-        System.out.println("Tamanho total: " + finalSize + " bytes");
         int ind = 0;
         byte[] body;
         for(AnonPacket pack : packs){
