@@ -8,10 +8,12 @@ public class Receiver {
 
         try {
             AnonSocket asocket = new AnonSocket(6666, InetAddress.getByName(args[0]));
-            System.out.println("À espera do pacote: ");
-            SecurePacket sp = asocket.receive();
-            System.out.println("Packet received: ");
-            System.out.println(sp.toString());
+            while(true) {
+                System.out.println("À espera do pacote: ");
+                SecurePacket sp = asocket.receive();
+                System.out.println("Packet received: ");
+                System.out.println(sp.toString());
+            }
         }
         catch(UnknownHostException | SocketException exc){
             System.out.println("Erro ao criar socket");

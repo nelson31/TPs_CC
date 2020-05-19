@@ -34,8 +34,6 @@ public class Reader implements Runnable {
                 socket.receive(dp);
                 /* Obtemos o pacote Secure */
                 SecurePacket sp = SecurePacket.getFromByteArray(dp.getData());
-                System.out.println("[Reader] Novo pacote lido: ");
-                System.out.println(sp.toString());
                 /* Colocamos o pacote na estrutura */
                 this.receiving.addPacket(sp);
             }
