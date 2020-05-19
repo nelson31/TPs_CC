@@ -78,11 +78,13 @@ public class ReaderFromSocketToStream implements Runnable {
             /* Enquanto houver dados para
             ler do socket TCP */
             byte[] data = new byte[1024];
+            System.out.println("À espera de dados: ");
             while ((os.read(data,0,1024)) != -1) {
                 this.stream.send(data,sequence,
                         this.socket.getInetAddress(),this.destinoIp,
                         this.destinoFinalIP, this.socket.getInetAddress(),this.destinoPort,
                         this.destinoFinalPort);
+                System.out.println("À espera de dados");
             }
         }
         catch(IOException exc){
