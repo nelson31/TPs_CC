@@ -19,7 +19,7 @@ public class StreamReceiver {
                 byte[] lido = as.read();
                 System.out.println("Conteudo lido da stream");
                 for(byte b : lido)
-                    System.out.println(b);
+                    System.out.print(b);
                 System.out.println();
             }
         }

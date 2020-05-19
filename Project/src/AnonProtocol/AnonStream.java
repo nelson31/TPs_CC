@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 public class AnonStream {
 
-    private static final int maxsize_payload = 800;
+    private static final int maxsize_payload = 796;
 
     /**
      * Variável para a qual vão sendo enviados
