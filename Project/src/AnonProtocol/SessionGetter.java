@@ -65,6 +65,10 @@ public class SessionGetter {
             for(int i=0; i<MAX_SESSIONS_SIMULT && ret==-1; i++)
                 if(!isIndexAtributed[i]) ret = i;
 
+            /* Atribuimos mais um id, pelo que
+            incrementamos o número de id's atribuidos */
+            this.num++;
+
         }
         catch(InterruptedException exc){
             System.out.println("Erro ao obter id de sessão");
@@ -86,6 +90,7 @@ public class SessionGetter {
 
         /* Sinalizamos a entrega do id */
         this.isIndexAtributed[ID] = false;
+        this.num--;
         this.c.signal();
 
         /* Cedemos o lock */
