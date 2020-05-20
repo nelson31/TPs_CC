@@ -84,7 +84,7 @@ public class ReaderFromSocketToStream implements Runnable {
                 for(int i=0; i<lidos; i++){
                     dat[i] = data[i];
                 }
-                this.stream.send(dat,sequence,this.socket.getLocalAddress(),this.destinoIp,
+                this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,this.socket.getLocalAddress(),this.destinoPort,
                         this.destinoFinalPort);
                 System.out.println("À espera de dados");

@@ -21,7 +21,7 @@ public class ClientAnon {
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("À espera de mensagens: ");
             while((message = bf.readLine()) != null){
-                stream.send(message.getBytes(),new IntegerEncapsuler(0),origem,destino,
+                stream.send(message.getBytes(),origem,destino,
                         InetAddress.getByName("localhost"),origem,6666,80);
                 System.out.println("À espera de mensagens: ");
             }

@@ -41,6 +41,12 @@ public class AnonStream {
     private PacketReader reader;
 
     /**
+     * Variável que guarda as sequencias
+     * dos pacotes a serem enviados
+     */
+    private IntegerEncapsuler sequence;
+
+    /**
      * Construtor para objetos da classe
      * AnonStreamProtocol.AnonStream
      */
@@ -48,6 +54,7 @@ public class AnonStream {
 
         this.asocket = asocket;
         this.session = session;
+        this.sequence = new IntegerEncapsuler(0);
         this.listAnonPackets = new StreamList();
         this.reader = new PacketReader(this.asocket,this.listAnonPackets,this.session);
         /* Colocamos o reader a correr */
@@ -62,12 +69,12 @@ public class AnonStream {
      * @param destino
      * @param destPort
      */
-    public void send(byte[] dados, IntegerEncapsuler actualSequence, InetAddress origem,
+    public void send(byte[] dados, InetAddress origem,
                      InetAddress destino, InetAddress finalDestIp, InetAddress owner,
                      int destPort, int finalDestPort){
 
         int count = 0;
-        int sizeSequence = actualSequence.getI();
+        int sizeSequence = this.sequence.getI();
         int sequence = sizeSequence+1;
         byte[] body;
         int dadosSize = dados.length;
@@ -104,7 +111,7 @@ public class AnonStream {
         }
         /* Atualizamos o valor da sequence
         em vigor */
-        actualSequence.setI(sequence);
+        this.sequence.setI(sequence);
     }
 
     /**
