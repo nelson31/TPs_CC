@@ -16,9 +16,9 @@ public class StreamReceiver {
             AnonStream as = new AnonStream(new AnonSocket(6666,
                     InetAddress.getByName(args[0])), Integer.parseInt(args[1]));
 
-            while(true){
-                DataInfo info = new DataInfo();
-                byte[] lido = as.read(info);
+            DataInfo info = new DataInfo();
+            byte[] lido;
+            while((lido = as.read(info)) != null){
                 System.out.println("Meta-Info: ");
                 System.out.println(info.toString());
                 System.out.println("Conteudo lido da stream");

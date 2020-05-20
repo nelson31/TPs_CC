@@ -129,6 +129,11 @@ public class AnonStream {
         mensagem enviada através da outra extremidade da stream */
         Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
 
+        /* Se tiver recebido fim de comunicação
+        retorna-se null */
+        if(packs == null)
+            return null;
+
         System.out.println("Li nova mensagem");
         /* Percorremos cada um dos pacotes para
         obter o tamanho total dos dados */
@@ -153,8 +158,10 @@ public class AnonStream {
      */
     public void close(InetAddress origem, InetAddress destino, int destPort){
 
+        /* Vamos buscar a sequencia */
+        int sequence = this.sequence.getI();
         /* Enviamos um anonPacket de fecho */
-        AnonPacket fecho = new AnonPacket(this.session,-1,0,80,
+        AnonPacket fecho = new AnonPacket(this.session,sequence,-1,80,
                 null,null,-1,new byte[0]);
 
         this.asocket.send(fecho,origem,destino,destPort);

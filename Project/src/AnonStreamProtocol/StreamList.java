@@ -89,6 +89,13 @@ public class StreamList {
             AnonPacket sizepacket = this.recebidos.get(this.nextSizePacketSequence);
             this.nextPacketWaiting = this.nextSizePacketSequence+1;
             this.recebidos.remove(this.nextSizePacketSequence);
+
+            /* Se for um pacote de fim de comunicação
+            é retornado null */
+            if(sizepacket.getPayloadSize() == -1){
+                this.lwaitPacketSequence.unlock();
+                return null;
+            }
             /* Atualizamos o valor da sequencia de próximo pacote size que esperamos */
             this.nextSizePacketSequence += sizepacket.getIsSizeArray()+1;
             pacotesALer = sizepacket.getIsSizeArray();
