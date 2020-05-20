@@ -144,6 +144,9 @@ public class StreamList {
 
             this.lwaitsize.lock();
 
+            /* Adicionamos o pacote de dados à lista */
+            this.recebidos.put(pack.getSequence(),pack);
+
             /* Caso haja algúem à espera deste pacote
             acordamos a respetiva thread */
             if(pack.getSequence() == this.nextSizePacketSequence)
