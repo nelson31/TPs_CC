@@ -145,6 +145,7 @@ public class StreamList {
             acordamos a respetiva thread */
             if(pack.getSequence() == this.nextSizePacketSequence)
                 this.cwaitsize.signal();
+            System.out.println("Li novo pacote de size com sequence: " + pack.getSequence());
 
             this.lwaitsize.unlock();
         }
@@ -155,6 +156,8 @@ public class StreamList {
             à espera desta pacote */
             if(pack.getSequence() == this.nextPacketWaiting)
                 this.cwaitPacketSequence.signal();
+
+            System.out.println("Li novo pacote com sequence: " + pack.getSequence());
 
             this.lwaitPacketSequence.unlock();
         }

@@ -41,7 +41,6 @@ public class PacketReader implements Runnable{
         while(true){
             /* Lemos pacotes do socket */
             AnonPacket ap = this.asocket.receive(session);
-            System.out.println("Li novo pacote com sequence: " + ap.getSequence());
             /* Adicionamos o respetivo pacote à lista */
             this.listaPackets.addPacket(ap);
         }
