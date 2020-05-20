@@ -1,4 +1,9 @@
-package AnonProtocol;
+package AnonStreamProtocol;
+
+import AnonProtocol.AnonPacket;
+import AnonProtocol.AnonSocket;
+import AnonProtocol.DataInfo;
+import AnonProtocol.IntegerEncapsuler;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -24,13 +29,29 @@ public class AnonStream {
     private int session;
 
     /**
+     * Variável que vai guardando os pacotes
+     * que vão sendo recebidos
+     */
+    private StreamList listAnonPackets;
+
+    /**
+     * Variável que permite ler constantemente
+     * pacotes do AnonSocket para a stream list
+     */
+    private PacketReader reader;
+
+    /**
      * Construtor para objetos da classe
-     * AnonProtocol.AnonStream
+     * AnonStreamProtocol.AnonStream
      */
     public AnonStream(AnonSocket asocket, int session) {
 
         this.asocket = asocket;
         this.session = session;
+        this.listAnonPackets = new StreamList();
+        this.reader = new PacketReader(this.asocket,this.listAnonPackets,this.session);
+        /* Colocamos o reader a correr */
+        new Thread(this.reader).start();
     }
 
     /**
@@ -97,27 +118,10 @@ public class AnonStream {
         byte[] ret;
         int finalSize = 0;
         AnonPacket ap = null;
-        /* Guarda os pacotes que vão sendo
-        lidos ordenando-os por sequencia */
-        Set<AnonPacket> packs = new TreeSet<>();
+        /* Vamos buscar os pacotes que correspondem à próxima
+        mensagem enviada através da outra extremidade da stream */
+        Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
         int count = 0;
-
-        do{
-            ap = this.asocket.receive(session);
-            if(!info.isComplete()){
-                info.setSession(ap.getSession());
-                // Verificar se estamos perante uma sessão local ou externa
-                info.setOwner(ap.getOwnerIP());
-                info.setTargetServer(ap.getTargetServerIP());
-                info.setTargetPort(ap.getTargetPort());
-            }
-            if(!ap.isSizePacket()){
-                count++;
-                packs.add(ap);
-                finalSize += ap.getPayloadSize();
-            }
-        }
-        while(!ap.isSizePacket());
         /* Aqui o ap é um pacote de size */
         int numReaded = ap.getIsSizeArray();
         while(count<numReaded){
@@ -137,5 +141,17 @@ public class AnonStream {
             }
         }
         return ret;
+    }
+
+    /**
+     * Método que permite fechar a stream para um determinado destino
+     */
+    public void close(InetAddress origem, InetAddress destino, int destPort){
+
+        /* Enviamos um anonPacket de fecho */
+        AnonPacket fecho = new AnonPacket(this.session,-1,0,80,
+                null,null,-1,new byte[0]);
+
+        this.asocket.send(fecho,origem,destino,destPort);
     }
 }

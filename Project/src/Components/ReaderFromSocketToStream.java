@@ -1,6 +1,6 @@
 package Components;
 
-import AnonProtocol.AnonStream;
+import AnonStreamProtocol.AnonStream;
 import AnonProtocol.IntegerEncapsuler;
 
 import java.io.IOException;

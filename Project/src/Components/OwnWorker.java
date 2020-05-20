@@ -1,7 +1,7 @@
 package Components;
 
 import AnonProtocol.AnonSocket;
-import AnonProtocol.AnonStream;
+import AnonStreamProtocol.AnonStream;
 import AnonProtocol.IntegerEncapsuler;
 
 import java.net.InetAddress;

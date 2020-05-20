@@ -1,7 +1,7 @@
 package Components;
 
 import AnonProtocol.AnonSocket;
-import AnonProtocol.AnonStream;
+import AnonStreamProtocol.AnonStream;
 import AnonProtocol.DataInfo;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class ReaderFromStreamToSocket implements Runnable{
 
         try {
             OutputStream os = this.socket.getOutputStream();
-            while (true) {
+            while (!this.socket.isClosed()) {
                 DataInfo info = new DataInfo();
                 /* Ficamos a espera de receber
                 dados provenientes da stream */

@@ -1,5 +1,7 @@
 package AnonProtocol;
 
+import AnonStreamProtocol.AnonStream;
+
 public class AnonSmartStream {
 
     /**
