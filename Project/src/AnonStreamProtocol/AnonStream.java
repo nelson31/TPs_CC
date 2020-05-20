@@ -123,7 +123,7 @@ public class AnonStream {
         Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
         int count = 0;
         /* Aqui o ap é um pacote de size */
-        int numReaded = ap.getIsSizeArray();
+        int numReaded = packs.size();
         while(count<numReaded){
             ap = this.asocket.receive(session);
             finalSize += ap.getPayloadSize();
