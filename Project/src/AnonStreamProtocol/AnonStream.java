@@ -120,12 +120,12 @@ public class AnonStream {
         /* Vamos buscar os pacotes que correspondem à próxima
         mensagem enviada através da outra extremidade da stream */
         Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
-        int count = 0;
+
+        System.out.println("Li nova mensagem");
         /* Percorremos cada um dos pacotes para
         obter o tamanho total dos dados */
         for(AnonPacket ap : packs){
             finalSize += ap.getPayloadSize();
-            count++;
         }
         ret = new byte[finalSize];
         int ind = 0;
