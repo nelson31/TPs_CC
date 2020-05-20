@@ -154,6 +154,9 @@ public class StreamList {
         else{
             this.lwaitPacketSequence.lock();
 
+            /* Adicionamos o pacote de dados à lista */
+            this.recebidos.put(pack.getSequence(),pack);
+
             /* Sinalizamos caso esteja algúem
             à espera desta pacote */
             if(pack.getSequence() == this.nextPacketWaiting)
