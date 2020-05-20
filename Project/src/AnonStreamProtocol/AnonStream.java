@@ -117,6 +117,7 @@ public class AnonStream {
 
         byte[] ret;
         int finalSize = 0;
+        System.out.println("Vou ler nova mensagem");
         /* Vamos buscar os pacotes que correspondem à próxima
         mensagem enviada através da outra extremidade da stream */
         Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
