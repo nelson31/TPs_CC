@@ -117,17 +117,14 @@ public class AnonStream {
 
         byte[] ret;
         int finalSize = 0;
-        AnonPacket ap = null;
         /* Vamos buscar os pacotes que correspondem à próxima
         mensagem enviada através da outra extremidade da stream */
         Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
         int count = 0;
-        /* Aqui o ap é um pacote de size */
-        int numReaded = packs.size();
-        while(count<numReaded){
-            ap = this.asocket.receive(session);
+        /* Percorremos cada um dos pacotes para
+        obter o tamanho total dos dados */
+        for(AnonPacket ap : packs){
             finalSize += ap.getPayloadSize();
-            packs.add(ap);
             count++;
         }
         ret = new byte[finalSize];
