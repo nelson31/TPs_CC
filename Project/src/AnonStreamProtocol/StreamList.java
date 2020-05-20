@@ -92,6 +92,7 @@ public class StreamList {
             /* Atualizamos o valor da sequencia de próximo pacote size que esperamos */
             this.nextSizePacketSequence += sizepacket.getIsSizeArray()+1;
             pacotesALer = sizepacket.getIsSizeArray();
+            System.out.println("Vou ler " + pacotesALer + " pacotes de dados");
         } catch (InterruptedException exc) {
             System.out.println("Erro ao obter pacote de tamanho");
         } finally {
@@ -112,6 +113,8 @@ public class StreamList {
                 /* Quando acordamos adicionamos o pacote
                 à coleção para retornar */
                 ret.add(this.recebidos.get(this.nextPacketWaiting));
+
+                System.out.println("Li o pacote de seq: " + this.nextPacketWaiting);
                 /* Incrementamos o valor da sequencia do
                 pacote pelo qual esperamos */
                 this.nextPacketWaiting++;
@@ -145,7 +148,6 @@ public class StreamList {
             acordamos a respetiva thread */
             if(pack.getSequence() == this.nextSizePacketSequence)
                 this.cwaitsize.signal();
-            System.out.println("Li novo pacote de size com sequence: " + pack.getSequence());
 
             this.lwaitsize.unlock();
         }
@@ -157,7 +159,6 @@ public class StreamList {
             if(pack.getSequence() == this.nextPacketWaiting)
                 this.cwaitPacketSequence.signal();
 
-            System.out.println("Li novo pacote com sequence: " + pack.getSequence());
 
             this.lwaitPacketSequence.unlock();
         }
