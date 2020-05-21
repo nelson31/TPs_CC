@@ -73,7 +73,7 @@ public class SessionData {
 
         SessionData sd = (SessionData)o;
 
-        return this.ownerIP.equals(sd.ownerIP) &&
+        return this.ownerIP.toString().equals(sd.ownerIP.toString()) &&
                 this.id == sd.id;
     }
 
