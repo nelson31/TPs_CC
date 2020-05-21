@@ -111,7 +111,7 @@ public class StreamList {
             /* Se for um pacote de fim de comunicação
             é retornado null */
             if(sizepacket.getPayloadSize() == -1){
-                this.lwaitPacketSequence.unlock();
+                this.lwaitsize.unlock();
                 System.out.println("Encontrei pacote de fim");
                 return null;
             }
