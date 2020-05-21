@@ -111,17 +111,20 @@ public class ForeignSessions {
 
         SessionData data = new SessionData(id,owner, targetIp, targetPort);
 
+        int novoId;
         /* Obtemos o lock */
         this.l.lock();
 
         /* Adicionamos a informação acerca de uma sessão
         para ser tratada por um worker se ela ainda não
         existir na lista de espera */
-        if(!this.waiting.contains(data))
+        if(!this.waiting.contains(data)) {
             this.waiting.add(data);
-
-        /* Atribuimos logo um id à sessão no anon local */
-        this.association.put(data,this.sessionGetter.getID());
+            novoId = this.sessionGetter.getID();
+            /* Atribuimos logo um id à sessão no anon local */
+            this.association.put(data,novoId);
+            System.out.println("Nova sessão externa vinda de " + owner.toString() + "; id: " + id + "; idlocal: " + novoId);
+        }
 
         /* Sinalizamos a thread que se encontra à
         espera de novas sessões provenientes de
