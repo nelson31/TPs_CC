@@ -63,6 +63,7 @@ public class SessionData {
      * @param o
      * @return
      */
+    @Override
     public boolean equals(Object o){
 
         if(this == o)

@@ -54,7 +54,7 @@ public class ForeignSessions {
      */
     public ForeignSessions(SessionGetter sessionGetter){
 
-        this.association = new TreeMap<>();
+        this.association = new HashMap<>();
         this.waiting = new ArrayList<>();
         this.l = new ReentrantLock();
         this.c = this.l.newCondition();
