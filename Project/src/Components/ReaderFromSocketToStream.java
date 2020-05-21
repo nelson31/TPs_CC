@@ -29,11 +29,6 @@ public class ReaderFromSocketToStream implements Runnable {
     private int idSession;
 
     /**
-     * Variável que guarda a sequencia do pacote
-     */
-    private IntegerEncapsuler sequence;
-
-    /**
      * Próximo anon pelo qual os dados
      * irão passar
      */
@@ -55,14 +50,13 @@ public class ReaderFromSocketToStream implements Runnable {
      * @param idSession
      */
     public ReaderFromSocketToStream(AnonStream stream, Socket socket,
-                                    int idSession, IntegerEncapsuler sequence,
+                                    int idSession,
                                     InetAddress destinoIp, int portIp,
                                     InetAddress destinoFinalIP, int destinoFinalPort) {
 
         this.stream = stream;
         this.socket = socket;
         this.idSession = idSession;
-        this.sequence = sequence;
         this.destinoIp = destinoIp;
         this.destinoPort = portIp;
         this.destinoFinalIP = destinoFinalIP;
@@ -84,6 +78,7 @@ public class ReaderFromSocketToStream implements Runnable {
                 for(int i=0; i<lidos; i++){
                     dat[i] = data[i];
                 }
+                System.out.println("Enviei dados");
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,this.socket.getLocalAddress(),this.destinoPort,
                         this.destinoFinalPort);

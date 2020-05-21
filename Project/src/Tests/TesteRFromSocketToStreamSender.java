@@ -18,7 +18,7 @@ public class TesteRFromSocketToStreamSender {
             ServerSocket accept = new ServerSocket(80,0,InetAddress.getByName(args[0]));
             AnonStream stream = new AnonStream(new AnonSocket(6666, InetAddress.getByName(args[0])),0);
             ReaderFromSocketToStream reader = new ReaderFromSocketToStream(stream,
-                    accept.accept(),0,new IntegerEncapsuler(0),destino,
+                    accept.accept(),0,destino,
                     6666,InetAddress.getByName("localhost"),80);
             /* Colocamos a thread a correr */
             new Thread(reader).start();

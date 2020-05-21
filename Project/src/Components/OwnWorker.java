@@ -39,12 +39,6 @@ public class OwnWorker implements Runnable {
     private int targetPort;
 
     /**
-     * Variável que guarda o atual
-     * número para a atual sequencia
-     */
-    private IntegerEncapsuler sequence;
-
-    /**
      * Variável que guarda o endereço IP do
      * próximo AnonGW para o qual são enviados os dados
      */
@@ -58,8 +52,7 @@ public class OwnWorker implements Runnable {
      * @param socket
      * @param sessionID
      */
-    public OwnWorker(AnonSocket asocket, Socket socket, int sessionID,
-                     IntegerEncapsuler sequence, InetAddress nextHopIp,
+    public OwnWorker(AnonSocket asocket, Socket socket, int sessionID, InetAddress nextHopIp,
                      InetAddress targetServerIp, int targetPort) {
 
         this.asocket = asocket;
@@ -68,7 +61,6 @@ public class OwnWorker implements Runnable {
         this.nextHopIp = nextHopIp;
         this.targetServerIp = targetServerIp;
         this.targetPort = targetPort;
-        this.sequence = sequence;
     }
 
     public void run() {
@@ -76,7 +68,7 @@ public class OwnWorker implements Runnable {
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */
         ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(new AnonStream(this.asocket,this.sessionID),
-                this.socket,this.sessionID,this.sequence,this.nextHopIp,
+                this.socket,this.sessionID,this.nextHopIp,
                 6666,this.targetServerIp,this.targetPort);
 
         /* Criamos a thread que lê da stream Anon e
