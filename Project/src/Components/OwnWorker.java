@@ -75,15 +75,18 @@ public class OwnWorker implements Runnable {
 
     public void run() {
 
+        /* Criamos uma stream para ler e receber dados */
+        AnonStream stream = new AnonStream(this.asocket,0);
+
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */
-        ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(new AnonStream(this.asocket,this.sessionID),
+        ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(stream,
                 this.socket,this.sessionID,this.nextHopIp,
                 6666,this.targetServerIp,this.targetPort);
 
         /* Criamos a thread que lê da stream Anon e
         envia os dados de volta para o cliente */
-        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(asocket,this.socket,this.sessionID);
+        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream,this.socket,this.sessionID);
 
         /* Colocamos ambas as threads a correr */
         Thread t1 = new Thread(sockToStream);

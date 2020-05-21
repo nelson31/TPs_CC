@@ -23,6 +23,7 @@ public class OwnServer {
             DataInfo info = new DataInfo();
             byte[] lido; String message, feedback;
             while ((lido = stream.read()) != null){
+                System.out.println("Acabei de ler da stream");
                 message = new String(lido, StandardCharsets.UTF_8);
                 System.out.println("String lida da stream: " + message);
                 /* Obtemos a informação para obter o owner */

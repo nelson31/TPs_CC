@@ -1,6 +1,7 @@
 package Tests;
 
 import AnonProtocol.AnonSocket;
+import AnonStreamProtocol.AnonStream;
 import Components.ReaderFromStreamToSocket;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class TesteRFromStreamToSocketSender {
         try {
             AnonSocket asocket = new AnonSocket(6666, InetAddress.getByName(args[0]));
             Socket sock = new Socket(InetAddress.getByName(args[1]),80);
-            ReaderFromStreamToSocket reader = new ReaderFromStreamToSocket(asocket,sock,0);
+            ReaderFromStreamToSocket reader = new ReaderFromStreamToSocket(new AnonStream(asocket,0),sock,0);
             /* Colocamos a thread à escuta de dados
             provenientes da stream */
             new Thread(reader).start();

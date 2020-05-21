@@ -31,12 +31,10 @@ public class ReaderFromStreamToSocket implements Runnable{
     /**
      * Construtor para objetos da classe
      * ReaderFromStreamToSocket
-     *
-     * @param asocket
      */
-    public ReaderFromStreamToSocket(AnonSocket asocket, Socket socket, int sessionID) {
+    public ReaderFromStreamToSocket(AnonStream astream, Socket socket, int sessionID) {
 
-        this.stream = new AnonStream(asocket,sessionID);
+        this.stream = astream;
         /* Ativação da extremidade de leitura da stream */
         this.stream.enableInputStream();
         this.socket = socket;
