@@ -76,7 +76,7 @@ public class SessionSepare implements Runnable {
                 InetAddress owner = ap.getOwnerIP();
                 /* Se o owner não for o anon local, teremos
                 que converter o id de sessão */
-                if(!owner.equals(this.localIp)) {
+                if(!owner.toString().equals(this.localIp.toString())) {
                     /* Se for uma sessão externa temos que verificar na
                     foreign table e se não existir teremos que a adicionar */
                     if (!this.foreignSessions.contains(id, owner)) {
