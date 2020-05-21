@@ -89,6 +89,8 @@ public class ReaderFromSocketToStream implements Runnable {
                         this.destinoFinalPort);
                 System.out.println("À espera de dados");
             }
+            /* No final fazemos close da stream */
+            this.stream.close(this.socket.getLocalAddress(),this.destinoIp,this.destinoPort);
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());

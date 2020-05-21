@@ -15,15 +15,17 @@ public class TesteRFromSocketToStreamReceiver {
         try {
             AnonSocket socket = new AnonSocket(6666, InetAddress.getByName(args[0]));
             AnonStream stream = new AnonStream(socket,0);
-            while (true){
-                DataInfo info = new DataInfo();
-                byte[] data = stream.read();
-                System.out.println("Meta-info");
-                System.out.println(info.toString());
+            /* Ativamos a extremidade de leitura */
+            stream.enableInputStream();
+            byte[] lido;
+            while ((lido = stream.read()) != null){
                 System.out.println("Conteudo lido da stream");
-                for(int i=0; i<data.length; i++)
-                    System.out.print(data[i]);
+                for(int i=0; i<lido.length; i++)
+                    System.out.print(lido[i]);
             }
+            DataInfo info = stream.getTargetInfo();
+            System.out.println("Tinha que enviar isto para: ");
+            System.out.println(info.toString());
         }
         catch(UnknownHostException | SocketException exc){
             System.out.println(exc.getMessage());
