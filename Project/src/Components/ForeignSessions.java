@@ -123,6 +123,7 @@ public class ForeignSessions {
             novoId = this.sessionGetter.getID();
             /* Atribuimos logo um id à sessão no anon local */
             this.association.put(data,novoId);
+            System.out.println(this.association.containsKey(new SessionData(id,owner,null,0)));
             System.out.println("Nova sessão externa vinda de " + owner.toString() + "; id: " + id + "; idlocal: " + novoId);
         }
 
