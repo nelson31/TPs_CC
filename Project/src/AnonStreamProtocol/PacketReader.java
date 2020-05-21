@@ -2,6 +2,7 @@ package AnonStreamProtocol;
 
 import AnonProtocol.AnonPacket;
 import AnonProtocol.AnonSocket;
+import AnonProtocol.DataInfo;
 
 public class PacketReader implements Runnable{
 
@@ -43,6 +44,14 @@ public class PacketReader implements Runnable{
             AnonPacket ap = this.asocket.receive(session);
             /* Adicionamos o respetivo pacote à lista */
             this.listaPackets.addPacket(ap);
+            /* Vamos buscar a informação acerca do target server*/
+            DataInfo info = this.listaPackets.getTargetInfo();
+            if(!info.isComplete()){
+                info.setTargetServer(ap.getTargetServerIP());
+                info.setOwner(ap.getOwnerIP());
+                info.setSession(ap.getSession());
+                info.setTargetPort(ap.getTargetPort());
+            }
         }
     }
 }

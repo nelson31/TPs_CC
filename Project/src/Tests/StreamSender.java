@@ -30,7 +30,7 @@ public class StreamSender {
 
         try {
             InetAddress origem = InetAddress.getByName(args[0]);
-            InetAddress destino;
+            InetAddress destino = InetAddress.getByName(args[1]);
             AnonStream as = new AnonStream(new AnonSocket(6666, origem),0);
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             String message;
@@ -49,10 +49,12 @@ public class StreamSender {
             System.out.println();
             System.out.println("Inserir destino: ");
             while((message = bf.readLine()) != null){
-                destino = InetAddress.getByName(message);
+                data = message.getBytes();
                 as.send(data,origem,destino,destino,origem,6666,80);
                 System.out.println("Inserir destino: ");
             }
+            /* Fechamos a stream */
+            as.close(origem,destino,6666);
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());

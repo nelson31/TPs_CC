@@ -1,6 +1,7 @@
 package AnonStreamProtocol;
 
 import AnonProtocol.AnonPacket;
+import AnonProtocol.DataInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,12 @@ public class StreamList {
      * sendo lidos do socket
      */
     private Map<Integer, AnonPacket> recebidos;
+
+    /**
+     * Informação acerca do destino
+     * final dos dados
+     */
+    private DataInfo targetInfo;
 
     /**
      * Variável que guarda o valor do campo
@@ -59,10 +66,21 @@ public class StreamList {
         tem sequence 0 */
         this.nextSizePacketSequence = 0;
         this.nextPacketWaiting = 1;
+        this.targetInfo = new DataInfo();
         this.lwaitsize = new ReentrantLock();
         this.cwaitsize = this.lwaitsize.newCondition();
         this.lwaitPacketSequence = new ReentrantLock();
         this.cwaitPacketSequence = this.lwaitPacketSequence.newCondition();
+    }
+
+    /**
+     * Método que retorna informações acerca do destino
+     * final dos dados recebidos pela stream
+     * @return
+     */
+    public DataInfo getTargetInfo() {
+
+        return this.targetInfo;
     }
 
     /**

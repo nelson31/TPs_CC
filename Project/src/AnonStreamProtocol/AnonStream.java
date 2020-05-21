@@ -5,6 +5,7 @@ import AnonProtocol.AnonSocket;
 import AnonProtocol.DataInfo;
 import AnonProtocol.IntegerEncapsuler;
 
+import javax.xml.crypto.Data;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,16 @@ public class AnonStream {
         this.sequence = new IntegerEncapsuler(0);
         this.listAnonPackets = new StreamList();
         this.reader = new PacketReader(this.asocket,this.listAnonPackets,this.session);
-        /* Colocamos o reader a correr */
+    }
+
+    /**
+     * Método que ativa a extremidade de leitura
+     * para ler dados da stream
+     */
+    public void enableInputStream(){
+
+        /* Colocamos o reader a correr para
+        poder ler dados da stream */
         new Thread(this.reader).start();
     }
 
@@ -117,10 +127,9 @@ public class AnonStream {
     /**
      * Método que permite ler da stream
      * um certo conteudo de dados
-     * @param info
      * @return
      */
-    public byte[] read(DataInfo info){
+    public byte[] read(){
 
         byte[] ret;
         int finalSize = 0;
@@ -151,6 +160,16 @@ public class AnonStream {
             }
         }
         return ret;
+    }
+
+    /**
+     * Método que retorna as informações acerca do destino
+     * final dos dados recebidos através da stream
+     * @return
+     */
+    public DataInfo getTargetInfo(){
+
+        return this.listAnonPackets.getTargetInfo();
     }
 
     /**
