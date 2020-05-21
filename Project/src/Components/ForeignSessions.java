@@ -130,6 +130,7 @@ public class ForeignSessions {
             novoId = this.sessionGetter.getID();
             /* Atribuimos logo um id à sessão no anon local */
             this.association.put(data,novoId);
+            System.out.println("Tamanho da colecao: " + association.size());
             System.out.println(this.association.get(ndata));
             System.out.println("[Equals]" + (data.equals(ndata) + "; " + ndata.getOwnerIP().toString() + "/"
                     + data.getId() + "; " + ndata.getId()));
