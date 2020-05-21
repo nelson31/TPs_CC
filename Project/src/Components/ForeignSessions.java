@@ -82,7 +82,6 @@ public class ForeignSessions {
 
             sdata = this.waiting.get(0);
             this.waiting.remove(0);
-            System.out.println("[Accept] Li nova sessão externa: id: " + sdata.getId() + "; owner: " + sdata.getOwnerIP().toString());
             /* Atribuimos os valores à variavel
             session data de saida */
             sessionData.setId(sdata.getId());
@@ -90,8 +89,9 @@ public class ForeignSessions {
             sessionData.setTargetIp(sdata.getTargetIp());
             sessionData.setTargetPort(sdata.getTargetPort());
             /* Retornamos o valor do id no anon local */
+            System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
             id = this.association.get(sessionData);
-
+            System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
         }
         catch(InterruptedException exc){
             System.out.println("Erro a obter uma sessão externa - " + exc.getMessage());
