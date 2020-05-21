@@ -7,6 +7,7 @@ import Components.ForeignSessions;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnonGW {
@@ -47,6 +48,7 @@ public class AnonGW {
             InetAddress targetIp = InetAddress.getByName(args[1]);
             int targetPort = Integer.parseInt(args[3]);
             InetAddress localIp = InetAddress.getByName(args[5]);
+            peers = new ArrayList<>();
             for (int i = 7; i < args.length; i++)
                 peers.add(InetAddress.getByName(args[i]));
             accepter = new ServerSocket(targetPort,0,targetIp);
