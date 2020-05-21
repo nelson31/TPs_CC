@@ -7,6 +7,7 @@ import AnonProtocol.DataInfo;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ReaderFromStreamToSocket implements Runnable{
 
@@ -45,9 +46,10 @@ public class ReaderFromStreamToSocket implements Runnable{
 
         try {
             OutputStream os = this.socket.getOutputStream();
-            byte[] data;
+            byte[] data; String message;
             while ((data = this.stream.read()) != null) {
-                System.out.println("Recebi dados");
+                message = new String(data, StandardCharsets.UTF_8);
+                System.out.println("Recebi dados: " + message);
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }
