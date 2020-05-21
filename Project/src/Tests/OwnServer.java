@@ -31,8 +31,10 @@ public class OwnServer {
                     info = stream.getTargetInfo();
                 /* Enviamos feedback da stream */
                 feedback = "Conteúdo lido: " + message;
+                System.out.println("Vou enviar feedback");
                 stream.send(feedback.getBytes(),origem,info.getOwner(),
                         InetAddress.getByName("localhost"),info.getOwner(),6666,80);
+                System.out.println("Enviei feedback");
             }
         }
         catch(UnknownHostException | SocketException exc){
