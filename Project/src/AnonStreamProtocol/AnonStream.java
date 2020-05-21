@@ -90,6 +90,7 @@ public class AnonStream {
         byte[] body;
         int dadosSize = dados.length;
         List<AnonPacket> sending = new ArrayList<>();
+        System.out.println("Criei a lista");
         int ind = 0;
         for(int i=0; i<dadosSize; sequence++){
             if(dadosSize-i<maxsize_payload)
