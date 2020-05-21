@@ -54,13 +54,14 @@ public class AnonGW {
                 System.out.println(args[i]);
                 peers.add(InetAddress.getByName(args[i]));
             }
+
+            System.out.println("Reconheci peers");
             accepter = new ServerSocket(targetPort,0,targetIp);
+            System.out.println("Criei server socket");
             sessionGetter = new SessionGetter();
             foreignSessions = new ForeignSessions(sessionGetter);
             System.out.println("Vou criar anonsocket");
             asocket = new AnonSocket(6666,localIp,foreignSessions);
-
-            System.out.println("Vou criar accepters");
 
             /* Criamos as threads que aceitam novos pedidos */
             ClientAccepter ca = new ClientAccepter(asocket,accepter,sessionGetter,peers);
