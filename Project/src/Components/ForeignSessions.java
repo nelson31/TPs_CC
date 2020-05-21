@@ -5,10 +5,7 @@ import AnonProtocol.SessionGetter;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -57,7 +54,7 @@ public class ForeignSessions {
      */
     public ForeignSessions(SessionGetter sessionGetter){
 
-        this.association = new HashMap<>();
+        this.association = new TreeMap<>();
         this.waiting = new ArrayList<>();
         this.l = new ReentrantLock();
         this.c = this.l.newCondition();
@@ -132,7 +129,7 @@ public class ForeignSessions {
             this.association.put(data,novoId);
             System.out.println("Tamanho da colecao: " + association.size());
             System.out.println(this.association.get(data));
-            System.out.println("[Equals]" + (data.equals(ndata) + "; " + ndata.getOwnerIP().toString() + "/"
+            System.out.println("[Equals]" + (ndata.equals(data) + "; " + ndata.getOwnerIP().toString() + "/"
                     + data.getId() + "; " + ndata.getId()));
             System.out.println(this.association.containsKey(ndata));
         }
