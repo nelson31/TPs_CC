@@ -110,7 +110,7 @@ public class ForeignSessions {
     public void addForeignSession(int id, InetAddress owner, InetAddress targetIp, int targetPort){
 
         SessionData data = new SessionData(id,owner, targetIp, targetPort);
-        SessionData ndata = new SessionData(id,owner, targetIp, targetPort);
+        SessionData ndata = new SessionData(id,owner, null, 0);
 
         int novoId;
         /* Obtemos o lock */
