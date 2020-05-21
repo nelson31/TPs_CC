@@ -76,14 +76,12 @@ public class SessionData {
         SessionData sd = (SessionData)o;
 
         return (this.ownerIP.toString().equals(sd.getOwnerIP().toString()) &&
-                this.id == sd.getId() &&
-                this.targetPort == sd.getTargetPort() &&
-                this.targetIp.toString().equals(sd.getTargetIp().toString()));
+                this.id == sd.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.id,this.ownerIP,this.targetIp,this.targetPort);
+        return Objects.hash(this.id,this.ownerIP);
     }
 
     /**
