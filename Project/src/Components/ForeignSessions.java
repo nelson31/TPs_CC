@@ -87,11 +87,6 @@ public class ForeignSessions {
             sessionData.setTargetIp(sdata.getTargetIp());
             sessionData.setTargetPort(sdata.getTargetPort());
             /* Retornamos o valor do id no anon local */
-            System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
-            System.out.println("Tamanho da colecao: " + association.size());
-            for(Map.Entry<SessionData,Integer> info : this.association.entrySet()){
-                System.out.println(info.getKey().toString());
-            }
 
             id = this.association.get(sessionData);
         }
@@ -113,7 +108,6 @@ public class ForeignSessions {
     public void addForeignSession(int id, InetAddress owner, InetAddress targetIp, int targetPort){
 
         SessionData data = new SessionData(id,owner, targetIp, targetPort);
-        SessionData ndata = new SessionData(id,owner, targetIp, targetPort);
 
         int novoId;
         /* Obtemos o lock */
@@ -127,11 +121,6 @@ public class ForeignSessions {
             novoId = this.sessionGetter.getID();
             /* Atribuimos logo um id à sessão no anon local */
             this.association.put(data,novoId);
-            System.out.println("Tamanho da colecao: " + association.size());
-            System.out.println(this.association.get(ndata));
-            System.out.println("[Equals]" + (ndata.equals(data) + "; " + ndata.getOwnerIP().toString() + "/"
-                    + data.getId() + "; " + ndata.getId()));
-            System.out.println(this.association.containsKey(ndata));
         }
 
         /* Sinalizamos a thread que se encontra à
