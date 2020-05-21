@@ -133,7 +133,7 @@ public class ForeignSessions {
             System.out.println("[Equals]" + (data.getOwnerIP().toString().equals(ndata.getOwnerIP().toString()) &&
                     data.getId() == ndata.getId()) + data.getOwnerIP().toString() + "; " + ndata.getOwnerIP().toString() + "/"
                     + data.getId() + "; " + ndata.getId());
-            System.out.println(this.association.containsKey(new SessionData(id,owner,null,0)));
+            System.out.println(this.association.containsKey(ndata));
         }
 
         /* Sinalizamos a thread que se encontra à
