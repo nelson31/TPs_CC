@@ -48,19 +48,14 @@ public class AnonGW {
             InetAddress targetIp = InetAddress.getByName(args[1]);
             int targetPort = Integer.parseInt(args[3]);
             InetAddress localIp = InetAddress.getByName(args[5]);
-            System.out.println("Reconheci ip local");
             peers = new ArrayList<>();
             for (int i = 7; i < args.length; i++) {
                 System.out.println(args[i]);
                 peers.add(InetAddress.getByName(args[i]));
             }
-
-            System.out.println("Reconheci peers");
-            accepter = new ServerSocket(targetPort,0,targetIp);
-            System.out.println("Criei server socket");
+            accepter = new ServerSocket(targetPort,0,localIp);
             sessionGetter = new SessionGetter();
             foreignSessions = new ForeignSessions(sessionGetter);
-            System.out.println("Vou criar anonsocket");
             asocket = new AnonSocket(6666,localIp,foreignSessions);
 
             /* Criamos as threads que aceitam novos pedidos */
@@ -71,6 +66,8 @@ public class AnonGW {
             accepters a correr */
             new Thread(ca).start();
             new Thread(aa).start();
+
+            System.out.println("Tudo a correr...");
         }
         catch(IOException exc){
             System.out.println(exc.getLocalizedMessage());
