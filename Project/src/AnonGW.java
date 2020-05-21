@@ -48,6 +48,7 @@ public class AnonGW {
             InetAddress targetIp = InetAddress.getByName(args[1]);
             int targetPort = Integer.parseInt(args[3]);
             InetAddress localIp = InetAddress.getByName(args[5]);
+            System.out.println("Reconheci ip local");
             peers = new ArrayList<>();
             for (int i = 7; i < args.length; i++)
                 peers.add(InetAddress.getByName(args[i]));
