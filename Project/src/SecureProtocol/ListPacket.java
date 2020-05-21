@@ -91,6 +91,8 @@ public class ListPacket {
         SecurePacket ret = null;
         this.l.lock();
 
+        this.notAck.lock();
+
         try {
             /* Enquanto não houver nada
             para ler esperamos */
@@ -104,6 +106,7 @@ public class ListPacket {
 
         }
         finally {
+            this.notAck.unlock();
             this.l.unlock();
         }
 
@@ -118,6 +121,7 @@ public class ListPacket {
     public SecurePacket getDataPacket(){
 
         SecurePacket ret = null;
+        this.l.lock();
         this.notAck.lock();
 
         try {
@@ -135,6 +139,7 @@ public class ListPacket {
         }
         finally {
             this.notAck.unlock();
+            this.l.unlock();
         }
 
         return ret;
@@ -150,11 +155,15 @@ public class ListPacket {
 
         this.l.lock();
 
+        this.notAck.lock();
+
         boolean ret = this.list.contains(new SecurePacket(id,null,null,0,0,new byte[0]));
         /* Caso exista removemos o
         respetivo pacote de ack */
         if(ret)
             this.remove(id);
+
+        this.notAck.unlock();
 
         this.l.unlock();
 
