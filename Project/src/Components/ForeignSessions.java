@@ -91,7 +91,6 @@ public class ForeignSessions {
             /* Retornamos o valor do id no anon local */
             System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
             id = this.association.get(sessionData);
-            System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
         }
         catch(InterruptedException exc){
             System.out.println("Erro a obter uma sessão externa - " + exc.getMessage());
