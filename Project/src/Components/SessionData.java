@@ -73,8 +73,12 @@ public class SessionData {
 
         SessionData sd = (SessionData)o;
 
-        return this.getOwnerIP().toString().equals(sd.getOwnerIP().toString()) &&
-                this.getId() == sd.getId();
+        System.out.println("[Equals]" + (this.ownerIP.toString().equals(sd.getOwnerIP().toString()) &&
+                this.id == sd.getId()) + this.ownerIP.toString() + "; " + sd.getOwnerIP().toString() + "/"
+        + this.id + "; " + sd.getId());
+
+        return this.ownerIP.toString().equals(sd.getOwnerIP().toString()) &&
+                this.id == sd.getId();
     }
 
     /**
