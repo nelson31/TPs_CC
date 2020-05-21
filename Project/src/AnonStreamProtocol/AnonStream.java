@@ -186,7 +186,7 @@ public class AnonStream {
         System.out.println("Pacote de exit com seq: " + sequence);
         /* Enviamos um anonPacket de fecho */
         AnonPacket fecho = new AnonPacket(this.session,sequence,-1,80,
-                InetAddress.getByName("localhost"),InetAddress.getByName("localhost"),-1,new byte[0]);
+                InetAddress.getByName("localhost"),InetAddress.getByName("localhost"),0,new byte[0]);
 
         this.asocket.send(fecho,origem,destino,destPort);
     }
