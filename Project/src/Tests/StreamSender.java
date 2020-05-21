@@ -44,8 +44,8 @@ public class StreamSender {
                 data[i++] = valor[2];
                 data[i++] = valor[3];
             }
-            for(int i=0; i<4096; i++)
-                System.out.print(data[i]);
+            //for(int i=0; i<4096; i++)
+            //    System.out.print(data[i]);
             System.out.println();
             System.out.println("Inserir destino: ");
             while((message = bf.readLine()) != null){
