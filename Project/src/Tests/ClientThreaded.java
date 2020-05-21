@@ -13,7 +13,7 @@ public class ClientThreaded {
 
         try {
             Socket socket = new Socket(InetAddress.getByName(args[0]), 80);
-            new Thread(new SocketReader(socket));
+            new Thread(new SocketReader(socket)).start();
             PrintWriter pw = new PrintWriter(socket.getOutputStream());
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             String message;
