@@ -64,6 +64,8 @@ public class AnonGW {
             accepters a correr */
             new Thread(ca).start();
             new Thread(aa).start();
+
+            System.out.println("Tá tudo a correr");
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
