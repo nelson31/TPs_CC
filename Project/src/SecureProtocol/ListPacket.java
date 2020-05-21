@@ -114,13 +114,13 @@ public class ListPacket {
      * Método que nos vai buscar o primeiro pacote que seja de ack
      * @return
      */
-    private SecurePacket getFstAckPacket(){
+    private SecurePacket getFstNotAckPacket(){
 
         SecurePacket ret = null;
         int size = this.list.size();
         boolean found = false;
         for(int i=0; i<size && !found; i++){
-            if(this.list.get(i).isAck()) {
+            if(!this.list.get(i).isAck()) {
                 ret = this.list.get(i);
                 found = true;
                 this.remove(ret.getId());
@@ -146,7 +146,8 @@ public class ListPacket {
             while (this.numNotAcks() == 0)
                 this.cnotAck.await();
 
-            ret = getFstAckPacket();
+            ret = getFstNotAckPacket();
+
         }
         catch(InterruptedException exc){
 
