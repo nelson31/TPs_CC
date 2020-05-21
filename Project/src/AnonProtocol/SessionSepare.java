@@ -44,6 +44,8 @@ public class SessionSepare implements Runnable {
                 /* Recebemos um secure packet */
                 SecurePacket sp = this.ssocket.receive();
                 /* Vamos buscar o anonpacket encapsulado */
+                if(sp.isAck())
+                    System.out.println("Recebi um ACK PERIGO");
                 AnonPacket ap = AnonPacket.getFromByteArray(sp.getData());
                 /* Adicionamos o pacote à tabela */
                 this.incoming.addPacket(ap,ap.getOwnerIP());
