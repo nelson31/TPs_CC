@@ -23,8 +23,9 @@ public class StreamReceiver {
             byte[] lido;
             while((lido = as.read()) != null){
                 System.out.println("Conteudo lido da stream");
-                for(int i=0; i<lido.length; i++)
-                    System.out.print(lido[i]);
+                String message = lido.toString();
+                //for(int i=0; i<lido.length; i++)
+                //    System.out.print(lido[i]);
                 System.out.println();
                 if(!info.isComplete())
                     info = as.getTargetInfo();

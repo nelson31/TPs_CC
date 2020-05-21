@@ -114,13 +114,11 @@ public class AnonStream {
         /* Enviamos o pacote que refere o tamanho */
         AnonPacket apack = AnonPacket.getSizePacket(session,sizeSequence,finalDestPort,finalDestIp,owner,count);
         this.asocket.send(apack,origem,destino,destPort);
-        System.out.println("Pacote de size com seq: " + sizeSequence);
 
         /* Agora enviamos os pacotes */
         for(AnonPacket ap : sending){
             /* Enviamos através do AnonSocket */
             this.asocket.send(ap,origem,destino,destPort);
-            System.out.println("Pacote de data com seq: " + ap.getSequence());
         }
         /* Atualizamos o valor da sequence
         em vigor */
@@ -136,7 +134,6 @@ public class AnonStream {
 
         byte[] ret;
         int finalSize = 0;
-        System.out.println("Vou ler nova mensagem");
         /* Vamos buscar os pacotes que correspondem à próxima
         mensagem enviada através da outra extremidade da stream */
         Set<AnonPacket> packs = this.listAnonPackets.getNextMessage();
@@ -146,7 +143,6 @@ public class AnonStream {
         if(packs == null)
             return null;
 
-        System.out.println("Li nova mensagem");
         /* Percorremos cada um dos pacotes para
         obter o tamanho total dos dados */
         for(AnonPacket ap : packs){
