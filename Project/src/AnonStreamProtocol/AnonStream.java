@@ -182,7 +182,7 @@ public class AnonStream {
             throws IOException {
 
         /* Vamos buscar a sequencia */
-        int sequence = this.sequence.getI()+1;
+        int sequence = this.sequence.getI();
         System.out.println("Pacote de exit com seq: " + sequence);
         /* Enviamos um anonPacket de fecho */
         AnonPacket fecho = new AnonPacket(this.session,sequence,-1,80,
