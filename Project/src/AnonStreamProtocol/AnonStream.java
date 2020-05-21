@@ -6,6 +6,7 @@ import AnonProtocol.DataInfo;
 import AnonProtocol.IntegerEncapsuler;
 
 import javax.xml.crypto.Data;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -175,13 +176,14 @@ public class AnonStream {
     /**
      * Método que permite fechar a stream para um determinado destino
      */
-    public void close(InetAddress origem, InetAddress destino, int destPort){
+    public void close(InetAddress origem, InetAddress destino, int destPort)
+            throws IOException {
 
         /* Vamos buscar a sequencia */
         int sequence = this.sequence.getI();
         /* Enviamos um anonPacket de fecho */
         AnonPacket fecho = new AnonPacket(this.session,sequence,-1,80,
-                null,null,-1,new byte[0]);
+                InetAddress.getByName("localhost"),InetAddress.getByName("localhost"),-1,new byte[0]);
 
         this.asocket.send(fecho,origem,destino,destPort);
     }
