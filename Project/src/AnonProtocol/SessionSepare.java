@@ -82,6 +82,7 @@ public class SessionSepare implements Runnable {
                     if (!this.foreignSessions.contains(id, owner)) {
                         this.foreignSessions.addForeignSession(id, owner, ap.getTargetServerIP(), ap.getTargetPort());
                     }
+                    System.out.println("Vou buscar id local de " + id + " do owner: " + owner.toString());
                     ap.setSession(this.foreignSessions.getLocalSession(id,owner));
                 }
                 /* Adicionamos o pacote à tabela */
