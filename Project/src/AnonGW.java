@@ -69,7 +69,7 @@ public class AnonGW {
             System.out.println("Tá tudo a correr");
         }
         catch(IOException exc){
-            System.out.println(exc.getMessage());
+            System.out.println(exc.getLocalizedMessage());
         }
     }
 }
