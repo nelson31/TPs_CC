@@ -39,9 +39,10 @@ public class PacketReader implements Runnable{
      */
     public void run(){
 
-        while(true){
-            /* Lemos pacotes do socket */
-            AnonPacket ap = this.asocket.receive(session);
+        AnonPacket ap;
+        /* Recebemos pacotes anon até que chegue um que sinaliza
+        o fecho da comunicação através da stream */
+        while((ap = this.asocket.receive(session)).getPayloadSize() != -1){
             /* Adicionamos o respetivo pacote à lista */
             this.listaPackets.addPacket(ap);
             /* Vamos buscar a informação acerca do target server*/
@@ -53,5 +54,8 @@ public class PacketReader implements Runnable{
                 info.setTargetPort(ap.getTargetPort());
             }
         }
+        /* Adicionamos a tag de fecho para poder ser
+        lida através da stream */
+        this.listaPackets.addPacket(ap);
     }
 }
