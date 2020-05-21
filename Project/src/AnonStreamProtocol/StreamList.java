@@ -112,8 +112,10 @@ public class StreamList {
             é retornado null */
             if(sizepacket.getPayloadSize() == -1){
                 this.lwaitPacketSequence.unlock();
+                System.out.println("Encontrei pacote de fim");
                 return null;
             }
+            System.out.println("Encontrei pacote não fim");
             /* Atualizamos o valor da sequencia de próximo pacote size que esperamos */
             this.nextSizePacketSequence += sizepacket.getIsSizeArray()+1;
             pacotesALer = sizepacket.getIsSizeArray();
