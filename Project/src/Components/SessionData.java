@@ -1,6 +1,7 @@
 package Components;
 
 import java.net.InetAddress;
+import java.util.Objects;
 
 public class SessionData {
 
@@ -78,6 +79,11 @@ public class SessionData {
                 this.id == sd.getId() &&
                 this.targetPort == sd.getTargetPort() &&
                 this.targetIp.toString().equals(sd.getTargetIp().toString()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id,this.ownerIP,this.targetIp,this.targetPort);
     }
 
     /**
