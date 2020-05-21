@@ -59,7 +59,8 @@ public class AnonGW {
             asocket = new AnonSocket(6666,localIp,foreignSessions);
 
             /* Criamos as threads que aceitam novos pedidos */
-            ClientAccepter ca = new ClientAccepter(asocket,accepter,sessionGetter,peers);
+            ClientAccepter ca = new ClientAccepter(asocket,accepter,sessionGetter,
+                    peers,targetIp,targetPort);
             AnonAccepter aa = new AnonAccepter(asocket,sessionGetter,foreignSessions);
 
             /* Colocamos ambos os

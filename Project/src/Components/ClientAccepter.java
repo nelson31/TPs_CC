@@ -65,13 +65,16 @@ public class ClientAccepter implements Runnable {
      * pedidos de novos clientes
      */
     public ClientAccepter(AnonSocket asocket, ServerSocket accepter,
-                          SessionGetter sessionGetter, List<InetAddress> peers) {
+                          SessionGetter sessionGetter, List<InetAddress> peers,
+                          InetAddress targetServer, int targetPort) {
 
         this.asocket = asocket;
         this.accepter = accepter;
         this.peers = peers;
         this.nextPeer = 0;
         this.sessionGetter = sessionGetter;
+        this.targetServer = targetServer;
+        this.targetPort = targetPort;
     }
 
     /**
