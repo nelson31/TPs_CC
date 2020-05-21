@@ -65,6 +65,11 @@ public class DataInfo {
         this.targetPort = -1;
     }
 
+    public InetAddress getOwner() {
+
+        return this.owner;
+    }
+
     public boolean isComplete(){
 
         return this.session >= 0;

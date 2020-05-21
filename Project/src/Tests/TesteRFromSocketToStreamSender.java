@@ -2,7 +2,6 @@ package Tests;
 
 import AnonProtocol.AnonSocket;
 import AnonStreamProtocol.AnonStream;
-import AnonProtocol.IntegerEncapsuler;
 import Components.ReaderFromSocketToStream;
 
 import java.io.IOException;

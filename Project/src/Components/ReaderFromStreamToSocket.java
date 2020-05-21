@@ -37,6 +37,8 @@ public class ReaderFromStreamToSocket implements Runnable{
     public ReaderFromStreamToSocket(AnonSocket asocket, Socket socket, int sessionID) {
 
         this.stream = new AnonStream(asocket,sessionID);
+        /* Ativação da extremidade de leitura da stream */
+        this.stream.enableInputStream();
         this.socket = socket;
         this.sessionID = sessionID;
     }
@@ -45,11 +47,8 @@ public class ReaderFromStreamToSocket implements Runnable{
 
         try {
             OutputStream os = this.socket.getOutputStream();
-            while (!this.socket.isClosed()) {
-                DataInfo info = new DataInfo();
-                /* Ficamos a espera de receber
-                dados provenientes da stream */
-                byte[] data = this.stream.read();
+            byte[] data;
+            while ((data = this.stream.read()) != null) {
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }

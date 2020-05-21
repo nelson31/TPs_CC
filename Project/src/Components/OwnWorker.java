@@ -27,6 +27,8 @@ public class OwnWorker implements Runnable {
      */
     private int sessionID;
 
+    ///////////////////////////////TARGET-SERVER/////////////////////////////////////////////
+
     /**
      * Variável que guarda o endereço IP do
      * targetServer para o qual o AnonGW garante o anonimo
@@ -38,11 +40,19 @@ public class OwnWorker implements Runnable {
      */
     private int targetPort;
 
+
+    ///////////////////////////////Next-Hop//////////////////////////////////////////////////
+
     /**
      * Variável que guarda o endereço IP do
      * próximo AnonGW para o qual são enviados os dados
      */
     private InetAddress nextHopIp;
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
     /**
      * COnstrutor para objetos da
@@ -52,7 +62,7 @@ public class OwnWorker implements Runnable {
      * @param socket
      * @param sessionID
      */
-    public OwnWorker(AnonSocket asocket, Socket socket, int sessionID, InetAddress nextHopIp,
+    public OwnWorker(int sessionID, Socket socket, AnonSocket asocket, InetAddress nextHopIp,
                      InetAddress targetServerIp, int targetPort) {
 
         this.asocket = asocket;
@@ -74,5 +84,12 @@ public class OwnWorker implements Runnable {
         /* Criamos a thread que lê da stream Anon e
         envia os dados de volta para o cliente */
         ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(asocket,this.socket,this.sessionID);
+
+        /* Colocamos ambas as threads a correr */
+        Thread t1 = new Thread(sockToStream);
+        Thread t2 = new Thread(streamToSock);
+
+        t1.start();
+        t2.start();
     }
 }
