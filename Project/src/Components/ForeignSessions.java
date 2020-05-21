@@ -1,5 +1,6 @@
 package Components;
 
+import AnonProtocol.DataInfo;
 import AnonProtocol.SessionGetter;
 
 import java.net.InetAddress;
@@ -91,6 +92,10 @@ public class ForeignSessions {
             /* Retornamos o valor do id no anon local */
             System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
             System.out.println("Tamanho da colecao: " + association.size());
+            for(Map.Entry<SessionData,Integer> info : this.association.entrySet()){
+                System.out.println(info.getKey().toString());
+            }
+
             id = this.association.get(sessionData);
         }
         catch(InterruptedException exc){

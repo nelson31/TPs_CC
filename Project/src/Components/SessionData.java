@@ -126,4 +126,15 @@ public class SessionData {
 
         this.targetPort = targetPort;
     }
+
+    public String toString(){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: ");
+        sb.append(this.id);
+        sb.append("; owner: ");
+        sb.append(this.ownerIP);
+
+        return sb.toString();
+    }
 }
