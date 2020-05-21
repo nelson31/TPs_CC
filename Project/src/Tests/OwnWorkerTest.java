@@ -21,6 +21,9 @@ public class OwnWorkerTest {
             recebendo no sentido contrário */
             OwnWorker worker = new OwnWorker(0, accept.accept(),asocket,nextIp,
                     InetAddress.getByName("localhost"),80);
+
+            /* Colocamos o worker a correr */
+            new Thread(worker).start();
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
