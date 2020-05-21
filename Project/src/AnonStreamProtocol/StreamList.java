@@ -111,19 +111,21 @@ public class StreamList {
             /* Se for um pacote de fim de comunicação
             é retornado null */
             if(sizepacket.getPayloadSize() == -1){
-                this.lwaitsize.unlock();
                 System.out.println("Encontrei pacote de fim");
                 return null;
             }
-            System.out.println("Encontrei pacote não fim");
-            /* Atualizamos o valor da sequencia de próximo pacote size que esperamos */
-            this.nextSizePacketSequence += sizepacket.getIsSizeArray()+1;
-            pacotesALer = sizepacket.getIsSizeArray();
-            System.out.println("Vou ler " + pacotesALer + " pacotes de dados");
+            else {
+                System.out.println("Encontrei pacote não fim");
+                /* Atualizamos o valor da sequencia de próximo pacote size que esperamos */
+                this.nextSizePacketSequence += sizepacket.getIsSizeArray() + 1;
+                /* Vamos buscar o número de pacotes de dados que vamos ler */
+                pacotesALer = sizepacket.getIsSizeArray();
+            }
         } catch (InterruptedException exc) {
             System.out.println("Erro ao obter pacote de tamanho");
         } finally {
             this.lwaitsize.unlock();
+            System.out.println("Fiz unlock");
         }
 
         /* Obtemos o lock para aceder aos
