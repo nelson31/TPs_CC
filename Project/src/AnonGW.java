@@ -57,9 +57,13 @@ public class AnonGW {
             foreignSessions = new ForeignSessions(sessionGetter);
             asocket = new AnonSocket(6666,localIp,foreignSessions);
 
+            System.out.println("Vou criar accepters");
+
             /* Criamos as threads que aceitam novos pedidos */
             ClientAccepter ca = new ClientAccepter(asocket,accepter,sessionGetter,peers);
             AnonAccepter aa = new AnonAccepter(asocket,sessionGetter,foreignSessions);
+
+            System.out.println("Tá tudo a correr");
 
             /* Colocamos ambos os
             accepters a correr */
