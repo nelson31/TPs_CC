@@ -5,13 +5,11 @@ import AnonProtocol.AnonSocket;
 import AnonProtocol.DataInfo;
 import AnonProtocol.IntegerEncapsuler;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class AnonStream {
 

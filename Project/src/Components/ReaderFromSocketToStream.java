@@ -1,7 +1,7 @@
 package Components;
 
+import AnonProtocol.SessionGetter;
 import AnonStreamProtocol.AnonStream;
-import AnonProtocol.IntegerEncapsuler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +28,8 @@ public class ReaderFromSocketToStream implements Runnable {
      */
     private int idSession;
 
+    //////////////////////////////////////Next-Hop//////////////////////////////////////////////
+
     /**
      * Próximo anon pelo qual os dados
      * irão passar
@@ -37,9 +39,19 @@ public class ReaderFromSocketToStream implements Runnable {
     private int destinoPort;
 
 
+    ///////////////////////////////////Target Server////////////////////////////////////////////
+
     private InetAddress destinoFinalIP;
 
     private int destinoFinalPort;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Variável que permite ceder o id quando
+     * é terminada a conexão com o socket tcp
+     */
+    private SessionGetter cedeId;
 
     /**
      * Construtor para objetos da
@@ -50,7 +62,7 @@ public class ReaderFromSocketToStream implements Runnable {
      * @param idSession
      */
     public ReaderFromSocketToStream(AnonStream stream, Socket socket,
-                                    int idSession,
+                                    int idSession, SessionGetter cedeId,
                                     InetAddress destinoIp, int portIp,
                                     InetAddress destinoFinalIP, int destinoFinalPort) {
 
@@ -61,6 +73,7 @@ public class ReaderFromSocketToStream implements Runnable {
         this.destinoPort = portIp;
         this.destinoFinalIP = destinoFinalIP;
         this.destinoFinalPort = destinoFinalPort;
+        this.cedeId = cedeId;
     }
 
     public void run() {
@@ -86,6 +99,8 @@ public class ReaderFromSocketToStream implements Runnable {
             }
             /* No final fazemos close da stream */
             this.stream.close(this.socket.getLocalAddress(),this.destinoIp,this.destinoPort);
+            /* Libertamos o id utilizado */
+            this.cedeId.cedeID(this.idSession);
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());

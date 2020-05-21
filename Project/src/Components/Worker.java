@@ -1,13 +1,14 @@
 package Components;
 
 import AnonProtocol.AnonSocket;
+import AnonProtocol.SessionGetter;
 import AnonStreamProtocol.AnonStream;
 import AnonProtocol.IntegerEncapsuler;
 
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class OwnWorker implements Runnable {
+public class Worker implements Runnable {
 
     /**
      * Variável que permite comunicar
@@ -25,7 +26,19 @@ public class OwnWorker implements Runnable {
      * Variável que guarda a sessão à qual
      * o worker se encontra dedicado
      */
-    private int sessionID;
+    private int incomingSessionId;
+
+    /**
+     * Id de sessão a considerar quando enviamos
+     * pacotes para o anonGW
+     */
+    private int outgoingSessionId;
+
+    /**
+     * Variável para, no final da comunicação
+     * com o cliente, ceder o id de sessão
+     */
+    private SessionGetter cedeId;
 
     ///////////////////////////////TARGET-SERVER/////////////////////////////////////////////
 
@@ -56,21 +69,23 @@ public class OwnWorker implements Runnable {
 
     /**
      * COnstrutor para objetos da
-     * classe OwnWorker
+     * classe Worker
      *
      * @param asocket
      * @param socket
-     * @param sessionID
      */
-    public OwnWorker(int sessionID, Socket socket, AnonSocket asocket, InetAddress nextHopIp,
-                     InetAddress targetServerIp, int targetPort) {
+    public Worker(int incomingSessionId, int outgoingSessionId, Socket socket,
+                  AnonSocket asocket, InetAddress nextHopIp, InetAddress targetServerIp,
+                  int targetPort, SessionGetter cedeId){
 
         this.asocket = asocket;
         this.socket = socket;
-        this.sessionID = sessionID;
+        this.incomingSessionId = incomingSessionId;
+        this.outgoingSessionId = outgoingSessionId;
         this.nextHopIp = nextHopIp;
         this.targetServerIp = targetServerIp;
         this.targetPort = targetPort;
+        this.cedeId = cedeId;
     }
 
     public void run() {
@@ -81,12 +96,12 @@ public class OwnWorker implements Runnable {
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */
         ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(stream,
-                this.socket,this.sessionID,this.nextHopIp,
+                this.socket,this.outgoingSessionId,this.cedeId,this.nextHopIp,
                 6666,this.targetServerIp,this.targetPort);
 
         /* Criamos a thread que lê da stream Anon e
         envia os dados de volta para o cliente */
-        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream,this.socket,this.sessionID);
+        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream,this.socket,this.incomingSessionId);
 
         /* Colocamos ambas as threads a correr */
         Thread t1 = new Thread(sockToStream);

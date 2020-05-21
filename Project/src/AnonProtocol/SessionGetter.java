@@ -89,9 +89,11 @@ public class SessionGetter {
         this.l.lock();
 
         /* Sinalizamos a entrega do id */
-        this.isIndexAtributed[ID] = false;
-        this.num--;
-        this.c.signal();
+        if(this.isIndexAtributed[ID]) {
+            this.isIndexAtributed[ID] = false;
+            this.num--;
+            this.c.signal();
+        }
 
         /* Cedemos o lock */
         this.l.unlock();

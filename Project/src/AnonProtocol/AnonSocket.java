@@ -1,5 +1,6 @@
 package AnonProtocol;
 
+import Components.ForeignSessions;
 import SecureProtocol.SecurePacket;
 import SecureProtocol.SecureSocket;
 
@@ -32,17 +33,28 @@ public class AnonSocket {
      */
     private SessionSepare ssepare;
 
+    ///////////////////////////////ATRIBUIR ID'S LOCAIS A SESSÕES EXTERNAS//////////////////////////////////////
+
+    /**
+     * Estrutura de dados que permite a pacotes de
+     * owner externo obterem um id de sessão local
+     */
+    private ForeignSessions foreignSessions;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Construtor para objetos da classe
      * AnonSocket
      */
-    public AnonSocket(int port, InetAddress localIp)
+    public AnonSocket(int port, InetAddress localIp, ForeignSessions foreignSessions)
             throws SocketException {
 
         this.localIp = localIp;
         this.socket = new SecureSocket(port,localIp);
         this.received = new MappingTable();
-        this.ssepare = new SessionSepare(this.socket,received);
+        this.foreignSessions = foreignSessions;
+        this.ssepare = new SessionSepare(this.socket,this.received,this.foreignSessions,this.localIp);
         /* Colocamos o reader a correr */
         new Thread(this.ssepare).start();
     }

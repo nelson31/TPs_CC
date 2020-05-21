@@ -1,7 +1,7 @@
 package Tests;
 
 import AnonProtocol.AnonSocket;
-import Components.OwnWorker;
+import Components.Worker;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -19,7 +19,7 @@ public class OwnWorkerTest {
             /* Colocamos a correr um programa que trata da sessão 0,
             aceitando dados de um socket TCP e enviando para um peer e
             recebendo no sentido contrário */
-            OwnWorker worker = new OwnWorker(0, accept.accept(),asocket,nextIp,
+            Worker worker = new Worker(0, accept.accept(),asocket,nextIp,
                     InetAddress.getByName("localhost"),80);
 
             /* Colocamos o worker a correr */
