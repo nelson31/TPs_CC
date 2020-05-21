@@ -82,6 +82,7 @@ public class ForeignSessions {
 
             sdata = this.waiting.get(0);
             this.waiting.remove(0);
+            System.out.println("[Accept] Li nova sessão externa");
             /* Atribuimos os valores à variavel
             session data de saida */
             sessionData.setId(sdata.getId());
