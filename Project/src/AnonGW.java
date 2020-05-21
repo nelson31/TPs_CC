@@ -50,8 +50,10 @@ public class AnonGW {
             InetAddress localIp = InetAddress.getByName(args[5]);
             System.out.println("Reconheci ip local");
             peers = new ArrayList<>();
-            for (int i = 7; i < args.length; i++)
+            for (int i = 7; i < args.length; i++) {
+                System.out.println(args[i]);
                 peers.add(InetAddress.getByName(args[i]));
+            }
             accepter = new ServerSocket(targetPort,0,targetIp);
             sessionGetter = new SessionGetter();
             foreignSessions = new ForeignSessions(sessionGetter);
