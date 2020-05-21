@@ -90,7 +90,6 @@ public class AnonStream {
         byte[] body;
         int dadosSize = dados.length;
         List<AnonPacket> sending = new ArrayList<>();
-        System.out.println("Criei a lista");
         int ind = 0;
         for(int i=0; i<dadosSize; sequence++){
             if(dadosSize-i<maxsize_payload)
@@ -112,17 +111,16 @@ public class AnonStream {
 
             sending.add(sp);
         }
-        System.out.println("Sending criado");
         /* Enviamos o pacote que refere o tamanho */
         AnonPacket apack = AnonPacket.getSizePacket(session,sizeSequence,finalDestPort,finalDestIp,owner,count);
         this.asocket.send(apack,origem,destino,destPort);
-        System.out.println("Enviei pacote de size seq: " + sizeSequence);
+        System.out.println("Pacote enviado: " + apack.toString());
 
         /* Agora enviamos os pacotes */
         for(AnonPacket ap : sending){
             /* Enviamos através do AnonSocket */
             this.asocket.send(ap,origem,destino,destPort);
-            System.out.println("Enviei pacote de data seq: " + ap.getSequence());
+            System.out.println("Pacote enviado: " + ap.toString());
         }
         /* Atualizamos o valor da sequence
         em vigor */
