@@ -49,7 +49,7 @@ public class ReaderFromStreamToSocket implements Runnable{
                 DataInfo info = new DataInfo();
                 /* Ficamos a espera de receber
                 dados provenientes da stream */
-                byte[] data = this.stream.read(info);
+                byte[] data = this.stream.read();
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }

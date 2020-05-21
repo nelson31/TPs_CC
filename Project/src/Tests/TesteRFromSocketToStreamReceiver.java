@@ -17,7 +17,7 @@ public class TesteRFromSocketToStreamReceiver {
             AnonStream stream = new AnonStream(socket,0);
             while (true){
                 DataInfo info = new DataInfo();
-                byte[] data = stream.read(info);
+                byte[] data = stream.read();
                 System.out.println("Meta-info");
                 System.out.println(info.toString());
                 System.out.println("Conteudo lido da stream");
