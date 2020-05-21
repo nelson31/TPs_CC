@@ -90,6 +90,7 @@ public class ForeignSessions {
             sessionData.setTargetPort(sdata.getTargetPort());
             /* Retornamos o valor do id no anon local */
             System.out.println("[Accept] Li nova sessão externa: id: " + sessionData.getId() + "; owner: " + sessionData.getOwnerIP().toString());
+            System.out.println("Tamanho da colecao: " + association.size());
             id = this.association.get(sessionData);
         }
         catch(InterruptedException exc){
