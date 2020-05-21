@@ -55,6 +55,7 @@ public class AnonGW {
             accepter = new ServerSocket(targetPort,0,targetIp);
             sessionGetter = new SessionGetter();
             foreignSessions = new ForeignSessions(sessionGetter);
+            System.out.println("Vou criar anonsocket");
             asocket = new AnonSocket(6666,localIp,foreignSessions);
 
             System.out.println("Vou criar accepters");
@@ -63,14 +64,10 @@ public class AnonGW {
             ClientAccepter ca = new ClientAccepter(asocket,accepter,sessionGetter,peers);
             AnonAccepter aa = new AnonAccepter(asocket,sessionGetter,foreignSessions);
 
-            System.out.println("Tá tudo a correr");
-
             /* Colocamos ambos os
             accepters a correr */
             new Thread(ca).start();
             new Thread(aa).start();
-
-            System.out.println("Tá tudo a correr");
         }
         catch(IOException exc){
             System.out.println(exc.getLocalizedMessage());
