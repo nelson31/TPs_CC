@@ -47,6 +47,7 @@ public class ReaderFromStreamToSocket implements Runnable{
             OutputStream os = this.socket.getOutputStream();
             byte[] data;
             while ((data = this.stream.read()) != null) {
+                System.out.println("Recebi dados");
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }
