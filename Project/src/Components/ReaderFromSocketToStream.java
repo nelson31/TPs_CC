@@ -110,7 +110,6 @@ public class ReaderFromSocketToStream implements Runnable {
                 o próprio anon */
                 else
                     owner = this.stream.getLocalIp();
-                System.out.println("[ReaderFromSocket] Obtive endereço do owner" + owner);
 
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,owner,this.destinoPort,
