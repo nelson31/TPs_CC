@@ -53,6 +53,9 @@ public class ReaderFromStreamToSocket implements Runnable{
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }
+            this.socket.shutdownInput();
+            this.socket.shutdownOutput();
+            this.socket.close();
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());

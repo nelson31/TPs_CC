@@ -4,6 +4,7 @@ import AnonProtocol.AnonPacket;
 import AnonProtocol.AnonSocket;
 import AnonProtocol.DataInfo;
 import AnonProtocol.IntegerEncapsuler;
+import SecureProtocol.BooleanEncapsuler;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -45,6 +46,11 @@ public class AnonStream {
      * dos pacotes a serem enviados
      */
     private IntegerEncapsuler sequence;
+
+    /**
+     * Criamos um booleanencapsuler para o packet reader saber quando
+     */
+    private BooleanEncapsuler stop;
 
     /**
      * Construtor para objetos da classe
