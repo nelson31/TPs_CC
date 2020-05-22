@@ -18,15 +18,14 @@ public class Cliente {
             BufferedReader bf = new BufferedReader(new InputStreamReader(input.getInputStream()));
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
             String message;
-            while((message = in.readLine()) != null){
-                pw.println(message);
-                pw.flush();
-                /* Lemos a resposta do server */
-                System.out.println(bf.readLine());
-                input.shutdownInput();
-                input.shutdownOutput();
-                input.close();
-            }
+            message = in.readLine();
+            pw.println(message);
+            pw.flush();
+            /* Lemos a resposta do server */
+            System.out.println(bf.readLine());
+            input.shutdownInput();
+            input.shutdownOutput();
+            input.close();
         }
         catch(
                 IOException exc){
