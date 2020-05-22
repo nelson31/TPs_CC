@@ -54,9 +54,6 @@ public class ReaderFromStreamToSocket implements Runnable{
                 os.write(data,0,data.length);
             }
             System.out.println("[ReaderFromSocket] Fechei a ligação");
-            this.socket.shutdownInput();
-            this.socket.shutdownOutput();
-            this.socket.close();
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
