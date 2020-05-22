@@ -49,7 +49,7 @@ public class ReaderFromStreamToSocket implements Runnable{
             byte[] data; String message;
             while ((data = this.stream.read()) != null) {
                 message = new String(data, StandardCharsets.UTF_8);
-                System.out.println("Recebi dados da stream: " + message);
+                System.out.println("[ReaderFromStream] Recebi dados da stream: " + message);
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }

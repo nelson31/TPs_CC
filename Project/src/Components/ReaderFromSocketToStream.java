@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ReaderFromSocketToStream implements Runnable {
 
@@ -84,9 +85,9 @@ public class ReaderFromSocketToStream implements Runnable {
             /* Enquanto houver dados para
             ler do socket TCP */
             byte[] data = new byte[1024];
-            System.out.println("Origem: " + this.socket.getLocalAddress());
+            System.out.println("[ReaderFromSocket] Origem: " + this.socket.getLocalAddress());
             while ((lidos = os.read(data,0,1024)) != -1) {
-                System.out.println("Li dados do socket");
+                System.out.println("[ReaderFromSocket] Li dados do socket: " + new String(data, StandardCharsets.UTF_8));
                 byte[] dat = new byte[lidos];
                 for(int i=0; i<lidos; i++){
                     dat[i] = data[i];
@@ -94,7 +95,7 @@ public class ReaderFromSocketToStream implements Runnable {
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,this.socket.getLocalAddress(),this.destinoPort,
                         this.destinoFinalPort);
-                System.out.println("À espera de dados do socket");
+                System.out.println("[ReaderFromSocket] À espera de dados do socket");
             }
             /* No final fazemos close da stream */
             this.stream.close(this.socket.getLocalAddress(),this.destinoIp,this.destinoPort);
