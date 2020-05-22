@@ -40,6 +40,12 @@ public class Worker implements Runnable {
      */
     private SessionGetter cedeId;
 
+    /**
+     * Estrutura de dados que permite reconhecer
+     * se uma sessão é local ou externa
+     */
+    private ForeignSessions foreignSessions;
+
     ///////////////////////////////TARGET-SERVER/////////////////////////////////////////////
 
     /**
@@ -76,7 +82,7 @@ public class Worker implements Runnable {
      */
     public Worker(int incomingSessionId, int outgoingSessionId, Socket socket,
                   AnonSocket asocket, InetAddress nextHopIp, InetAddress targetServerIp,
-                  int targetPort, SessionGetter cedeId){
+                  int targetPort, SessionGetter cedeId, ForeignSessions foreignSessions){
 
         this.asocket = asocket;
         this.socket = socket;
@@ -86,6 +92,7 @@ public class Worker implements Runnable {
         this.targetServerIp = targetServerIp;
         this.targetPort = targetPort;
         this.cedeId = cedeId;
+        this.foreignSessions = foreignSessions;
     }
 
     public void run() {
@@ -96,7 +103,7 @@ public class Worker implements Runnable {
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */
         ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(stream,
-                this.socket,this.outgoingSessionId,this.cedeId,this.nextHopIp,
+                this.socket,this.outgoingSessionId,this.cedeId,this.foreignSessions,this.nextHopIp,
                 6666,this.targetServerIp,this.targetPort);
 
         /* Criamos a thread que lê da stream Anon e

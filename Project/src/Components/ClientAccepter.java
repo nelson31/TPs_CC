@@ -30,6 +30,12 @@ public class ClientAccepter implements Runnable {
     private SessionGetter sessionGetter;
 
     /**
+     * Estrutura de dados que guarda informações
+     * acerca de sessões externas
+     */
+    private ForeignSessions foreignSessions;
+
+    /**
      * Estrutura de dados que guarda os
      * endereços IP de todos os peers
      */
@@ -65,7 +71,8 @@ public class ClientAccepter implements Runnable {
      * pedidos de novos clientes
      */
     public ClientAccepter(AnonSocket asocket, ServerSocket accepter,
-                          SessionGetter sessionGetter, List<InetAddress> peers,
+                          SessionGetter sessionGetter, ForeignSessions foreignSessions,
+                          List<InetAddress> peers,
                           InetAddress targetServer, int targetPort) {
 
         this.asocket = asocket;
@@ -73,6 +80,7 @@ public class ClientAccepter implements Runnable {
         this.peers = peers;
         this.nextPeer = 0;
         this.sessionGetter = sessionGetter;
+        this.foreignSessions = foreignSessions;
         this.targetServer = targetServer;
         this.targetPort = targetPort;
     }
@@ -106,7 +114,7 @@ public class ClientAccepter implements Runnable {
                 /* Colocamos o worker a correr */
                 Worker w = new Worker(id, id,
                         accepter.accept(), asocket, this.getNextPeer(),
-                        this.targetServer, this.targetPort,this.sessionGetter);
+                        this.targetServer, this.targetPort,this.sessionGetter,this.foreignSessions);
 
                 new Thread(w).start();
             }

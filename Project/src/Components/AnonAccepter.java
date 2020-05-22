@@ -52,7 +52,7 @@ public class AnonAccepter implements Runnable {
 
             try {
                 Worker w = new Worker(incoming, outgoing, new Socket(data.getTargetIp(),data.getTargetPort()),
-                        this.asocket, data.getOwnerIP(), data.getTargetIp(), data.getTargetPort(), this.sessionGetter);
+                        this.asocket, data.getOwnerIP(), data.getTargetIp(), data.getTargetPort(), this.sessionGetter, this.foreignSessions);
 
                 /* Colocamos o worker a correr */
                 new Thread(w).start();
