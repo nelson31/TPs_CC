@@ -98,7 +98,7 @@ public class Worker implements Runnable {
     public void run() {
 
         /* Criamos uma stream para ler e receber dados */
-        AnonStream stream = new AnonStream(this.asocket,this.outgoingSessionId);
+        AnonStream stream = new AnonStream(this.asocket,this.incomingSessionId,this.outgoingSessionId);
 
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */

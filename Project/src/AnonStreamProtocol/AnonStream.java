@@ -27,7 +27,13 @@ public class AnonStream {
      * Sessão para a qual a stream se
      * encontra dedicada
      */
-    private int session;
+    private int localSession;
+
+    /**
+     * Variável que guarda o id de sessão com o qual
+     * os pacotes terão de ser enviados
+     */
+    private int ownerSession;
 
     /**
      * Variável que vai guardando os pacotes
@@ -48,21 +54,17 @@ public class AnonStream {
     private IntegerEncapsuler sequence;
 
     /**
-     * Criamos um booleanencapsuler para o packet reader saber quando
-     */
-    private BooleanEncapsuler stop;
-
-    /**
      * Construtor para objetos da classe
      * AnonStreamProtocol.AnonStream
      */
-    public AnonStream(AnonSocket asocket, int session) {
+    public AnonStream(AnonSocket asocket, int localSession, int ownerSession) {
 
         this.asocket = asocket;
-        this.session = session;
+        this.localSession = localSession;
+        this.ownerSession = ownerSession;
         this.sequence = new IntegerEncapsuler(0);
         this.listAnonPackets = new StreamList();
-        this.reader = new PacketReader(this.asocket,this.listAnonPackets,this.session);
+        this.reader = new PacketReader(this.asocket,this.listAnonPackets,this.localSession);
     }
 
     /**
@@ -109,14 +111,14 @@ public class AnonStream {
                 body[j] = dados[i];
 
             /* Construimos novo datagrama */
-            AnonPacket sp = new AnonPacket(this.session,sequence,ind,finalDestPort,finalDestIp,owner,-1,body);
+            AnonPacket sp = new AnonPacket(this.ownerSession,sequence,ind,finalDestPort,finalDestIp,owner,-1,body);
 
             count++;
 
             sending.add(sp);
         }
         /* Enviamos o pacote que refere o tamanho */
-        AnonPacket apack = AnonPacket.getSizePacket(session,sizeSequence,finalDestPort,finalDestIp,owner,count);
+        AnonPacket apack = AnonPacket.getSizePacket(this.ownerSession,sizeSequence,finalDestPort,finalDestIp,owner,count);
         this.asocket.send(apack,origem,destino,destPort);
 
         /* Agora enviamos os pacotes */
@@ -194,7 +196,7 @@ public class AnonStream {
         /* Vamos buscar a sequencia */
         int sequence = this.sequence.getI();
         /* Enviamos um anonPacket de fecho */
-        AnonPacket fecho = new AnonPacket(this.session,sequence,-1,80,
+        AnonPacket fecho = new AnonPacket(this.localSession,sequence,-1,80,
                 InetAddress.getByName("localhost"),InetAddress.getByName("localhost"),1,new byte[0]);
 
         this.asocket.send(fecho,origem,destino,destPort);
