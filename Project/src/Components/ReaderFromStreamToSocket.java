@@ -53,6 +53,7 @@ public class ReaderFromStreamToSocket implements Runnable{
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }
+            System.out.println("[ReaderFromSocket] Fechei a ligação");
             this.socket.shutdownInput();
             this.socket.shutdownOutput();
             this.socket.close();

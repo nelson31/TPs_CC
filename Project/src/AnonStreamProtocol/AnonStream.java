@@ -4,7 +4,6 @@ import AnonProtocol.AnonPacket;
 import AnonProtocol.AnonSocket;
 import AnonProtocol.DataInfo;
 import AnonProtocol.IntegerEncapsuler;
-import SecureProtocol.BooleanEncapsuler;
 
 import java.io.IOException;
 import java.net.InetAddress;

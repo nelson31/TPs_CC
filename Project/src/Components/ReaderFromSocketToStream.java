@@ -93,7 +93,6 @@ public class ReaderFromSocketToStream implements Runnable {
             /* Enquanto houver dados para
             ler do socket TCP */
             byte[] data = new byte[1024];
-            System.out.println("[ReaderFromSocket] Origem: " + this.socket.getLocalAddress());
             while ((lidos = os.read(data,0,1024)) != -1) {
                 System.out.println("[ReaderFromSocket] Li dados do socket: " + new String(data, StandardCharsets.UTF_8));
                 byte[] dat = new byte[lidos];
