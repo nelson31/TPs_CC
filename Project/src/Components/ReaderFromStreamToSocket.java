@@ -54,6 +54,8 @@ public class ReaderFromStreamToSocket implements Runnable{
                 os.write(data,0,data.length);
             }
             System.out.println("[ReaderFromSocket] Fechei a ligação");
+            /* Removemos uma linha da foreign sessions
+            se se tratar de uma sessão externa */
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
