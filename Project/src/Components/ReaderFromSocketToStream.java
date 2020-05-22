@@ -49,6 +49,12 @@ public class ReaderFromSocketToStream implements Runnable {
     ////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Estrutura de dados que guarda as informações
+     * acerca das sessões externas
+     */
+    private ForeignSessions foreignSessions;
+
+    /**
      * Variável que permite ceder o id quando
      * é terminada a conexão com o socket tcp
      */
@@ -63,7 +69,7 @@ public class ReaderFromSocketToStream implements Runnable {
      * @param idSession
      */
     public ReaderFromSocketToStream(AnonStream stream, Socket socket,
-                                    int idSession, SessionGetter cedeId,
+                                    int idSession, SessionGetter cedeId, ForeignSessions foreignSessions,
                                     InetAddress destinoIp, int portIp,
                                     InetAddress destinoFinalIP, int destinoFinalPort) {
 
@@ -74,6 +80,7 @@ public class ReaderFromSocketToStream implements Runnable {
         this.destinoPort = portIp;
         this.destinoFinalIP = destinoFinalIP;
         this.destinoFinalPort = destinoFinalPort;
+        this.foreignSessions = foreignSessions;
         this.cedeId = cedeId;
     }
 
@@ -82,6 +89,7 @@ public class ReaderFromSocketToStream implements Runnable {
         try {
             InputStream os = this.socket.getInputStream();
             int lidos;
+            InetAddress owner;
             /* Enquanto houver dados para
             ler do socket TCP */
             byte[] data = new byte[1024];
@@ -93,8 +101,17 @@ public class ReaderFromSocketToStream implements Runnable {
                     dat[i] = data[i];
                 }
                 System.out.println("[ReaderFromSocket] enviei dados para" + this.destinoIp);
+                /* Temos que verificar se esta sessão é externa */
+                if(this.foreignSessions.isForeign(this.idSession)){
+                    /* Se for o owner não somos nós */
+                    owner = this.foreignSessions.getInfo(this.idSession).getOwnerIP();
+                }
+                /* Se não for externa, o owner é
+                o próprio anon */
+                else
+                    owner = this.socket.getInetAddress();
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
-                        this.destinoFinalIP,this.socket.getLocalAddress(),this.destinoPort,
+                        this.destinoFinalIP,owner,this.destinoPort,
                         this.destinoFinalPort);
             }
             /* No final fazemos close da stream */

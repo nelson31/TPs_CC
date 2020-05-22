@@ -197,4 +197,44 @@ public class ForeignSessions {
 
         return ret;
     }
+
+    /**
+     * Método que nos diz se uma sessão é
+     * externa
+     * @return
+     */
+    public boolean isForeign(int session){
+
+        boolean found = false;
+        this.l.lock();
+
+        found = this.association.containsValue(session);
+
+        this.l.unlock();
+
+        return found;
+    }
+
+    /**
+     * Método que retorna a informação acerca
+     * de uma sessão externa
+     * @return
+     */
+    public SessionData getInfo(int session){
+
+        boolean found = false;
+        this.l.lock();
+        SessionData data = null;
+
+        Iterator it = this.association.keySet().iterator();
+
+        while(it.hasNext() && !found){
+            if(this.association.get((data=(SessionData) it.next())) == session)
+                found = true;
+        }
+
+        this.l.unlock();
+
+        return data;
+    }
 }
