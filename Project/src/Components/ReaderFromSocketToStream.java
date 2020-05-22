@@ -121,6 +121,7 @@ public class ReaderFromSocketToStream implements Runnable {
             this.stream.close(this.socket.getLocalAddress(),this.destinoIp,this.destinoPort);
             /* Libertamos o id utilizado */
             this.cedeId.cedeID(this.idSession);
+            System.out.println("Fechei a conexão");
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
