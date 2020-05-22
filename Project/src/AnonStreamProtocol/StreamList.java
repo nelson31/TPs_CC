@@ -178,8 +178,10 @@ public class StreamList {
 
             /* Caso haja algúem à espera deste pacote
             acordamos a respetiva thread */
-            if(pack.getSequence() == this.nextSizePacketSequence)
+            if(pack.getSequence() == this.nextSizePacketSequence) {
+                System.out.println("[Separe] Chegou pacote de size com seq: " + this.nextSizePacketSequence);
                 this.cwaitsize.signal();
+            }
 
             this.lwaitsize.unlock();
         }
