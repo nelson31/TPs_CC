@@ -112,7 +112,6 @@ public class AnonStream {
         /* Enviamos o pacote que refere o tamanho */
         AnonPacket apack = AnonPacket.getSizePacket(session,sizeSequence,finalDestPort,finalDestIp,owner,count);
         this.asocket.send(apack,origem,destino,destPort);
-        System.out.println("[AnonStream] Enviei pacote de size com seq: " + sizeSequence);
 
         /* Agora enviamos os pacotes */
         for(AnonPacket ap : sending){
