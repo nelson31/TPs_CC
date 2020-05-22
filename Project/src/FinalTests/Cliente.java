@@ -23,10 +23,10 @@ public class Cliente {
                 pw.flush();
                 /* Lemos a resposta do server */
                 System.out.println(bf.readLine());
+                input.shutdownInput();
+                input.shutdownOutput();
+                input.close();
             }
-            input.shutdownInput();
-            input.shutdownOutput();
-            input.close();
         }
         catch(
                 IOException exc){
