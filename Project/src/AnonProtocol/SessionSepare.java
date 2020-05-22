@@ -82,6 +82,7 @@ public class SessionSepare implements Runnable {
                     foreign table e se não existir teremos que a adicionar */
                     if (!this.foreignSessions.contains(id, owner)) {
                         this.foreignSessions.addForeignSession(id, owner, ap.getTargetServerIP(), ap.getTargetPort());
+                        System.out.println("Criei nova entrada para a sessão: id: " + id + "; owner: " + owner);
                     }
                     ap.setSession(this.foreignSessions.getLocalSession(id,owner));
                 }
