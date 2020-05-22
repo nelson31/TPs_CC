@@ -43,7 +43,9 @@ public class SecureSocket {
             ss.setId(id);
             boolean received = false;
             while (!received) {
+                System.out.println("Vou enviar securepacket");
                 this.ssocket.send(ss);
+                System.out.println("Enviei securepacket");
                 Thread.sleep(250);
                 if (this.ssocket.contains(-ss.getId()))
                     received = true;
