@@ -111,13 +111,14 @@ public class ClientAccepter implements Runnable {
 
             try {
                 id = this.sessionGetter.getID();
-                System.out.println("[ClienteAccepter] Recebido novo pedido de cliente");
                 /* Colocamos o worker a correr */
                 Worker w = new Worker(id, id,
                         accepter.accept(), asocket, this.getNextPeer(),
                         this.targetServer, this.targetPort,this.sessionGetter,this.foreignSessions);
 
                 new Thread(w).start();
+
+                System.out.println("[ClienteAccepter] Recebido novo pedido de cliente");
             }
             catch(IOException exc){
                 System.out.println(exc.getMessage());
