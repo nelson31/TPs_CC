@@ -162,6 +162,16 @@ public class AnonStream {
     }
 
     /**
+     * Método que retorna o endereço IP local
+     * para o qual a stream está conectada
+     * @return
+     */
+    public InetAddress getLocalIp(){
+
+        return this.asocket.getLocalIp();
+    }
+
+    /**
      * Método que retorna as informações acerca do destino
      * final dos dados recebidos através da stream
      * @return
