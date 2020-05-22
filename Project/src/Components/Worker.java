@@ -71,8 +71,6 @@ public class Worker implements Runnable {
     /////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
     /**
      * COnstrutor para objetos da
      * classe Worker
@@ -82,7 +80,7 @@ public class Worker implements Runnable {
      */
     public Worker(int incomingSessionId, int outgoingSessionId, Socket socket,
                   AnonSocket asocket, InetAddress nextHopIp, InetAddress targetServerIp,
-                  int targetPort, SessionGetter cedeId, ForeignSessions foreignSessions){
+                  int targetPort, SessionGetter cedeId, ForeignSessions foreignSessions) {
 
         this.asocket = asocket;
         this.socket = socket;
@@ -98,17 +96,17 @@ public class Worker implements Runnable {
     public void run() {
 
         /* Criamos uma stream para ler e receber dados */
-        AnonStream stream = new AnonStream(this.asocket,this.incomingSessionId,this.outgoingSessionId);
+        AnonStream stream = new AnonStream(this.asocket, this.incomingSessionId, this.outgoingSessionId);
 
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */
         ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(stream,
-                this.socket,this.outgoingSessionId,this.cedeId,this.foreignSessions,this.nextHopIp,
-                6666,this.targetServerIp,this.targetPort);
+                this.socket, this.outgoingSessionId, this.cedeId, this.foreignSessions, this.nextHopIp,
+                6666, this.targetServerIp, this.targetPort);
 
         /* Criamos a thread que lê da stream Anon e
         envia os dados de volta para o cliente */
-        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream,this.socket,this.incomingSessionId);
+        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream, this.socket, this.incomingSessionId);
 
         /* Colocamos ambas as threads a correr */
         Thread t1 = new Thread(sockToStream);
@@ -116,5 +114,13 @@ public class Worker implements Runnable {
 
         t1.start();
         t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        }
+        catch(InterruptedException exc){
+            System.out.println(exc.getLocalizedMessage());
+        }
     }
 }
