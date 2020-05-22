@@ -122,5 +122,7 @@ public class Worker implements Runnable {
         catch(InterruptedException exc){
             System.out.println(exc.getLocalizedMessage());
         }
+
+        System.out.println("Terminada conexão");
     }
 }
