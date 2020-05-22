@@ -75,7 +75,9 @@ public class AnonSocket {
         /* Encapsulamos o anonPacket num SecurePacket */
         SecurePacket sp = new SecurePacket(-1,origem,destino,destPort,body.length,body);
         /* Enviamos para o destino respetivo */
+        System.out.println("Vou enviar anonPacket");
         this.socket.send(sp);
+        System.out.println("Enviei anonPacket");
     }
 
     /**
