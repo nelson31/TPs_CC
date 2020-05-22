@@ -47,7 +47,7 @@ public class AnonAccepter implements Runnable {
             os dados da sessão */
             SessionData data = new SessionData();
             int incoming = this.foreignSessions.accept(data);
-            System.out.println("Novo id para uma sessão externa");
+            System.out.println("[AnonAccepter] Novo id para uma sessão externa");
             int outgoing = data.getId();
 
             try {
