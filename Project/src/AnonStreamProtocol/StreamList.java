@@ -176,6 +176,8 @@ public class StreamList {
             /* Adicionamos o pacote de dados à lista */
             this.recebidos.put(pack.getSequence(),pack);
 
+            System.out.println("[Separe] Recebi pacote de size com seq: " + pack.getSequence() + " e espero o de seq: " + this.nextSizePacketSequence);
+
             /* Caso haja algúem à espera deste pacote
             acordamos a respetiva thread */
             if(pack.getSequence() == this.nextSizePacketSequence) {
