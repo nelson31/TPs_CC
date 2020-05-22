@@ -118,7 +118,16 @@ public class ReaderFromSocketToStream implements Runnable {
                 System.out.println("[ReaderFromSocket] Acabei de enviar dados para" + this.destinoIp);
             }
             /* No final fazemos close da stream */
-            this.stream.close(this.socket.getLocalAddress(),this.destinoIp,this.destinoPort);
+            /* Temos que verificar se esta sessão é externa */
+            if(this.foreignSessions.isForeign(this.idSession)){
+                /* Se for o owner não somos nós */
+                owner = this.foreignSessions.getInfo(this.idSession).getOwnerIP();
+            }
+                /* Se não for externa, o owner é
+                o próprio anon */
+            else
+                owner = this.stream.getLocalIp();
+            this.stream.close(this.socket.getLocalAddress(),this.destinoIp,owner,this.destinoPort);
             /* Libertamos o id utilizado */
             this.cedeId.cedeID(this.idSession);
             System.out.println("Fechei a conexão");

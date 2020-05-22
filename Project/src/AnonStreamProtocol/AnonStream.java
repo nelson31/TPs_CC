@@ -190,14 +190,14 @@ public class AnonStream {
     /**
      * Método que permite fechar a stream para um determinado destino
      */
-    public void close(InetAddress origem, InetAddress destino, int destPort)
+    public void close(InetAddress origem, InetAddress destino, InetAddress owner, int destPort)
             throws IOException {
 
         /* Vamos buscar a sequencia */
         int sequence = this.sequence.getI();
         /* Enviamos um anonPacket de fecho */
         AnonPacket fecho = new AnonPacket(this.localSession,sequence,-1,80,
-                InetAddress.getByName("localhost"),InetAddress.getByName("localhost"),1,new byte[0]);
+                owner,owner,1,new byte[0]);
 
         this.asocket.send(fecho,origem,destino,destPort);
     }
