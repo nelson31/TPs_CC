@@ -113,6 +113,8 @@ public class ReaderFromSocketToStream implements Runnable {
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,owner,this.destinoPort,
                         this.destinoFinalPort);
+
+                System.out.println("[ReaderFromSocket] Acabei de enviar dados para" + this.destinoIp);
             }
             /* No final fazemos close da stream */
             this.stream.close(this.socket.getLocalAddress(),this.destinoIp,this.destinoPort);
