@@ -25,10 +25,10 @@ public class Server {
                     size = message.length();
                     pw.println("Tamanho da string: " + size);
                     pw.flush();
+                    input.shutdownInput();
+                    input.shutdownOutput();
+                    input.close();
                 }
-                input.shutdownInput();
-                input.shutdownOutput();
-                input.close();
             }
         }
         catch(IOException exc){
