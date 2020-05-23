@@ -129,12 +129,12 @@ public class Worker implements Runnable {
             t1.join();
             t2.join();
 
-            InetAddress owner = this.foreignSessions.getInfo(this.incomingSessionId).getOwnerIP();
             /* Libertamos o id utilizado */
             this.cedeId.cedeID(this.incomingSessionId);
             /* Se for uma sessão externa removemos a
             linha da foreign sessions table */
             if(this.foreignSessions.isForeign(this.incomingSessionId)) {
+                InetAddress owner = this.foreignSessions.getInfo(this.incomingSessionId).getOwnerIP();
                 this.foreignSessions.removeAssociation(this.foreignSessions.getInfo(this.incomingSessionId).getId(), owner);
             }
         }
