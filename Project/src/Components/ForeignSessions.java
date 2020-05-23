@@ -168,10 +168,6 @@ public class ForeignSessions {
         estrutura de dados */
         this.l.lock();
 
-        /* Cedemos também o id que tinhamos
-        reservado para a sessão */
-        this.sessionGetter.cedeID(this.association.get(data));
-
         /* Removemos uma linha da tabela */
         this.association.remove(data);
 
