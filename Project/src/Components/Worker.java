@@ -101,7 +101,7 @@ public class Worker implements Runnable {
         /* Criamos a thread que lê do socket TCP e
         envia os dados para o próximo AnonGW */
         ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(stream,
-                this.socket, this.outgoingSessionId, this.cedeId, this.foreignSessions, this.nextHopIp,
+                this.socket, this.incomingSessionId, this.cedeId, this.foreignSessions, this.nextHopIp,
                 6666, this.targetServerIp, this.targetPort);
 
         /* Criamos a thread que lê da stream Anon e
