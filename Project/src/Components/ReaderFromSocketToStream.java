@@ -60,6 +60,14 @@ public class ReaderFromSocketToStream implements Runnable {
      */
     private SessionGetter cedeId;
 
+    ////////////////////////////Dados usados na cifragem das mensagens//////////////////////////
+
+    private String password;
+
+    private int Key1, Key2;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Construtor para objetos da
      * classe SessionGetter
@@ -71,7 +79,8 @@ public class ReaderFromSocketToStream implements Runnable {
     public ReaderFromSocketToStream(AnonStream stream, Socket socket,
                                     int idSession, SessionGetter cedeId, ForeignSessions foreignSessions,
                                     InetAddress destinoIp, int portIp,
-                                    InetAddress destinoFinalIP, int destinoFinalPort) {
+                                    InetAddress destinoFinalIP, int destinoFinalPort,
+                                    String password, int Key1, int Key2) {
 
         this.stream = stream;
         this.socket = socket;
@@ -82,6 +91,9 @@ public class ReaderFromSocketToStream implements Runnable {
         this.destinoFinalPort = destinoFinalPort;
         this.foreignSessions = foreignSessions;
         this.cedeId = cedeId;
+        this.password = password;
+        this.Key1 = Key1;
+        this.Key2 = Key2;
     }
 
     public void run() {
@@ -111,7 +123,8 @@ public class ReaderFromSocketToStream implements Runnable {
                     owner = this.stream.getLocalIp();
                     System.out.println("O owner da session nº" + this.idSession + "sou eu");
                 }
-
+                /* Encriptamos os dados antes de enviar */
+                dat = Encriptacao.encriptar(dat,this.password,this.Key1,this.Key2);
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,owner,this.destinoPort,
                         this.destinoFinalPort);

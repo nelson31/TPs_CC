@@ -63,6 +63,12 @@ public class ClientAccepter implements Runnable {
      */
     private int targetPort;
 
+    ////////////////////////////Dados usados na cifragem das mensagens//////////////////////////
+
+    private String password;
+
+    private int Key1, Key2;
+
     ////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -73,7 +79,8 @@ public class ClientAccepter implements Runnable {
     public ClientAccepter(AnonSocket asocket, ServerSocket accepter,
                           SessionGetter sessionGetter, ForeignSessions foreignSessions,
                           List<InetAddress> peers,
-                          InetAddress targetServer, int targetPort) {
+                          InetAddress targetServer, int targetPort,
+                          String password, int Key1, int Key2) {
 
         this.asocket = asocket;
         this.accepter = accepter;
@@ -83,6 +90,9 @@ public class ClientAccepter implements Runnable {
         this.foreignSessions = foreignSessions;
         this.targetServer = targetServer;
         this.targetPort = targetPort;
+        this.password = password;
+        this.Key1 = Key1;
+        this.Key2 = Key2;
     }
 
     /**
@@ -114,7 +124,7 @@ public class ClientAccepter implements Runnable {
                 /* Colocamos o worker a correr */
                 Worker w = new Worker(id, id,
                         accepter.accept(), asocket, this.getNextPeer(),
-                        this.targetServer, this.targetPort,this.sessionGetter,this.foreignSessions);
+                        this.targetServer, this.targetPort,this.sessionGetter,this.foreignSessions,this.password,this.Key1,this.Key2);
 
                 new Thread(w).start();
 

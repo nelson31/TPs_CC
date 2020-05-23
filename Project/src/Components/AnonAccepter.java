@@ -24,17 +24,29 @@ public class AnonAccepter implements Runnable {
      */
     private SessionGetter sessionGetter;
 
+    ////////////////////////////Dados usados na cifragem das mensagens//////////////////////////
+
+    private String password;
+
+    private int Key1, Key2;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Construtor para objetos da classe AnonAccepter
      *
      * @param asocket
      * @param sessionGetter
      */
-    public AnonAccepter(AnonSocket asocket, SessionGetter sessionGetter, ForeignSessions foreignSessions) {
+    public AnonAccepter(AnonSocket asocket, SessionGetter sessionGetter, ForeignSessions foreignSessions,
+                        String password, int Key1, int Key2) {
 
         this.asocket = asocket;
         this.sessionGetter = sessionGetter;
         this.foreignSessions = foreignSessions;
+        this.password = password;
+        this.Key1 = Key1;
+        this.Key2 = Key2;
     }
 
     public void run() {
@@ -53,7 +65,8 @@ public class AnonAccepter implements Runnable {
 
             try {
                 Worker w = new Worker(incoming, outgoing, new Socket(data.getTargetIp(),data.getTargetPort()),
-                        this.asocket, data.getOwnerIP(), data.getTargetIp(), data.getTargetPort(), this.sessionGetter, this.foreignSessions);
+                        this.asocket, data.getOwnerIP(), data.getTargetIp(), data.getTargetPort(),
+                        this.sessionGetter, this.foreignSessions, this.password, this.Key1, this.Key2);
 
                 /* Colocamos o worker a correr */
                 new Thread(w).start();

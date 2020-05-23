@@ -29,17 +29,28 @@ public class ReaderFromStreamToSocket implements Runnable{
      */
     private int sessionID;
 
+    ////////////////////////////Dados usados na cifragem das mensagens//////////////////////////
+
+    private String password;
+
+    private int Key1, Key2;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Construtor para objetos da classe
      * ReaderFromStreamToSocket
      */
-    public ReaderFromStreamToSocket(AnonStream astream, Socket socket, int sessionID) {
+    public ReaderFromStreamToSocket(AnonStream astream, Socket socket, int sessionID, String password, int Key1, int Key2) {
 
         this.stream = astream;
         /* Ativação da extremidade de leitura da stream */
         this.stream.enableInputStream();
         this.socket = socket;
         this.sessionID = sessionID;
+        this.password = password;
+        this.Key1 = Key1;
+        this.Key2 = Key2;
     }
 
     public void run() {
@@ -50,6 +61,9 @@ public class ReaderFromStreamToSocket implements Runnable{
             while ((data = this.stream.read()) != null) {
                 message = new String(data, StandardCharsets.UTF_8);
                 System.out.println("[ReaderFromStream] Recebi dados da stream: " + message);
+                /* Desencriptamos os dados antes de
+                enviar para o socket */
+                data = Encriptacao.desencriptar(data,this.password,this.Key1,this.Key2);
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }

@@ -42,6 +42,17 @@ public class AnonGW {
      */
     private static List<InetAddress> peers;
 
+    /**
+     * Password utilizada para encriptar dados
+     */
+    private static String password;
+
+    /**
+     * Variáveis utilizadas para encriptar
+     * e desencriptar dados
+     */
+    private static int Key1, Key2;
+
     public static void main(String[] args) {
 
         try {
@@ -57,11 +68,14 @@ public class AnonGW {
             sessionGetter = new SessionGetter();
             foreignSessions = new ForeignSessions(sessionGetter);
             asocket = new AnonSocket(6666,localIp,foreignSessions);
+            /* Atribuição de valores para a criptografia */
+            password = "GT$!kT=D*k3b2U&x9?9!cFSGTfVtnm";
+            Key1 = 15; Key2 = 20;
 
             /* Criamos as threads que aceitam novos pedidos */
             ClientAccepter ca = new ClientAccepter(asocket,accepter,sessionGetter,foreignSessions,
-                    peers,targetIp,targetPort);
-            AnonAccepter aa = new AnonAccepter(asocket,sessionGetter,foreignSessions);
+                    peers,targetIp,targetPort,password,Key1,Key2);
+            AnonAccepter aa = new AnonAccepter(asocket,sessionGetter,foreignSessions,password,Key1,Key2);
 
             /* Colocamos ambos os
             accepters a correr */

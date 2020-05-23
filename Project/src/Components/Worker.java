@@ -3,7 +3,6 @@ package Components;
 import AnonProtocol.AnonSocket;
 import AnonProtocol.SessionGetter;
 import AnonStreamProtocol.AnonStream;
-import AnonProtocol.IntegerEncapsuler;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -68,7 +67,13 @@ public class Worker implements Runnable {
      */
     private InetAddress nextHopIp;
 
-    /////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////Dados usados na cifragem das mensagens//////////////////////////
+
+    private String password;
+
+    private int Key1, Key2;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
 
     /**
@@ -80,7 +85,8 @@ public class Worker implements Runnable {
      */
     public Worker(int incomingSessionId, int outgoingSessionId, Socket socket,
                   AnonSocket asocket, InetAddress nextHopIp, InetAddress targetServerIp,
-                  int targetPort, SessionGetter cedeId, ForeignSessions foreignSessions) {
+                  int targetPort, SessionGetter cedeId, ForeignSessions foreignSessions,
+                  String password, int Key1, int Key2) {
 
         this.asocket = asocket;
         this.socket = socket;
@@ -91,6 +97,9 @@ public class Worker implements Runnable {
         this.targetPort = targetPort;
         this.cedeId = cedeId;
         this.foreignSessions = foreignSessions;
+        this.password = password;
+        this.Key1 = Key1;
+        this.Key2 = Key2;
     }
 
     public void run() {
@@ -102,11 +111,12 @@ public class Worker implements Runnable {
         envia os dados para o próximo AnonGW */
         ReaderFromSocketToStream sockToStream = new ReaderFromSocketToStream(stream,
                 this.socket, this.incomingSessionId, this.cedeId, this.foreignSessions, this.nextHopIp,
-                6666, this.targetServerIp, this.targetPort);
+                6666, this.targetServerIp, this.targetPort, this.password, this.Key1, this.Key2);
 
         /* Criamos a thread que lê da stream Anon e
         envia os dados de volta para o cliente */
-        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream, this.socket, this.incomingSessionId);
+        ReaderFromStreamToSocket streamToSock = new ReaderFromStreamToSocket(stream, this.socket,
+                this.incomingSessionId,this.password, this.Key1, this.Key2);
 
         /* Colocamos ambas as threads a correr */
         Thread t1 = new Thread(sockToStream);

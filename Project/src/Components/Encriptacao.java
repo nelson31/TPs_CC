@@ -14,9 +14,9 @@ package Components;
 public class Encriptacao {
 
     /* Variavel que sinaliza que se pretende encriptar uma dada sequencia de dados */
-    public static final int ENCRIPT = 1000;
+    private static final int ENCRIPT = 1000;
     /* Variavel que sinaliza que se pretende encriptar uma dada sequencia de dados */
-    public static final int DECRIPT = 1001;
+    private static final int DECRIPT = 1001;
 
     /**
      * Método que repete o padrao da password até ela ter o tamanho t
@@ -24,7 +24,7 @@ public class Encriptacao {
      * @param t
      * @return
      */
-    public byte[] repeat(String password, int t){
+    private static byte[] repeat(String password, int t){
         int tpw = password.getBytes().length;
         int tcurr = 0;
         StringBuilder sb = new StringBuilder();
@@ -46,7 +46,7 @@ public class Encriptacao {
      * @param tamanho
      * @return
      */
-    public void rotateEsq(byte[] b, int tamanho){
+    private static void rotateEsq(byte[] b, int tamanho){
         byte aux = b[0];
 
         for(int i=0;i<tamanho-1;i++){
@@ -62,7 +62,7 @@ public class Encriptacao {
      * @param tamanho
      * @return
      */
-    public void rotateDir(byte[] b, int tamanho){
+    private static void rotateDir(byte[] b, int tamanho){
         byte aux = b[tamanho-1];
 
         for(int i=tamanho-1;i>0;i--){
@@ -82,7 +82,7 @@ public class Encriptacao {
      * @param tamanho
      * @return
      */
-    public byte[] rotate(byte[] pad, int Key, int tamanho){
+    private static byte[] rotate(byte[] pad, int Key, int tamanho){
 
         if(Key>=0) {
             for(int i=0;i<Key;i++) {
@@ -104,7 +104,7 @@ public class Encriptacao {
      * @param tamanho
      * @return
      */
-    public byte[] ouExclusivo(byte[] pad, byte[] dados, int tamanho){
+    private static byte[] ouExclusivo(byte[] pad, byte[] dados, int tamanho){
 
         byte[] newbyteArr = new byte[tamanho];
         for(int i=0;i<tamanho;i++){
@@ -122,7 +122,7 @@ public class Encriptacao {
      * @param direcao
      * @return
      */
-    public byte[] f(byte[] dados, String password, int K1, int K2, int direcao){
+    private static byte[] f(byte[] dados, String password, int K1, int K2, int direcao){
         int t = dados.length;
         byte[] pad = repeat(password,t);
         pad = rotate(pad,K1,t);
@@ -144,7 +144,7 @@ public class Encriptacao {
      * @param KEY2
      * @return
      */
-    public byte[] encriptar(byte[] dados, String password, int KEY1, int KEY2){
+    public static byte[] encriptar(byte[] dados, String password, int KEY1, int KEY2){
         return f(dados,password,KEY1,KEY2,ENCRIPT);
     }
 
@@ -156,7 +156,7 @@ public class Encriptacao {
      * @param KEY2
      * @return
      */
-    public byte[] desencriptar(byte[] dadosEncriptados, String password, int KEY1, int KEY2){
+    public static byte[] desencriptar(byte[] dadosEncriptados, String password, int KEY1, int KEY2){
         return f(dadosEncriptados,password,KEY1,KEY2,DECRIPT);
     }
 }
