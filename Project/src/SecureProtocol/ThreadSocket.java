@@ -5,7 +5,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadSocket {
 
@@ -18,12 +17,12 @@ public class ThreadSocket {
     /**
      * Estrutura de dados para enviar pacotes
      */
-    private ListPacket sending;
+    private ListPacketSending sending;
 
     /**
      * Estrutura de dados para receber pacotes
      */
-    private ListPacket receiving;
+    private ListPacketReceiving receiving;
 
     private Reader reader;
 
@@ -40,8 +39,8 @@ public class ThreadSocket {
             throws SocketException {
 
         this.socket = new DatagramSocket(port, localIP);
-        this.sending = new ListPacket();
-        this.receiving = new ListPacket();
+        this.sending = new ListPacketSending();
+        this.receiving = new ListPacketReceiving();
         this.reader = new Reader(socket, this.receiving);
         this.writer = new Writer(socket, this.sending);
         new Thread(this.reader).start();

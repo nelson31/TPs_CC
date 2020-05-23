@@ -8,7 +8,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ListPacket {
+public class ListPacketReceiving {
 
     /**
      * Variável que guarda os pacotes
@@ -49,9 +49,9 @@ public class ListPacket {
 
     /**
      * Construtores para objetos
-     * da classe SecureProtocol.ListPacket
+     * da classe SecureProtocol.ListPacketSending
      */
-    public ListPacket(){
+    public ListPacketReceiving(){
 
         this.list = new ArrayList<>();
         this.l = new ReentrantLock();
@@ -87,14 +87,16 @@ public class ListPacket {
         de ler um pacote não ACK*/
         if(!sp.isAck())
             this.cnotAck.signal();
-
-        /* Se for um ack sinalizamos quem está à
-        espera desse mesmo ack */
+        /* Se for um ack sinalizamos a thread que
+        espera pelo respetivo ack */
         if(sp.isAck()){
-            System.out.println("Vou buscar o lock para sinalizar a thread que espera pelo ack: " + sp.getId());
+
+            /* Vamos buscar o lock da thread que
+            espera pelo ack que acabamos de receber */
             Lock l = this.locks.get(sp.getId());
             l.lock();
 
+            /* Acordamos a thread que espera pelo lock */
             this.conditions.get(sp.getId()).signal();
 
             l.unlock();
@@ -103,35 +105,6 @@ public class ListPacket {
         this.notAck.unlock();
 
         this.l.unlock();
-    }
-
-    /**
-     * Método que permite obter o
-     * próximo packet da queue
-     * @return
-     */
-    public SecurePacket getPacket(){
-
-        SecurePacket ret = null;
-        this.l.lock();
-
-        try {
-            /* Enquanto não houver nada
-            para ler esperamos */
-            while (this.list.size() == 0)
-                this.c.await();
-
-            ret = this.list.get(0);
-            this.list.remove(0);
-        }
-        catch(InterruptedException exc){
-
-        }
-        finally {
-            this.l.unlock();
-        }
-
-        return ret;
     }
 
     /**
@@ -232,6 +205,8 @@ public class ListPacket {
 
         this.l.lock();
 
+        /* Removemos o pacote da lista e também as variáveis
+        lock e condition que usamos para sinalizar a thread */
         for(int i=0; i<this.list.size() && !found; i++) {
             if (this.list.get(i).getId() == id) {
                 this.list.remove(i);
@@ -244,3 +219,4 @@ public class ListPacket {
         this.l.unlock();
     }
 }
+

@@ -11,7 +11,7 @@ public class Reader implements Runnable {
      * encaminhados os pacotes que são
      * lidos do socket
      */
-    private ListPacket receiving;
+    private ListPacketReceiving receiving;
 
     /**
      * Socket a partir do qual vão
@@ -19,7 +19,7 @@ public class Reader implements Runnable {
      */
     private DatagramSocket socket;
 
-    public Reader(DatagramSocket socket, ListPacket receiving) {
+    public Reader(DatagramSocket socket, ListPacketReceiving receiving) {
 
         this.receiving = receiving;
         this.socket = socket;
