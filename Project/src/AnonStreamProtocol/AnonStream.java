@@ -200,6 +200,6 @@ public class AnonStream {
 
         this.asocket.send(fecho,origem,destino,destPort);
 
-        System.out.println("[ReaderFromSocket] Enviei pacote de fecho para " + destino + " com seq: " + sequence);
+        //System.out.println("[ReaderFromSocket] Enviei pacote de fecho para " + destino + " com seq: " + sequence);
     }
 }

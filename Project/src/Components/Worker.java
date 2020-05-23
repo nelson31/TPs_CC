@@ -133,6 +133,6 @@ public class Worker implements Runnable {
             System.out.println(exc.getLocalizedMessage());
         }
 
-        System.out.println("Terminada conexão");
+        System.out.println("[Worker] Conexão terminada");
     }
 }

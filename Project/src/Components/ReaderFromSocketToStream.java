@@ -106,12 +106,12 @@ public class ReaderFromSocketToStream implements Runnable {
             ler do socket TCP */
             byte[] data = new byte[1024];
             while ((lidos = os.read(data,0,1024)) != -1) {
-                System.out.println("[ReaderFromSocket] Li dados do socket: " + new String(data, StandardCharsets.UTF_8));
+                //System.out.println("[ReaderFromSocket] Li dados do socket: " + new String(data, StandardCharsets.UTF_8));
                 byte[] dat = new byte[lidos];
                 for(int i=0; i<lidos; i++){
                     dat[i] = data[i];
                 }
-                System.out.println("[ReaderFromSocket] enviei dados para " + this.destinoIp + " com id se sessão: " + this.idSession);
+                //System.out.println("[ReaderFromSocket] enviei dados para " + this.destinoIp + " com id se sessão: " + this.idSession);
                 /* Temos que verificar se esta sessão é externa */
                 if(this.foreignSessions.isForeign(this.idSession)){
                     /* Se for o owner não somos nós */
@@ -121,7 +121,7 @@ public class ReaderFromSocketToStream implements Runnable {
                 o próprio anon */
                 else {
                     owner = this.stream.getLocalIp();
-                    System.out.println("O owner da session nº" + this.idSession + "sou eu");
+                    //System.out.println("O owner da session nº" + this.idSession + "sou eu");
                 }
                 /* Encriptamos os dados antes de enviar */
                 dat = Encriptacao.encriptar(dat,this.password,this.Key1,this.Key2);
@@ -129,7 +129,7 @@ public class ReaderFromSocketToStream implements Runnable {
                         this.destinoFinalIP,owner,this.destinoPort,
                         this.destinoFinalPort);
 
-                System.out.println("[ReaderFromSocket] Acabei de enviar dados para" + this.destinoIp);
+                //System.out.println("[ReaderFromSocket] Acabei de enviar dados para" + this.destinoIp);
             }
             /* No final fazemos close da stream */
             /* Temos que verificar se esta sessão é externa */
@@ -149,7 +149,7 @@ public class ReaderFromSocketToStream implements Runnable {
             if(this.foreignSessions.isForeign(this.idSession)) {
                 this.foreignSessions.removeAssociation(this.foreignSessions.getInfo(this.idSession).getId(), owner);
             }
-            System.out.println("Fechei a conexão");
+            System.out.println("[ReaderFromSocket]Fechei a conexão");
         }
         catch(IOException exc){
             System.out.println(exc.getMessage());
