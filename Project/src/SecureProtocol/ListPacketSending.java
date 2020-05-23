@@ -21,21 +21,6 @@ public class ListPacketSending {
     private Condition c;
 
     /**
-     * Método que nos diz o número de pacotes
-     * que se encontram na lista de pacotes e
-     * não são packets
-     * @return
-     */
-    private int numNotAcks(){
-
-        int count = 0;
-        for(SecurePacket sp : this.list)
-            if(!sp.isAck())
-                count++;
-        return count;
-    }
-
-    /**
      * Construtores para objetos
      * da classe SecureProtocol.ListPacketSending
      */
@@ -93,23 +78,6 @@ public class ListPacketSending {
         finally {
             this.l.unlock();
         }
-
-        return ret;
-    }
-
-    /**
-     * Método que nos diz se existe
-     * um dado pacote na lista
-     * @param id
-     * @return
-     */
-    public boolean contains(int id){
-
-        this.l.lock();
-
-        boolean ret = this.list.contains(new SecurePacket(id,null,null,0,0,new byte[0]));
-
-        this.l.unlock();
 
         return ret;
     }

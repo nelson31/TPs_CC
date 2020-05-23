@@ -95,12 +95,12 @@ public class ThreadSocket {
         l.lock();
 
         try {
-            /* Colocamos o timeout a correr */
-            new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
             /* Enquanto o ack não chegar */
-            while (!this.contains(id) && !timeoutreached.getB())
+            while (!this.contains(id) && !timeoutreached.getB()) {
+                /* Colocamos o timeout a correr */
+                new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
                 c.await();
-
+            }
             /* Se o pacote tiver chegado retornamos true
             e eliminamos o pacote da lista de chegada */
             if(this.contains(id)) {
