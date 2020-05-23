@@ -20,10 +20,6 @@ public class SecureSocket {
      */
     private PacketIdGetter idGetter;
 
-    private Lock lock;
-
-    private Condition c;
-
     /**
      * Construtor para objetos da
      * classe SecureProtocol.SecureSocket
@@ -36,8 +32,6 @@ public class SecureSocket {
 
         this.ssocket = new ThreadSocket(port, localIP);
         this.idGetter = new PacketIdGetter();
-        this.lock = new ReentrantLock();
-        this.c = lock.newCondition();
     }
 
     /**
@@ -47,23 +41,18 @@ public class SecureSocket {
      */
     public void send(SecurePacket ss) {
 
-        this.lock.lock();
-        Lock l = new ReentrantLock();
-        Condition c = l.newCondition();
         System.out.println("Estou à espera para enviar secure packet");
         int id = this.idGetter.get();
         ss.setId(id);
         boolean received = false;
         while (!received) {
-            this.ssocket.prepareRecebeAck(-ss.getId(),l,c);
             System.out.println("[SecureSocket] Vou enviar novo secure packet");
             /* Enviamos o pacote */
             this.ssocket.send(ss);
             /* Verificamos se chegou o ack */
-            if(this.ssocket.waitForAck(-ss.getId(),250,l,c))
+            if(this.ssocket.waitForAck(-ss.getId(),250))
                 received = true;
         }
-        this.lock.unlock();
     }
 
     /**
@@ -73,7 +62,6 @@ public class SecureSocket {
      */
     public SecurePacket receive(){
 
-        this.lock.lock();
         SecurePacket data = null;
         /* Recebemos o primeiro pacote
         que não seja ack */
@@ -81,7 +69,6 @@ public class SecureSocket {
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
         this.ssocket.send(pack);
-        this.lock.unlock();
         return data;
     }
 }

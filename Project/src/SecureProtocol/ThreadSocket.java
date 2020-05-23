@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ThreadSocket {
 
@@ -17,12 +18,12 @@ public class ThreadSocket {
     /**
      * Estrutura de dados para enviar pacotes
      */
-    private ListPacketSending sending;
+    private ListPacket sending;
 
     /**
      * Estrutura de dados para receber pacotes
      */
-    private ListPacketReceiving receiving;
+    private ListPacket receiving;
 
     private Reader reader;
 
@@ -39,8 +40,8 @@ public class ThreadSocket {
             throws SocketException {
 
         this.socket = new DatagramSocket(port, localIP);
-        this.sending = new ListPacketSending();
-        this.receiving = new ListPacketReceiving();
+        this.sending = new ListPacket();
+        this.receiving = new ListPacket();
         this.reader = new Reader(socket, this.receiving);
         this.writer = new Writer(socket, this.sending);
         new Thread(this.reader).start();
@@ -87,28 +88,24 @@ public class ThreadSocket {
      * Método que permite a uma thread esperar por um
      * ack após o envio de um determinado pacote
      */
-    public boolean waitForAck(int id, int milis, Lock l, Condition c) {
+    public boolean waitForAck(int id, int milis) {
 
         boolean ret = false;
         BooleanEncapsuler timeoutreached = new BooleanEncapsuler(false);
+        /* Variáveis para sinalizar thread
+        quando o ack chegar */
+        Lock l = new ReentrantLock();
+        Condition c = l.newCondition();
         /* Obtens o lock */
         l.lock();
 
-        TimeOut to = new TimeOut(milis,l,c,timeoutreached);
-
         try {
+            /* Colocamos o timeout a correr */
+            new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
             /* Enquanto o ack não chegar */
-            while (!this.contains(id) && !timeoutreached.getB()) {
-                /* Colocamos o timeout a correr */
-                new Thread(to).start();
+            while (!this.contains(id) && !timeoutreached.getB())
                 c.await();
-            }
-        }
-        catch(InterruptedException exc){
-            System.out.println(exc.getLocalizedMessage());
-        }
-        finally {
-            l.unlock();
+
             /* Se o pacote tiver chegado retornamos true
             e eliminamos o pacote da lista de chegada */
             if(this.contains(id)) {
@@ -116,18 +113,13 @@ public class ThreadSocket {
                 this.receiving.remove(id);
             }
         }
+        catch(InterruptedException exc){
+            System.out.println(exc.getLocalizedMessage());
+        }
+        finally {
+            l.unlock();
+        }
 
         return ret;
-    }
-
-    /**
-     * Método que prepara a receção de um ack
-     * @param id
-     * @param l
-     * @param c
-     */
-    public void prepareRecebeAck(int id, Lock l, Condition c){
-
-        this.receiving.prepareRecebeAck(id, l, c);
     }
 }

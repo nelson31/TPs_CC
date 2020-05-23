@@ -1,14 +1,12 @@
 package SecureProtocol;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ListPacketReceiving {
+public class ListPacket {
 
     /**
      * Variável que guarda os pacotes
@@ -23,14 +21,6 @@ public class ListPacketReceiving {
     private Condition cnotAck;
 
     private Condition c;
-
-    ////////////////////////////Variáveis para acordar threads que esperem por acks////////////////////////////////
-
-    private Map<Integer, Lock> locks;
-
-    private Map<Integer, Condition> conditions;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Método que nos diz o número de pacotes
@@ -49,17 +39,15 @@ public class ListPacketReceiving {
 
     /**
      * Construtores para objetos
-     * da classe SecureProtocol.ListPacketSending
+     * da classe SecureProtocol.ListPacket
      */
-    public ListPacketReceiving(){
+    public ListPacket(){
 
         this.list = new ArrayList<>();
         this.l = new ReentrantLock();
         this.notAck = new ReentrantLock();
         this.c = l.newCondition();
         this.cnotAck = notAck.newCondition();
-        this.locks = new HashMap<>();
-        this.conditions = new HashMap<>();
     }
 
     /**
@@ -87,24 +75,39 @@ public class ListPacketReceiving {
         de ler um pacote não ACK*/
         if(!sp.isAck())
             this.cnotAck.signal();
-        /* Se for um ack sinalizamos a thread que
-        espera pelo respetivo ack */
-        if(sp.isAck()){
-
-            /* Vamos buscar o lock da thread que
-            espera pelo ack que acabamos de receber */
-            Lock l = this.locks.get(sp.getId());
-            l.lock();
-
-            /* Acordamos a thread que espera pelo lock */
-            this.conditions.get(sp.getId()).signal();
-
-            l.unlock();
-        }
 
         this.notAck.unlock();
 
         this.l.unlock();
+    }
+
+    /**
+     * Método que permite obter o
+     * próximo packet da queue
+     * @return
+     */
+    public SecurePacket getPacket(){
+
+        SecurePacket ret = null;
+        this.l.lock();
+
+        try {
+            /* Enquanto não houver nada
+            para ler esperamos */
+            while (this.list.size() == 0)
+                this.c.await();
+
+            ret = this.list.get(0);
+            this.list.remove(0);
+        }
+        catch(InterruptedException exc){
+
+        }
+        finally {
+            this.l.unlock();
+        }
+
+        return ret;
     }
 
     /**
@@ -174,28 +177,6 @@ public class ListPacketReceiving {
     }
 
     /**
-     * Método que prepara a receção de um novo
-     * ack por parte de uma thread
-     * @param id
-     * @param lwaitAck
-     * @param cwaitAck
-     */
-    public void prepareRecebeAck(int id, Lock lwaitAck, Condition cwaitAck){
-
-        this.l.lock();
-
-        /* Adicionamos as variáveis para sinalizar
-        a thread que espera pelo ack */
-        if(!this.locks.containsKey(id)) {
-            this.locks.put(id, lwaitAck);
-            this.conditions.put(id, cwaitAck);
-            System.out.println("Acicionei lock para o ack: " + id);
-        }
-
-        this.l.unlock();
-    }
-
-    /**
      * Método que permite remover um pacote
      * @param id
      */
@@ -205,13 +186,9 @@ public class ListPacketReceiving {
 
         this.l.lock();
 
-        /* Removemos o pacote da lista e também as variáveis
-        lock e condition que usamos para sinalizar a thread */
         for(int i=0; i<this.list.size() && !found; i++) {
             if (this.list.get(i).getId() == id) {
                 this.list.remove(i);
-                this.locks.remove(id);
-                this.conditions.remove(id);
                 found = true;
             }
         }
@@ -219,4 +196,3 @@ public class ListPacketReceiving {
         this.l.unlock();
     }
 }
-

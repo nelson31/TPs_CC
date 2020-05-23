@@ -10,7 +10,7 @@ public class Writer implements Runnable {
      * Estrutura de dados para a qual o
      * writer envia os pacotes
      */
-    private ListPacketSending sending;
+    private ListPacket sending;
 
     /**
      * Socket para o qual o writer
@@ -22,7 +22,7 @@ public class Writer implements Runnable {
      * Construtor para objetos
      * da classe SecureProtocol.Writer
      */
-    public Writer(DatagramSocket socket, ListPacketSending sending) {
+    public Writer(DatagramSocket socket, ListPacket sending) {
 
         this.sending = sending;
         this.socket = socket;
