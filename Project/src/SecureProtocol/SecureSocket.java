@@ -41,12 +41,10 @@ public class SecureSocket {
      */
     public void send(SecurePacket ss) {
 
-        System.out.println("Estou à espera para enviar secure packet");
         int id = this.idGetter.get();
         ss.setId(id);
         boolean received = false;
         while (!received) {
-            System.out.println("[SecureSocket] Vou enviar novo secure packet");
             /* Enviamos o pacote */
             this.ssocket.send(ss);
             /* Verificamos se chegou o ack */
