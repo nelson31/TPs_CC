@@ -88,6 +88,8 @@ public class SessionSepare implements Runnable {
                 }
                 /* Adicionamos o pacote à tabela */
                 this.incoming.addPacket(ap,ap.getOwnerIP());
+                if(ap.getPayloadSize() == -1)
+                    System.out.println("Recebi pacote de fecho");
             }
             catch(UnknownHostException exc){
                 System.out.println("Host inexistente");
