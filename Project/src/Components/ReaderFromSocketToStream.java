@@ -99,7 +99,7 @@ public class ReaderFromSocketToStream implements Runnable {
                 for(int i=0; i<lidos; i++){
                     dat[i] = data[i];
                 }
-                System.out.println("[ReaderFromSocket] enviei dados para" + this.destinoIp);
+                System.out.println("[ReaderFromSocket] enviei dados para " + this.destinoIp + " com id se sessão: " + this.idSession);
                 /* Temos que verificar se esta sessão é externa */
                 if(this.foreignSessions.isForeign(this.idSession)){
                     /* Se for o owner não somos nós */
