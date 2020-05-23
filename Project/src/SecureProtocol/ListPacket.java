@@ -1,7 +1,9 @@
 package SecureProtocol;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,6 +23,14 @@ public class ListPacket {
     private Condition cnotAck;
 
     private Condition c;
+
+    ////////////////////////////Variáveis para acordar threads que esperem por acks////////////////////////////////
+
+    private Map<Integer, Lock> locks;
+
+    private Map<Integer, Condition> conditions;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Método que nos diz o número de pacotes
@@ -48,6 +58,8 @@ public class ListPacket {
         this.notAck = new ReentrantLock();
         this.c = l.newCondition();
         this.cnotAck = notAck.newCondition();
+        this.locks = new HashMap<>();
+        this.conditions = new HashMap<>();
     }
 
     /**
@@ -75,6 +87,19 @@ public class ListPacket {
         de ler um pacote não ACK*/
         if(!sp.isAck())
             this.cnotAck.signal();
+
+        /* Se for um ack sinalizamos quem está à
+        espera desse mesmo ack */
+        if(sp.isAck()){
+            Lock l = this.locks.get(sp.getId());
+            l.lock();
+
+            this.conditions.get(sp.getId()).signal();
+
+            l.unlock();
+            this.locks.remove(sp.getId());
+            this.conditions.remove(sp.getId());
+        }
 
         this.notAck.unlock();
 
@@ -165,10 +190,16 @@ public class ListPacket {
      * @param id
      * @return
      */
-    public boolean contains(int id){
+    public boolean contains(int id, Lock lwaitAck, Condition cwaitAck){
 
         this.l.lock();
 
+        /* Adicionamos as variáveis para sinalizar
+        a thread que espera pelo ack */
+        if(!this.locks.containsKey(id)) {
+            this.locks.put(id, lwaitAck);
+            this.conditions.put(id, cwaitAck);
+        }
         boolean ret = this.list.contains(new SecurePacket(id,null,null,0,0,new byte[0]));
 
         this.l.unlock();

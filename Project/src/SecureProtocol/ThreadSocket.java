@@ -79,9 +79,9 @@ public class ThreadSocket {
      * @param id
      * @return
      */
-    private boolean contains(int id) {
+    private boolean contains(int id, Lock l, Condition c) {
 
-        return this.receiving.contains(id);
+        return this.receiving.contains(id, l, c);
     }
 
     /**
@@ -103,12 +103,12 @@ public class ThreadSocket {
             /* Colocamos o timeout a correr */
             new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
             /* Enquanto o ack não chegar */
-            while (!this.contains(id) && !timeoutreached.getB())
+            while (!this.contains(id,l,c) && !timeoutreached.getB())
                 c.await();
 
             /* Se o pacote tiver chegado retornamos true
             e eliminamos o pacote da lista de chegada */
-            if(this.contains(id)) {
+            if(this.contains(id,l,c)) {
                 ret = true;
                 this.receiving.remove(id);
             }
