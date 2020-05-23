@@ -125,7 +125,7 @@ public class Worker implements Runnable {
         t1.start();
         t2.start();
 
-        InetAddress owner = this.foreignSessions.getInfo(this.incomingSessionId).getOwnerIP()
+        InetAddress owner = this.foreignSessions.getInfo(this.incomingSessionId).getOwnerIP();
         /* Libertamos o id utilizado */
         this.cedeId.cedeID(this.incomingSessionId);
         /* Se for uma sessão externa removemos a
