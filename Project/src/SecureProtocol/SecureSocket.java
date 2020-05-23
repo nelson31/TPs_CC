@@ -41,6 +41,7 @@ public class SecureSocket {
      */
     public void send(SecurePacket ss) {
 
+        System.out.println("Estou à espera para enviar secure packet");
         int id = this.idGetter.get();
         ss.setId(id);
         boolean received = false;
