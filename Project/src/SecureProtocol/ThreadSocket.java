@@ -101,18 +101,18 @@ public class ThreadSocket {
                 new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
                 c.await();
             }
-            /* Se o pacote tiver chegado retornamos true
-            e eliminamos o pacote da lista de chegada */
-            if(this.contains(id)) {
-                ret = true;
-                this.receiving.remove(id);
-            }
         }
         catch(InterruptedException exc){
             System.out.println(exc.getLocalizedMessage());
         }
         finally {
             l.unlock();
+            /* Se o pacote tiver chegado retornamos true
+            e eliminamos o pacote da lista de chegada */
+            if(this.contains(id)) {
+                ret = true;
+                this.receiving.remove(id);
+            }
         }
 
         return ret;
