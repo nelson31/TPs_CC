@@ -101,7 +101,7 @@ public class StreamList {
             /* Esperamos enquanto o próximo
             pacote de size não chegar */
             while (!this.recebidos.containsKey(this.nextSizePacketSequence)) {
-                System.out.println("[AnonStream] Estou à espera do pacote de size com sequencia " + this.nextSizePacketSequence);
+                //System.out.println("[AnonStream] Estou à espera do pacote de size com sequencia " + this.nextSizePacketSequence);
                 this.cwaitsize.await();
             }
 
