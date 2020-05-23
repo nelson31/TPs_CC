@@ -32,14 +32,13 @@ public class ServerWorker implements Runnable {
             BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter pw = new PrintWriter(socket.getOutputStream());
             String message;
-            while ((message = bf.readLine()) != null) {
-                size = message.length();
-                pw.println("Tamanho da string: " + size);
-                pw.flush();
-                socket.shutdownInput();
-                socket.shutdownOutput();
-                socket.close();
-            }
+            message = bf.readLine();
+            size = message.length();
+            pw.println("Tamanho da string: " + size);
+            pw.flush();
+            socket.shutdownInput();
+            socket.shutdownOutput();
+            socket.close();
         }
         catch(IOException exc){
             System.out.println(exc.getLocalizedMessage());
