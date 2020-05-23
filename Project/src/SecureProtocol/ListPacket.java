@@ -91,6 +91,7 @@ public class ListPacket {
         /* Se for um ack sinalizamos quem está à
         espera desse mesmo ack */
         if(sp.isAck()){
+            System.out.println("Vou buscar o lock para sinalizar a thread que espera pelo ack: " + sp.getId());
             Lock l = this.locks.get(sp.getId());
             l.lock();
 
@@ -215,6 +216,7 @@ public class ListPacket {
         if(!this.locks.containsKey(id)) {
             this.locks.put(id, lwaitAck);
             this.conditions.put(id, cwaitAck);
+            System.out.println("Acicionei lock para o ack: " + id);
         }
 
         this.l.unlock();
