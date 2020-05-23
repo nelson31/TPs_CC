@@ -50,7 +50,7 @@ public class SecureSocket {
             /* Enviamos o pacote */
             this.ssocket.send(ss);
             /* Verificamos se chegou o ack */
-            if(this.ssocket.waitForAck(-ss.getId(),250))
+            if(this.ssocket.waitForAck(-ss.getId(),50))
                 received = true;
         }
     }
