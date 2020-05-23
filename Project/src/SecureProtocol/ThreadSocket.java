@@ -90,25 +90,20 @@ public class ThreadSocket {
      */
     public boolean waitForAck(int id, int milis) {
 
+        int waitmilis = 0;
         boolean ret = false;
         BooleanEncapsuler timeoutreached = new BooleanEncapsuler(false);
-        /* Variáveis para sinalizar thread
-        quando o ack chegar */
-        Lock l = new ReentrantLock();
-        Condition c = l.newCondition();
-        /* Obtens o lock */
-        l.lock();
-
+        /* Colocamos o timeout a correr */
+        new Thread(new TimeOut(milis)).start();
         try {
-            /* Colocamos o timeout a correr */
-            new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
             /* Enquanto o ack não chegar */
-            while (!this.contains(id) && !timeoutreached.getB())
-                c.await();
-
+            while (!this.contains(id) && waitmilis < milis) {
+                Thread.sleep(10);
+                waitmilis += 10;
+            }
             /* Se o pacote tiver chegado retornamos true
             e eliminamos o pacote da lista de chegada */
-            if(this.contains(id)) {
+            if (this.contains(id)) {
                 ret = true;
                 this.receiving.remove(id);
             }
@@ -116,10 +111,6 @@ public class ThreadSocket {
         catch(InterruptedException exc){
             System.out.println(exc.getLocalizedMessage());
         }
-        finally {
-            l.unlock();
-        }
-
         return ret;
     }
 }
