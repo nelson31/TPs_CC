@@ -3,6 +3,7 @@ package SecureProtocol;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.sql.Time;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
@@ -91,6 +92,7 @@ public class ThreadSocket {
 
         boolean ret = false;
         BooleanEncapsuler timeoutreached = new BooleanEncapsuler(false);
+        TimeOut to = new TimeOut(milis,l,c,timeoutreached);
         /* Obtens o lock */
         l.lock();
 
@@ -98,7 +100,7 @@ public class ThreadSocket {
             /* Enquanto o ack não chegar */
             while (!this.contains(id) && !timeoutreached.getB()) {
                 /* Colocamos o timeout a correr */
-                new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
+                new Thread(to).start();
                 c.await();
             }
         }
