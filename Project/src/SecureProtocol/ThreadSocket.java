@@ -57,7 +57,7 @@ public class ThreadSocket {
      *
      * @param packet
      */
-    public synchronized void send(SecurePacket packet) {
+    public void send(SecurePacket packet) {
 
         /* Adicionamos o pacote à estrutura
         de dados para ser enviado */
@@ -70,7 +70,7 @@ public class ThreadSocket {
      *
      * @return
      */
-    public synchronized SecurePacket receiveNotAck() {
+    public SecurePacket receiveNotAck() {
 
         return this.receiving.getDataPacket();
     }
@@ -82,7 +82,7 @@ public class ThreadSocket {
      * @param id
      * @return
      */
-    private synchronized boolean contains(int id) {
+    private boolean contains(int id) {
 
         return this.receiving.contains(id);
     }
