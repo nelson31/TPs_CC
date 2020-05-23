@@ -91,9 +91,10 @@ public class ThreadSocket {
 
         boolean ret = false;
         BooleanEncapsuler timeoutreached = new BooleanEncapsuler(false);
-        TimeOut to = new TimeOut(milis,l,c,timeoutreached);
         /* Obtens o lock */
         l.lock();
+
+        TimeOut to = new TimeOut(milis,l,c,timeoutreached);
 
         try {
             /* Enquanto o ack não chegar */
