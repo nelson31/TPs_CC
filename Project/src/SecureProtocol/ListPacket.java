@@ -97,8 +97,6 @@ public class ListPacket {
             this.conditions.get(sp.getId()).signal();
 
             l.unlock();
-            this.locks.remove(sp.getId());
-            this.conditions.remove(sp.getId());
         }
 
         this.notAck.unlock();
@@ -235,6 +233,8 @@ public class ListPacket {
         for(int i=0; i<this.list.size() && !found; i++) {
             if (this.list.get(i).getId() == id) {
                 this.list.remove(i);
+                this.locks.remove(id);
+                this.conditions.remove(id);
                 found = true;
             }
         }
