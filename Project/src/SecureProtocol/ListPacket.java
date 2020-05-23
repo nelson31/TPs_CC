@@ -190,7 +190,25 @@ public class ListPacket {
      * @param id
      * @return
      */
-    public boolean contains(int id, Lock lwaitAck, Condition cwaitAck){
+    public boolean contains(int id){
+
+        this.l.lock();
+
+        boolean ret = this.list.contains(new SecurePacket(id,null,null,0,0,new byte[0]));
+
+        this.l.unlock();
+
+        return ret;
+    }
+
+    /**
+     * Método que prepara a receção de um novo
+     * ack por parte de uma thread
+     * @param id
+     * @param lwaitAck
+     * @param cwaitAck
+     */
+    public void prepareRecebeAck(int id, Lock lwaitAck, Condition cwaitAck){
 
         this.l.lock();
 
@@ -200,11 +218,8 @@ public class ListPacket {
             this.locks.put(id, lwaitAck);
             this.conditions.put(id, cwaitAck);
         }
-        boolean ret = this.list.contains(new SecurePacket(id,null,null,0,0,new byte[0]));
 
         this.l.unlock();
-
-        return ret;
     }
 
     /**

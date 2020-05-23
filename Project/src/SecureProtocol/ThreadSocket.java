@@ -79,23 +79,19 @@ public class ThreadSocket {
      * @param id
      * @return
      */
-    private boolean contains(int id, Lock l, Condition c) {
+    private boolean contains(int id) {
 
-        return this.receiving.contains(id, l, c);
+        return this.receiving.contains(id);
     }
 
     /**
      * Método que permite a uma thread esperar por um
      * ack após o envio de um determinado pacote
      */
-    public boolean waitForAck(int id, int milis) {
+    public boolean waitForAck(int id, int milis, Lock l, Condition c) {
 
         boolean ret = false;
         BooleanEncapsuler timeoutreached = new BooleanEncapsuler(false);
-        /* Variáveis para sinalizar thread
-        quando o ack chegar */
-        Lock l = new ReentrantLock();
-        Condition c = l.newCondition();
         /* Obtens o lock */
         l.lock();
 
@@ -103,12 +99,12 @@ public class ThreadSocket {
             /* Colocamos o timeout a correr */
             new Thread(new TimeOut(milis,l,c,timeoutreached)).start();
             /* Enquanto o ack não chegar */
-            while (!this.contains(id,l,c) && !timeoutreached.getB())
+            while (!this.contains(id) && !timeoutreached.getB())
                 c.await();
 
             /* Se o pacote tiver chegado retornamos true
             e eliminamos o pacote da lista de chegada */
-            if(this.contains(id,l,c)) {
+            if(this.contains(id)) {
                 ret = true;
                 this.receiving.remove(id);
             }
@@ -121,5 +117,16 @@ public class ThreadSocket {
         }
 
         return ret;
+    }
+
+    /**
+     * Método que prepara a receção de um ack
+     * @param id
+     * @param l
+     * @param c
+     */
+    public void prepareRecebeAck(int id, Lock l, Condition c){
+
+        this.receiving.prepareRecebeAck(id, l, c);
     }
 }

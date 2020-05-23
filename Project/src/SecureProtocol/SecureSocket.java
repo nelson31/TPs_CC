@@ -41,16 +41,19 @@ public class SecureSocket {
      */
     public void send(SecurePacket ss) {
 
+        Lock l = new ReentrantLock();
+        Condition c = l.newCondition();
         System.out.println("Estou à espera para enviar secure packet");
         int id = this.idGetter.get();
         ss.setId(id);
         boolean received = false;
         while (!received) {
+            this.ssocket.prepareRecebeAck(-ss.getId(),l,c);
             System.out.println("[SecureSocket] Vou enviar novo secure packet");
             /* Enviamos o pacote */
             this.ssocket.send(ss);
             /* Verificamos se chegou o ack */
-            if(this.ssocket.waitForAck(-ss.getId(),250))
+            if(this.ssocket.waitForAck(-ss.getId(),250,l,c))
                 received = true;
         }
     }
