@@ -2,6 +2,9 @@ package SecureProtocol;
 
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SecureSocket {
 
@@ -38,19 +41,15 @@ public class SecureSocket {
      */
     public void send(SecurePacket ss) {
 
-        try {
-            int id = this.idGetter.get();
-            ss.setId(id);
-            boolean received = false;
-            while (!received) {
-                this.ssocket.send(ss);
-                Thread.sleep(250);
-                if (this.ssocket.contains(-ss.getId()))
-                    received = true;
-            }
-        }
-        catch(InterruptedException exc){
-            System.out.println(exc.getMessage());
+        int id = this.idGetter.get();
+        ss.setId(id);
+        boolean received = false;
+        while (!received) {
+            /* Enviamos o pacote */
+            this.ssocket.send(ss);
+            /* Verificamos se chegou o ack */
+            if(this.ssocket.waitForAck(-ss.getId(),250))
+                received = true;
         }
     }
 

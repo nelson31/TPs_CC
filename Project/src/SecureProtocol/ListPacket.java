@@ -170,10 +170,6 @@ public class ListPacket {
         this.l.lock();
 
         boolean ret = this.list.contains(new SecurePacket(id,null,null,0,0,new byte[0]));
-        /* Caso exista removemos o
-        respetivo pacote de ack */
-        if(ret)
-            this.remove(id);
 
         this.l.unlock();
 
@@ -184,14 +180,19 @@ public class ListPacket {
      * Método que permite remover um pacote
      * @param id
      */
-    private void remove(int id){
+    public void remove(int id){
 
         boolean found = false;
+
+        this.l.lock();
+
         for(int i=0; i<this.list.size() && !found; i++) {
             if (this.list.get(i).getId() == id) {
                 this.list.remove(i);
                 found = true;
             }
         }
+
+        this.l.unlock();
     }
 }
