@@ -129,7 +129,6 @@ public class ReaderFromSocketToStream implements Runnable {
             else
                 owner = this.stream.getLocalIp();
             this.stream.close(this.socket.getLocalAddress(),this.destinoIp,owner,this.destinoPort);
-            System.out.println("[ReaderFromSocket] Enviei pacote de fecho para " + this.destinoIp);
             /* Libertamos o id utilizado */
             this.cedeId.cedeID(this.idSession);
             /* Se for uma sessão externa removemos a

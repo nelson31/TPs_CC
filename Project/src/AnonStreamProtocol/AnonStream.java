@@ -199,5 +199,7 @@ public class AnonStream {
                 owner,owner,1,new byte[0]);
 
         this.asocket.send(fecho,origem,destino,destPort);
+
+        System.out.println("[ReaderFromSocket] Enviei pacote de fecho para " + destino + " com seq: " + sequence);
     }
 }
