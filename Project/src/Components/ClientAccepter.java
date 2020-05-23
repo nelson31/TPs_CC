@@ -118,7 +118,7 @@ public class ClientAccepter implements Runnable {
 
                 new Thread(w).start();
 
-                System.out.println("[ClienteAccepter] Recebido novo pedido de cliente");
+                System.out.println("[ClienteAccepter] Recebido novo pedido de cliente - id sessão local: " + id);
             }
             catch(IOException exc){
                 System.out.println(exc.getMessage());
