@@ -47,13 +47,13 @@ public class SecureSocket {
      */
     public void send(SecurePacket ss) {
 
+        this.lock.lock();
         Lock l = new ReentrantLock();
         Condition c = l.newCondition();
         System.out.println("Estou à espera para enviar secure packet");
         int id = this.idGetter.get();
         ss.setId(id);
         boolean received = false;
-        this.lock.lock();
         while (!received) {
             this.ssocket.prepareRecebeAck(-ss.getId(),l,c);
             System.out.println("[SecureSocket] Vou enviar novo secure packet");
@@ -73,10 +73,10 @@ public class SecureSocket {
      */
     public SecurePacket receive(){
 
+        this.lock.lock();
         SecurePacket data = null;
         /* Recebemos o primeiro pacote
         que não seja ack */
-        this.lock.lock();
         data = this.ssocket.receiveNotAck();
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
