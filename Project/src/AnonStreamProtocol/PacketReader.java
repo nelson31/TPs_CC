@@ -45,7 +45,7 @@ public class PacketReader implements Runnable{
         while((ap = this.asocket.receive(session)).getPayloadSize() != -1){
             /* Adicionamos o respetivo pacote à lista */
             this.listaPackets.addPacket(ap);
-            //System.out.println("[PacketReader] Recebi pacote com seq: " + ap.getSequence());
+            System.out.println("[PacketReader] Recebi pacote com sessão local: " + ap.getSession());
             /* Vamos buscar a informação acerca do target server*/
             DataInfo info = this.listaPackets.getTargetInfo();
             if(!info.isComplete()){
