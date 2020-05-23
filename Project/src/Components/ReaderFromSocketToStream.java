@@ -107,8 +107,10 @@ public class ReaderFromSocketToStream implements Runnable {
                 }
                 /* Se não for externa, o owner é
                 o próprio anon */
-                else
+                else {
                     owner = this.stream.getLocalIp();
+                    System.out.println("O owner da session nº" + this.idSession + "sou eu");
+                }
 
                 this.stream.send(dat,this.socket.getLocalAddress(),this.destinoIp,
                         this.destinoFinalIP,owner,this.destinoPort,
