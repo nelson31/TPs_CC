@@ -29,6 +29,8 @@ public class ThreadSocket {
 
     private Writer writer;
 
+    private Lock l;
+
     /**
      * Construtor para objetos da
      * classe SecureProtocol.ThreadSocket
@@ -41,6 +43,7 @@ public class ThreadSocket {
 
         this.socket = new DatagramSocket(port, localIP);
         this.sending = new ListPacket();
+        this.l = new ReentrantLock();
         this.receiving = new ListPacket();
         this.reader = new Reader(socket, this.receiving);
         this.writer = new Writer(socket, this.sending);
@@ -92,7 +95,7 @@ public class ThreadSocket {
 
         int waitmilis = 0;
         boolean ret = false;
-        BooleanEncapsuler timeoutreached = new BooleanEncapsuler(false);
+        this.l.lock();
         /* Colocamos o timeout a correr */
         new Thread(new TimeOut(milis)).start();
         try {
@@ -110,6 +113,9 @@ public class ThreadSocket {
         }
         catch(InterruptedException exc){
             System.out.println(exc.getLocalizedMessage());
+        }
+        finally {
+            this.l.unlock();
         }
         return ret;
     }
