@@ -77,7 +77,7 @@ public class SessionSepare implements Runnable {
                 /* Se o owner não for o anon local, teremos
                 que converter o id de sessão */
                 if(!owner.toString().equals(this.localIp.toString())) {
-                    System.out.println("Recebi novo pedido de peer: Owner do pack: " + owner.toString() + "; Local Ip: " + this.localIp.toString());
+                    System.out.println("[Separe] Recebi novo pedido de peer: Owner do pack: " + owner.toString() + "; Local Ip: " + this.localIp.toString());
                     /* Se for uma sessão externa temos que verificar na
                     foreign table e se não existir teremos que a adicionar */
                     if (!this.foreignSessions.contains(id, owner)) {

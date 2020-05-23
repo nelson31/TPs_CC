@@ -53,7 +53,7 @@ public class ReaderFromStreamToSocket implements Runnable{
                 /* Enviamos os dados para o socket */
                 os.write(data,0,data.length);
             }
-            System.out.println("[ReaderFromSocket] Fechei a ligação");
+            System.out.println("[ReaderFromStream] Fechei a ligação");
             /* Removemos uma linha da foreign sessions
             se se tratar de uma sessão externa */
         }
