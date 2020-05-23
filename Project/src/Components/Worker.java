@@ -125,6 +125,14 @@ public class Worker implements Runnable {
         t1.start();
         t2.start();
 
+        /* Libertamos o id utilizado */
+        this.cedeId.cedeID(this.incomingSessionId);
+            /* Se for uma sessão externa removemos a
+            linha da foreign sessions table */
+        if(this.foreignSessions.isForeign(this.incomingSessionId)) {
+            this.foreignSessions.removeAssociation(this.foreignSessions.getInfo(this.idSession).getId(), owner);
+        }
+
         try {
             t1.join();
             t2.join();

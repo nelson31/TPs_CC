@@ -142,13 +142,7 @@ public class ReaderFromSocketToStream implements Runnable {
             else
                 owner = this.stream.getLocalIp();
             this.stream.close(this.socket.getLocalAddress(),this.destinoIp,owner,this.destinoPort);
-            /* Libertamos o id utilizado */
-            this.cedeId.cedeID(this.idSession);
-            /* Se for uma sessão externa removemos a
-            linha da foreign sessions table */
-            if(this.foreignSessions.isForeign(this.idSession)) {
-                this.foreignSessions.removeAssociation(this.foreignSessions.getInfo(this.idSession).getId(), owner);
-            }
+
             System.out.println("[ReaderFromSocket]Fechei a conexão");
         }
         catch(IOException exc){
