@@ -63,7 +63,11 @@ public class SessionGetter {
                 this.c.await();
 
             for(int i=0; i<MAX_SESSIONS_SIMULT && ret==-1; i++)
-                if(!isIndexAtributed[i]) ret = i;
+                if(!isIndexAtributed[i]){
+                    ret = i;
+                    /* Colocamos o indice como estando ocupado */
+                    this.isIndexAtributed[i] = true;
+                }
 
             /* Atribuimos mais um id, pelo que
             incrementamos o número de id's atribuidos */
