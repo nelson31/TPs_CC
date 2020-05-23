@@ -76,10 +76,12 @@ public class SecureSocket {
         SecurePacket data = null;
         /* Recebemos o primeiro pacote
         que não seja ack */
+        this.lock.lock();
         data = this.ssocket.receiveNotAck();
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
         this.ssocket.send(pack);
+        this.lock.unlock();
         return data;
     }
 }
