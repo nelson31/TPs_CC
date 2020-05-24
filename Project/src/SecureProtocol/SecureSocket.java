@@ -51,7 +51,6 @@ public class SecureSocket {
         ss.setId(id);
         boolean received = false;
         int i=0;
-        this.l.lock();
         while (!received) {
             /* Enviamos o pacote */
             this.ssocket.send(ss);
@@ -62,7 +61,6 @@ public class SecureSocket {
                 System.out.println("Vou reenviar pacote de seq: " + seq);
             i++;
         }
-        this.l.unlock();
     }
 
     /**
