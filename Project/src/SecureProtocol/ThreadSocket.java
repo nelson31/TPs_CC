@@ -95,6 +95,7 @@ public class ThreadSocket {
 
         int waitmilis = 0;
         boolean ret = false;
+        this.l.lock();
         try {
             /* Enquanto o ack não chegar */
             while (!this.contains(id) && waitmilis < milis) {

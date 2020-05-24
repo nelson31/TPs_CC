@@ -50,7 +50,6 @@ public class SecureSocket {
         int id = this.idGetter.get();
         ss.setId(id);
         int i=0;
-        this.l.lock();
         boolean received = false;
         while (!received) {
             /* Enviamos o pacote */
@@ -62,7 +61,6 @@ public class SecureSocket {
                 System.out.println("Vou reenviar pacote de seq: " + seq);
             i++;
         }
-        this.l.unlock();
     }
 
     /**
@@ -78,10 +76,8 @@ public class SecureSocket {
         data = this.ssocket.receiveNotAck();
         //System.out.println("[Separe]Recebi novo pacote de dados");
         /* Enviamos um ack para o destino */
-        this.send.lock();
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
         this.ssocket.send(pack);
-        this.send.unlock();
         //System.out.println("[SecureSocket]Vou enviar ack");
         return data;
     }
