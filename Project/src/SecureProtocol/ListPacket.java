@@ -137,7 +137,6 @@ public class ListPacket {
     public SecurePacket getDataPacket(){
 
         SecurePacket ret = null;
-        this.l.lock();
         this.notAck.lock();
 
         try {
@@ -155,7 +154,6 @@ public class ListPacket {
         }
         finally {
             this.notAck.unlock();
-            this.l.unlock();
         }
 
         return ret;
