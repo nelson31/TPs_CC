@@ -101,7 +101,7 @@ public class StreamList {
             /* Esperamos enquanto o próximo
             pacote de size não chegar */
             while (!this.recebidos.containsKey(this.nextSizePacketSequence)) {
-                System.out.println("[AnonStream] Estou à espera do pacote de size com sequencia " + this.nextSizePacketSequence);
+                //System.out.println("[AnonStream] Estou à espera do pacote de size com sequencia " + this.nextSizePacketSequence);
                 this.cwaitsize.await();
             }
 
@@ -136,7 +136,7 @@ public class StreamList {
                 /* Enquanto não chegar o próximo pacote pelo qual
                 esperamos suspendemos */
                 while (!this.recebidos.containsKey(this.nextPacketWaiting)) {
-                    System.out.println("[AnonStream]Estou à espera do pacote com sequencia " + this.nextPacketWaiting);
+                    //System.out.println("[AnonStream]Estou à espera do pacote com sequencia " + this.nextPacketWaiting);
                     this.cwaitPacketSequence.await();
                 }
 
@@ -144,7 +144,7 @@ public class StreamList {
                 à coleção para retornar */
                 ret.add(this.recebidos.get(this.nextPacketWaiting));
 
-                System.out.println("[AnonStream]Li o pacote de seq: " + this.nextPacketWaiting);
+                //System.out.println("[AnonStream]Li o pacote de seq: " + this.nextPacketWaiting);
                 /* Incrementamos o valor da sequencia do
                 pacote pelo qual esperamos */
                 this.nextPacketWaiting++;

@@ -70,7 +70,7 @@ public class SessionSepare implements Runnable {
                 if(sp.isAck())
                     System.out.println("Recebi um ACK PERIGO");
                 AnonPacket ap = AnonPacket.getFromByteArray(sp.getData());
-                System.out.println("[Separe] Recebi pacote com seq: " + ap.getSequence() + "; session: " + ap.getSession());
+                //System.out.println("[Separe] Recebi pacote com seq: " + ap.getSequence() + "; session: " + ap.getSession());
 
                 /* Vamos buscar o id da sessão e o owner do pacote anon */
                 int id = ap.getSession();
@@ -89,8 +89,8 @@ public class SessionSepare implements Runnable {
                 }
                 /* Adicionamos o pacote à tabela */
                 this.incoming.addPacket(ap,ap.getOwnerIP());
-                if(ap.getPayloadSize() == -1)
-                    System.out.println("[Separe] Recebi pacote de fecho com seq: " + ap.getSequence() + " da sessão " + id);
+                //if(ap.getPayloadSize() == -1)
+                    //System.out.println("[Separe] Recebi pacote de fecho com seq: " + ap.getSequence() + " da sessão " + id);
             }
             catch(UnknownHostException exc){
                 System.out.println("Host inexistente");
