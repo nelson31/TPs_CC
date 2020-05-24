@@ -22,7 +22,7 @@ public class SecureSocket {
 
     private Lock l;
 
-    private Condition c;
+    private Lock send;
 
     /**
      * Construtor para objetos da
@@ -37,7 +37,7 @@ public class SecureSocket {
         this.ssocket = new ThreadSocket(port, localIP);
         this.idGetter = new PacketIdGetter();
         this.l = new ReentrantLock();
-        this.c = l.newCondition();
+        this.send = new ReentrantLock();
     }
 
     /**
