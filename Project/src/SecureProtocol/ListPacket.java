@@ -69,7 +69,7 @@ public class ListPacket {
 
         /* Sinalizamos quem estava à
         espera de ler do socket */
-        this.c.signal();
+        this.c.signalAll();
 
         /* Sinalizamos quem estava à espera
         de ler um pacote não ACK*/
