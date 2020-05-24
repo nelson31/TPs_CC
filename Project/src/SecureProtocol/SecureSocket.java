@@ -76,9 +76,11 @@ public class SecureSocket {
         que não seja ack */
         data = this.ssocket.receiveNotAck();
         /* Enviamos um ack para o destino */
+        this.l.lock();
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
         this.ssocket.send(pack);
         System.out.println("[SecureSocket]Vou enviar ack");
+        this.l.unlock();
         return data;
     }
 }
