@@ -45,7 +45,7 @@ public class SecureSocket {
      * um packet secure
      * @param ss
      */
-    public void send(SecurePacket ss) {
+    public void send(SecurePacket ss, int seq) {
 
         int id = this.idGetter.get();
         ss.setId(id);
@@ -58,7 +58,7 @@ public class SecureSocket {
             if(this.ssocket.waitForAck(-ss.getId(),50))
                 received = true;
             if(i>0)
-                System.out.println("Vou reenviar pacote");
+                System.out.println("Vou reenviar pacote de seq: " + seq);
             i++;
         }
         this.l.unlock();
