@@ -49,9 +49,9 @@ public class SecureSocket {
 
         int id = this.idGetter.get();
         ss.setId(id);
-        boolean received = false;
         int i=0;
         this.l.lock();
+        boolean received = false;
         while (!received) {
             /* Enviamos o pacote */
             this.ssocket.send(ss);
