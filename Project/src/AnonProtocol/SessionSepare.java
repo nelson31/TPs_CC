@@ -75,7 +75,7 @@ public class SessionSepare implements Runnable {
                 int id = ap.getSession();
                 InetAddress owner = ap.getOwnerIP();
 
-                System.out.println("[Separe] Recebi pacote da sessão: " + id + "; seq: " + ap.getSequence());
+                //System.out.println("[Separe] Recebi pacote da sessão: " + id + "; seq: " + ap.getSequence());
                 /* Se o owner não for o anon local, teremos
                 que converter o id de sessão */
                 if(!owner.toString().equals(this.localIp.toString())) {
@@ -92,7 +92,7 @@ public class SessionSepare implements Runnable {
                 this.incoming.addPacket(ap,ap.getOwnerIP());
                 //if(ap.getPayloadSize() == -1)
                     //System.out.println("[Separe] Recebi pacote de fecho com seq: " + ap.getSequence() + " da sessão " + id);
-                System.out.println("[Separe] Estou a espera de novo AnonPacket");
+                //System.out.println("[Separe] Estou a espera de novo AnonPacket");
             }
             catch(UnknownHostException exc){
                 System.out.println("Host inexistente");
