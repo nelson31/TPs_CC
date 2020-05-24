@@ -88,8 +88,8 @@ public class SessionSepare implements Runnable {
                 }
                 /* Adicionamos o pacote à tabela */
                 this.incoming.addPacket(ap,ap.getOwnerIP());
-                //if(ap.getPayloadSize() == -1)
-                    //System.out.println("[Separe] Recebi pacote de fecho com seq: " + ap.getSequence() + " da sessão " + id);
+                if(ap.getPayloadSize() == -1)
+                    System.out.println("[Separe] Recebi pacote de fecho com seq: " + ap.getSequence() + " da sessão " + id);
             }
             catch(UnknownHostException exc){
                 System.out.println("Host inexistente");
