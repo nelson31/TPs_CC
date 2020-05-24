@@ -70,6 +70,7 @@ public class SessionSepare implements Runnable {
                 if(sp.isAck())
                     System.out.println("Recebi um ACK PERIGO");
                 AnonPacket ap = AnonPacket.getFromByteArray(sp.getData());
+                System.out.println("[Separe] Recebi pacote com seq: " + ap.getSequence() + "; session: " + ap.getSession());
 
                 /* Vamos buscar o id da sessão e o owner do pacote anon */
                 int id = ap.getSession();
