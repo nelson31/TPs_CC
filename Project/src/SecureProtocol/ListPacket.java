@@ -123,7 +123,7 @@ public class ListPacket {
             if(!this.list.get(i).isAck()) {
                 ret = this.list.get(i);
                 found = true;
-                this.remove(ret.getId());
+                this.list.remove(i);
             }
         }
         return ret;
