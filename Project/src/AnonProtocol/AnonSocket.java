@@ -80,11 +80,8 @@ public class AnonSocket {
         byte[] body = ap.toByteArray();
         /* Encapsulamos o anonPacket num SecurePacket */
         SecurePacket sp = new SecurePacket(-1,origem,destino,destPort,body.length,body);
-        this.l.lock();
         /* Enviamos para o destino respetivo */
         this.socket.send(sp);
-
-        this.l.unlock();
     }
 
     /**
@@ -94,11 +91,7 @@ public class AnonSocket {
      */
     public AnonPacket receive(int session){
 
-        this.l.lock();
-
         AnonPacket ap = this.received.getPacket(session);
-
-        this.l.unlock();
         return ap;
     }
 
