@@ -50,6 +50,7 @@ public class SecureSocket {
         int id = this.idGetter.get();
         ss.setId(id);
         boolean received = false;
+        this.l.lock();
         while (!received) {
             /* Enviamos o pacote */
             this.ssocket.send(ss);
@@ -57,6 +58,7 @@ public class SecureSocket {
             if(this.ssocket.waitForAck(-ss.getId(),50))
                 received = true;
         }
+        this.l.unlock();
     }
 
     /**
