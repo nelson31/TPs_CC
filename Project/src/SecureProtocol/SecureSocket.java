@@ -76,7 +76,7 @@ public class SecureSocket {
         /* Recebemos o primeiro pacote
         que não seja ack */
         data = this.ssocket.receiveNotAck();
-        System.out.println("[Separe]Recebi novo pacote de dados");
+        //System.out.println("[Separe]Recebi novo pacote de dados");
         /* Enviamos um ack para o destino */
         this.send.lock();
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
