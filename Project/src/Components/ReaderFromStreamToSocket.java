@@ -59,8 +59,8 @@ public class ReaderFromStreamToSocket implements Runnable{
             OutputStream os = this.socket.getOutputStream();
             byte[] data; String message;
             while ((data = this.stream.read()) != null) {
-                message = new String(data, StandardCharsets.UTF_8);
-                System.out.println("[ReaderFromStream] Recebi dados da stream: " + message);
+                //message = new String(data, StandardCharsets.UTF_8);
+                //System.out.println("[ReaderFromStream] Recebi dados da stream: " + message);
                 /* Desencriptamos os dados antes de
                 enviar para o socket */
                 data = Encriptacao.desencriptar(data,this.password,this.Key1,this.Key2);

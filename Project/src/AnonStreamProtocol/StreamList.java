@@ -101,7 +101,7 @@ public class StreamList {
             /* Esperamos enquanto o próximo
             pacote de size não chegar */
             while (!this.recebidos.containsKey(this.nextSizePacketSequence)) {
-                //System.out.println("[AnonStream] Estou à espera do pacote de size com sequencia " + this.nextSizePacketSequence);
+                System.out.println("[AnonStream] Estou à espera do pacote de size com sequencia " + this.nextSizePacketSequence);
                 this.cwaitsize.await();
             }
 
@@ -118,7 +118,7 @@ public class StreamList {
             else {
                 /* Atualizamos o valor da sequencia de próximo pacote size que esperamos */
                 this.nextSizePacketSequence += sizepacket.getIsSizeArray() + 1;
-                //System.out.println("[AnonStream] Fico agora à espera do pack com seq: " + this.nextSizePacketSequence);
+                System.out.println("[AnonStream] Fico agora à espera do pack com seq: " + this.nextSizePacketSequence);
                 /* Vamos buscar o número de pacotes de dados que vamos ler */
                 pacotesALer = sizepacket.getIsSizeArray();
             }
