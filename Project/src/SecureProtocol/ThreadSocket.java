@@ -96,8 +96,6 @@ public class ThreadSocket {
         int waitmilis = 0;
         boolean ret = false;
         this.l.lock();
-        /* Colocamos o timeout a correr */
-        new Thread(new TimeOut(milis)).start();
         try {
             /* Enquanto o ack não chegar */
             while (!this.contains(id) && waitmilis < milis) {

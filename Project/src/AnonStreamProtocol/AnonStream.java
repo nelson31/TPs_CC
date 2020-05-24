@@ -124,6 +124,7 @@ public class AnonStream {
         for(AnonPacket ap : sending){
             /* Enviamos através do AnonSocket */
             this.asocket.send(ap,origem,destino,destPort);
+            System.out.println("[AnonSocket] Enviei pacote session: " + ap.getSession() + "; seq: " + ap.getSequence());
         }
         /* Atualizamos o valor da sequence
         em vigor */

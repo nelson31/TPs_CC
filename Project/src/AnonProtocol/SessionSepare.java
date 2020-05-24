@@ -68,12 +68,14 @@ public class SessionSepare implements Runnable {
                 SecurePacket sp = this.ssocket.receive();
                 /* Vamos buscar o anonpacket encapsulado */
                 if(sp.isAck())
-                    System.out.println("Recebi um ACK PERIGO");
+                    System.out.println("[WARNING]Recebi um ACK PERIGO");
                 AnonPacket ap = AnonPacket.getFromByteArray(sp.getData());
 
                 /* Vamos buscar o id da sessão e o owner do pacote anon */
                 int id = ap.getSession();
                 InetAddress owner = ap.getOwnerIP();
+
+                System.out.println("[Separe] Recebi pacote da sessão: " + id + "; seq: " + ap.getSequence());
                 /* Se o owner não for o anon local, teremos
                 que converter o id de sessão */
                 if(!owner.toString().equals(this.localIp.toString())) {
