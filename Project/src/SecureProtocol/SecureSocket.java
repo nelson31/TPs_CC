@@ -22,7 +22,7 @@ public class SecureSocket {
 
     private Lock l;
 
-    private Lock send;
+    private Condition c;
 
     /**
      * Construtor para objetos da
@@ -37,7 +37,7 @@ public class SecureSocket {
         this.ssocket = new ThreadSocket(port, localIP);
         this.idGetter = new PacketIdGetter();
         this.l = new ReentrantLock();
-        this.send = new ReentrantLock();
+        this.c = l.newCondition();
     }
 
     /**
@@ -45,11 +45,10 @@ public class SecureSocket {
      * um packet secure
      * @param ss
      */
-    public void send(SecurePacket ss, int seq) {
+    public void send(SecurePacket ss) {
 
         int id = this.idGetter.get();
         ss.setId(id);
-        int i=0;
         boolean received = false;
         while (!received) {
             /* Enviamos o pacote */
@@ -57,9 +56,6 @@ public class SecureSocket {
             /* Verificamos se chegou o ack */
             if(this.ssocket.waitForAck(-ss.getId(),50))
                 received = true;
-            if(i>0)
-                System.out.println("Vou reenviar pacote de seq: " + seq);
-            i++;
         }
     }
 
@@ -74,11 +70,9 @@ public class SecureSocket {
         /* Recebemos o primeiro pacote
         que não seja ack */
         data = this.ssocket.receiveNotAck();
-        //System.out.println("[Separe]Recebi novo pacote de dados");
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
         this.ssocket.send(pack);
-        //System.out.println("[SecureSocket]Vou enviar ack");
         return data;
     }
 }

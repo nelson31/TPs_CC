@@ -1,11 +1,14 @@
 package AnonProtocol;
 
+import Components.AnonAccepter;
 import Components.ForeignSessions;
 import SecureProtocol.SecurePacket;
 import SecureProtocol.SecureSocket;
 
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class AnonSocket {
 
@@ -43,6 +46,8 @@ public class AnonSocket {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    private Lock l;
+
     /**
      * Construtor para objetos da classe
      * AnonSocket
@@ -54,6 +59,7 @@ public class AnonSocket {
         this.socket = new SecureSocket(port,localIp);
         this.received = new MappingTable();
         this.foreignSessions = foreignSessions;
+        this.l = new ReentrantLock();
         this.ssepare = new SessionSepare(this.socket,this.received,this.foreignSessions,this.localIp);
         /* Colocamos o reader a correr */
         new Thread(this.ssepare).start();
@@ -74,8 +80,11 @@ public class AnonSocket {
         byte[] body = ap.toByteArray();
         /* Encapsulamos o anonPacket num SecurePacket */
         SecurePacket sp = new SecurePacket(-1,origem,destino,destPort,body.length,body);
+        this.l.lock();
         /* Enviamos para o destino respetivo */
-        this.socket.send(sp,ap.getSequence());
+        this.socket.send(sp);
+
+        this.l.unlock();
     }
 
     /**
@@ -85,7 +94,12 @@ public class AnonSocket {
      */
     public AnonPacket receive(int session){
 
-        return this.received.getPacket(session);
+        this.l.lock();
+
+        AnonPacket ap = this.received.getPacket(session);
+
+        this.l.unlock();
+        return ap;
     }
 
     public InetAddress getLocalIp(){
