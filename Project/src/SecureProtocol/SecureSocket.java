@@ -52,6 +52,7 @@ public class SecureSocket {
         boolean received = false;
         int i=0;
         while (!received) {
+            this.l.lock();
             /* Enviamos o pacote */
             this.ssocket.send(ss);
             /* Verificamos se chegou o ack */
@@ -60,6 +61,7 @@ public class SecureSocket {
             if(i>0)
                 System.out.println("Vou reenviar pacote de seq: " + seq);
             i++;
+            this.l.lock();
         }
     }
 
