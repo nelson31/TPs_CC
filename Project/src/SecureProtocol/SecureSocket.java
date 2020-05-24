@@ -78,6 +78,7 @@ public class SecureSocket {
         /* Enviamos um ack para o destino */
         SecurePacket pack = SecurePacket.getAck(data.getId(),data.getDestino(),data.getOrigem(),data.getPort());
         this.ssocket.send(pack);
+        System.out.println("Vou enviar ack");
         return data;
     }
 }
