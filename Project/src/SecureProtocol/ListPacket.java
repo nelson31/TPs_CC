@@ -74,7 +74,7 @@ public class ListPacket {
         /* Sinalizamos quem estava à espera
         de ler um pacote não ACK*/
         if(!sp.isAck())
-            this.cnotAck.signal();
+            this.cnotAck.signalAll();
 
         this.notAck.unlock();
 
